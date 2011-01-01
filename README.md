@@ -1,7 +1,7 @@
-===== Class.js =====
 This library combines best practices and experience with object oriented javascript to provide a compact base to build class hierarchies and modular components. It helps you keep your code DRY and readable by following conventions and doing magic in the background, see yourself:
 
----- Class Definition -----
+Class Definition
+-----------------
 
 		Class("com.example.Person") 
 
@@ -29,7 +29,8 @@ This library combines best practices and experience with object oriented javascr
 
 		.end();
 		
------ Inheritance -----
+Inheritance
+-----------------
 
 		Class("com.example.Student").extend(com.example.Person)
 
@@ -54,7 +55,8 @@ This library combines best practices and experience with object oriented javascr
 
 		.end();
 		
------ Readable Instanciation -----
+Readable Instanciation 
+----------------------
 
 		var dominik = new com.example.Student({
 			name: "Dominik",

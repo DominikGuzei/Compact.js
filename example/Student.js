@@ -1,4 +1,5 @@
-
+	
+	// Prototype inheritance
 	Class("com.example.Student").extend(com.example.Person)
 	
 	.properties({
@@ -7,13 +8,15 @@
 		}
 	})
 	
+	// You don't need to call the super class constructor
+	// this is done automatically in the background
 	.initialize(function(){
-		console.log("Init Student", this.name, this.number);
+		console.log("Constructor of Student", this.name, this.number);
 	})
 	
 	.methods({
 		sayHello: function() {
-			this.superMethod();
+			this.superMethod(); // call the same method on the super class
 			console.log("and I study at university with number " + this.number);
 		}
 	})

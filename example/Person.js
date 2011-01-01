@@ -1,10 +1,11 @@
-
-	Class("com.example.Person")	
+	
+	// Easy namespacing for your classes
+	Class("com.example.Person") 
 
 	.properties ({
-		name: {
-			value: "Unbekannt",
-			getter: function() {
+		name: { 
+			value: "Unknown", // default value
+			getter: function() { 
 				return this._name;
 			},
 			setter: function(value) {
@@ -13,8 +14,10 @@
 		}
 	})	
 	
+	// You don't need to call the super class constructor, 
+	// this is done automatically in the background
 	.initialize (function(){
-		console.log("Init Person " + this.name);
+		console.log("Constructor of Person " + this.name);
 	})
 	
 	.methods ({

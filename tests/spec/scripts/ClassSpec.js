@@ -13,26 +13,69 @@ define(['Class'], function(Class) {
 		},
 		strange: {}
 	})
-	.end();
+	.end(window);
+	
 	
 	describe("Class", function() {	
 		it("should provide a namespace", function() {
-			Class("com.example.Test");
+			Class("com.example.Test").end(window);
 			expect(com.example.Test).toBeDefined();
 		});
 		
 	});
 	
+	
+	describe(".extend()", function() {
+	  Class("test.extend.Super")
+		.end(window);
+
+		Class("test.extend.Sub").extend(test.extend.Super)
+		.end(window);
+		
+		it("should be instance of both classes", function() {
+		  var sub = new test.extend.Sub();
+			expect(sub instanceof test.extend.Super && sub instanceof test.extend.Sub).toBeTruthy();
+		});
+	});
+	
+	
+	describe(".methods()", function() {
+	  Class("test.methods.Super")
+		.methods({
+			sayHello: function() { return "hello" }
+		})
+		.end(window);
+
+		Class("test.methods.Sub").extend(test.methods.Super)
+		.methods({
+			sayHello: function() { 
+				return this.superMethod() + " world"; 
+			}
+		})
+		.end(window);
+		
+		it("should add methods to the prototype of the class", function() {
+			expect(test.methods.Super.prototype.sayHello).toBeTypeOf('function');
+			expect(test.methods.Sub.prototype.sayHello).toBeTypeOf('function');
+		});
+		
+		it("should reference the super class method in the sub class", function() {
+		  var sub = new test.methods.Sub();
+			expect(sub.sayHello()).toEqual("hello world");
+		});
+	});
+	
+	
 	describe(".initialize()", function() {
 		var init = jasmine.createSpy();
 	  Class("test.initialize.Super")
 		.initialize(init)
-		.end();
+		.end(window);
 		
 		var initSub = jasmine.createSpy();
 		Class("test.initialize.Sub").extend(test.initialize.Super)
 		.initialize(initSub)
-		.end();
+		.end(window);
 		
 		it("should call the initialize function on instanciation", function() {
 			expect(init).not.toHaveBeenCalled();
@@ -61,7 +104,7 @@ define(['Class'], function(Class) {
 				expect(this.getDefaultVar()).toEqual("somevalue");
 				expect(this.getUserChanged()).toEqual("uservalue");
 			})
-			.end();
+			.end(window);
 			
 			var property = new test.initialize.Properties({
 				userChanged: "uservalue"
@@ -69,6 +112,8 @@ define(['Class'], function(Class) {
 		});
 	
 	});
+	
+	
 	
 	describe(".properties()", function() {
 		
@@ -152,7 +197,33 @@ define(['Class'], function(Class) {
 			expect(person.getName()).toEqual("Changed Value");
 			person._afterChange = undefined;
 		});
+	});
+	
+	describe(".mixin()", function() {
+		Class("test.mixin.Mixin")
+		.methods({
+			sayHello: function() { return "hello" },
+			saySomethingElse: function() { return "mixed in method" }
+		})
+		.end(window);
 		
+	  Class("test.mixin.Test")
+		.methods({
+			sayHello: function() { return "hello world" },
+			sayGoodbye: function() { return "goodbye" }
+		})
+		.mixin(test.mixin.Mixin)
+		.end(window);
+		
+		it("should add mixin methods to prototype of class", function() {
+		  expect(test.mixin.Test.prototype.saySomethingElse).toBeTypeOf('function');
+			expect(test.mixin.Test.prototype.sayHello).toBeTypeOf('function');
+			expect(test.mixin.Test.prototype.saySomethingElse()).toEqual("mixed in method");
+		});
+		
+		it("should overwrite mixin methods with own methods", function() {
+		  expect(test.mixin.Test.prototype.sayHello()).toEqual("hello world");
+		});
 	});
 	
 });

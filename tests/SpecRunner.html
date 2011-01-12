@@ -3,12 +3,12 @@
 <html>
 <head>
   <title>Jasmine Test Runner</title>
-  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.0.1/jasmine.css">
-  <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine-html.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../lib/jasmine-1.0.1/jasmine.css">
+  <script type="text/javascript" src="../../lib/jasmine-1.0.1/jasmine.js"></script>
+  <script type="text/javascript" src="../../lib/jasmine-1.0.1/jasmine-html.js"></script>
 
   <!-- include source files here... -->
-  <script type="text/javascript" src="../../require.js"></script>
+  <script type="text/javascript" src="../../lib/require.js"></script>
 	<script type="text/javascript" src="spec/SpecHelper.js"></script>
 </head>
 <body>
@@ -17,7 +17,6 @@
 	require( { baseUrl: "../scripts" },
 		['../tests/spec/scripts/ClassSpec',
 		 '../tests/spec/scripts/MixinSpec',
-		 '../tests/spec/scripts/events/EventDispatcherSpec'
 		], 
 		
 		function(ClassSpec) {

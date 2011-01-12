@@ -7,7 +7,7 @@ Class Definition
 
 		.properties ({
 			name: { 
-				value: "Unbekannt", // default value
+				value: "Unknown", // default value
 				getter: function() { 
 					return this._name;
 				},
@@ -115,7 +115,7 @@ Add functionality to your classes without spoiling the class hierarchy:
 		})
 		.mixin(test.mixin.Mixin)
 		.end(window);
-		
-This adds the methods of test.mixin.Mixin to the prototype of test.mixin.Test, but if you define a method with the same name in your class, the mixin method is overwritten.
 
-		test.mixin.Test.prototype.sayHello(); // returns "hello world"
+Other Examples
+---------
+To fully understand Class.js you should open the tests, there you will find all use cases ;-)

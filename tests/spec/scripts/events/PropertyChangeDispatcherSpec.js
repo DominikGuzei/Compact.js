@@ -14,12 +14,12 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		})
 		.end(events);
 		
+		var instance;
+		beforeEach(function() {
+		  instance = new events.properties.Changer();
+		});
+		
 		describe("_beforeFilter", function() {
-		  
-			var instance;
-			beforeEach(function() {
-			  instance = new events.properties.Changer();
-			});
 			
 			it("Calls filters registered as propertyName + 'Change'", function() {
 			  var klass = function() {};
@@ -50,7 +50,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 					expect(eventData.test).toEqual("new value");
 					eventData.test = "filtered value";
 					return eventData;
-				}
+				};
 				
 				spyOn(spy, 'listener').andCallThrough();
 				
@@ -59,6 +59,49 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				
 				expect(spy.listener).toHaveBeenCalled();
 				expect(instance.test).toEqual("filtered value");
+			});
+		
+		});
+		
+		describe("_beforeChange", function() {
+		  
+			it("Calls validate listeners on property changes", function(){
+				var klass = function() {};
+				klass.listener1 = function(eventData) {
+					expect(eventData.test).toEqual("new value");
+					return true;
+				};
+				klass.listener2 = function(eventData) {
+					expect(eventData.test).toEqual("new value");
+					return true;
+				};
+				spyOn(klass, 'listener1').andCallThrough();
+				spyOn(klass, 'listener2').andCallThrough();
+				
+				instance.validate("testChange", klass.listener1);
+				instance.validate("testChange", klass.listener2);
+			
+				instance.setTest("new value");
+				
+				expect(klass.listener1).toHaveBeenCalled();
+				expect(klass.listener2).toHaveBeenCalled();
+				expect(instance.test).toEqual("new value");
+			});
+		
+			it("Makes it possible to validate a property change", function() {
+			  var spy = function() {};
+				spy.validator = function(eventData) {
+					expect(eventData.test).toEqual("new value");
+					return false; // return: 'not valid'
+				};
+				
+				spyOn(spy, 'validator').andCallThrough();
+				
+				instance.validate("testChange", spy.validator);
+				instance.setTest("new value");
+				
+				expect(spy.validator).toHaveBeenCalled();
+				expect(instance.test).toEqual("test");
 			});
 		
 		});

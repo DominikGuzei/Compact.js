@@ -26,6 +26,23 @@ define(['Mixin', 'events/EventDispatcher'], function(Mixin, EventDispatcher) {
 			var eventData = {};
 			eventData[propertyName] = value;
 			return this.filterEvent(eventName, eventData)[propertyName];
+		},
+
+		/**
+		 * Is called before a property changes and provides
+		 * the possibility to validate (e.g: cancle) the property
+		 * change. If the validation returns true this function
+		 * also dispatches an on event for the property change
+		 * 
+		 * @param {string} propertyName Name of property that is about to change 
+		 */
+		_beforeChange: function(propertyName, value) {
+			var eventName = propertyName + "Change";
+			var eventData = {};
+			eventData[propertyName] = value;
+			var validated = this.validateEvent(eventName, eventData);
+			validated && this._dispatch("on", eventName, eventData);
+			return validated;
 		}
 	})
 	

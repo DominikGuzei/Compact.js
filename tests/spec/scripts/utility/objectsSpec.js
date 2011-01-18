@@ -119,6 +119,17 @@ define(['utility/objects'], function(objectsUtility) {
 			});
 		
 		});
+		
+		describe("addCamelCaseGetter", function() {
+		  
+			it("Adds a function to the object that is named like a setter for the property", function() {
+			  var object = {};
+				var getter = function() {};
+				objectsUtility.addCamelCaseGetter(object, "test", getter);
+				expect(object.getTest).toBe(getter);
+			});
+		
+		});
 	
 	});
 	

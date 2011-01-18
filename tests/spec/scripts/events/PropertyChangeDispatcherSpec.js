@@ -106,5 +106,30 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		
 		});
 		
+		describe("_afterChange", function() {
+		  
+			it("Calls 'after' listeners on property changes", function(){
+				var klass = function() {};
+				klass.listener1 = function(eventData) {
+					expect(eventData.test).toEqual("new value");
+				};
+				klass.listener2 = function(eventData) {
+					expect(eventData.test).toEqual("new value");
+				};
+				spyOn(klass, 'listener1').andCallThrough();
+				spyOn(klass, 'listener2').andCallThrough();
+				
+				instance.after("testChange", klass.listener1);
+				instance.after("testChange", klass.listener2);
+			
+				instance.setTest("new value");
+				
+				expect(klass.listener1).toHaveBeenCalled();
+				expect(klass.listener2).toHaveBeenCalled();
+				expect(instance.test).toEqual("new value");
+			});
+		
+		});
+		
 	});
 });

@@ -35,6 +35,7 @@ define(['Mixin', 'events/EventDispatcher'], function(Mixin, EventDispatcher) {
 		 * also dispatches an on event for the property change
 		 * 
 		 * @param {string} propertyName Name of property that is about to change 
+		 * @param {*} value Value the property changes to
 		 */
 		_beforeChange: function(propertyName, value) {
 			var eventName = propertyName + "Change";
@@ -43,7 +44,22 @@ define(['Mixin', 'events/EventDispatcher'], function(Mixin, EventDispatcher) {
 			var validated = this.validateEvent(eventName, eventData);
 			validated && this._dispatch("on", eventName, eventData);
 			return validated;
+		},
+		
+		/**
+		 * Is called after a property has changed and dispatches
+		 * an 'after' event for the property change
+		 * 
+		 * @param {string} paramName Name of property that has changed 
+		 * @param {*} value Value the property has changed to
+		 */
+		
+		_afterChange: function(propertyName, value) {
+			var eventData = {};
+			eventData[propertyName] = value;
+			this._dispatch("after", propertyName + "Change", eventData);
 		}
+		
 	})
 	
 	.end(this);

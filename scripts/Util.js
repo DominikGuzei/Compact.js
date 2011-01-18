@@ -32,15 +32,6 @@ define(function() {
 			obj["get" + camelPropName] = prop.getter;
 		}
 	};
-	/*
-	Util.defineGetter = function(obj, propName, prop) {
-		camelPropName = propName.replace(/\S/, propName[0].toUpperCase());
-		obj["get" + camelPropName] = prop.getter ? prop.getter :
-			function() { 
-				return this["_" + propName]; 
-			};
-	}
-  */
 
 	/**
 	 * Creates a setter function for a property on the given object.

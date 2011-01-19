@@ -209,8 +209,22 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 				});
 			});
 		});
-
+		
+		describe(".statics()", function() {
+		  var test = {};
+			Class("statics.Class")
+			.statics({
+				prop: "property",
+				fn: function() { return "function" }
+			})
+			.end(test);
 			
+			it("Adds static properties and methods to the class", function() {
+			  expect(test.statics.Class.prop).toEqual("property");
+				expect(test.statics.Class.fn()).toEqual("function");
+			});
+		});
+		
 
 		describe(".mixin()", function() {
 			Mixin("test.mixin.Mixin")

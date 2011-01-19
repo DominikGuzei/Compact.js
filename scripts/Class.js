@@ -33,6 +33,11 @@ define(['utility/objects'], function(utility) {
 				return this;
 			},
 			
+			statics: function(statics) {
+				this.statics = statics;
+				return this;
+			},
+			
 			mixin: function() {
 				this.mixinClasses = arguments;
 				return this;
@@ -78,6 +83,7 @@ define(['utility/objects'], function(utility) {
 				
 				addPropertyAccessors(klass.prototype, this.classProperties);
 				addPrototypeMethods(klass.prototype, this.classMethods, this.superclass);
+				utility.copyProperties(this.statics, klass, true, true);
 			}
 			
 		}; // end return

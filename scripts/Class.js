@@ -81,55 +81,11 @@ define(['utility/objects'], function(utility) {
 					}
 				}
 				
-				addPropertyAccessors(klass.prototype, this.classProperties);
 				addPrototypeMethods(klass.prototype, this.classMethods, this.superclass);
 				utility.copyProperties(this.statics, klass, true, true);
 			}
 			
 		}; // end return
-	};
-	
-	
-	var addWatchableSetter = function(destination, propertyName, definition) {
-		
-		var setter = definition.setter || function(value) {
-			definition.getter ? this["_" + propertyName] = value : this[propertyName] = value;
-		};
-		
-		utility.addCamelCaseSetter(destination, propertyName, function(value) {
-			var validated = true;
-			this._filterChange && typeof(this._filterChange) == 'function' && (value = this._filterChange(propertyName, value));
-			this._beforeChange && typeof(this._beforeChange) == 'function' && (validated = this._beforeChange(propertyName, value));
-
-			if (validated) {
-				setter.call(this, value);
-				this._afterChange && typeof(this._afterChange) == 'function' && this._afterChange(propertyName, value);
-			}
-		});
-	};
-	
-	/**
-	 * Takes a properties definition and creates the setter and getter
-	 * on the given object.
-	 * 
-	 * @param {object} properties The definition object passed in .properties() 
-	 */
-
-	var addPropertyAccessors = function(destination, properties) {
-		for (var propertyName in properties) {
-			if (properties.hasOwnProperty(propertyName)) {
-				definition = properties[propertyName];
-				
-				definition.getter && utility.addCamelCaseGetter(destination, propertyName, definition.getter);
-				
-				if (definition.watchable) {
-					addWatchableSetter(destination, propertyName, definition);
-				} else if (definition.setter) {
-					utility.addCamelCaseSetter(destination, propertyName, definition.setter);
-				}
-			}
-		}
-		
 	};
 	
 	/**

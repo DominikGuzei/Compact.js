@@ -68,13 +68,13 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 			
 			it("Calls filters registered as propertyName + 'Change'", function() {
 			  var klass = function() {};
-				klass.listener1 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
-					return eventData;
+				klass.listener1 = function(value) {
+					expect(value).toEqual("new value");
+					return value;
 				};
-				klass.listener2 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
-					return eventData;
+				klass.listener2 = function(value) {
+					expect(value).toEqual("new value");
+					return value;
 				};
 				spyOn(klass, 'listener1').andCallThrough();
 				spyOn(klass, 'listener2').andCallThrough();
@@ -91,10 +91,10 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 			
 			it("Allows to change the value in a filter", function() {
 			  var spy = function() {};
-				spy.listener = function(eventData) {
-					expect(eventData.test).toEqual("new value");
-					eventData.test = "filtered value";
-					return eventData;
+				spy.listener = function(value) {
+					expect(value).toEqual("new value");
+					value = "filtered value";
+					return value;
 				};
 				
 				spyOn(spy, 'listener').andCallThrough();
@@ -112,12 +112,12 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		  
 			it("Calls validate listeners on property changes", function(){
 				var klass = function() {};
-				klass.listener1 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
+				klass.listener1 = function(value) {
+					expect(value).toEqual("new value");
 					return true;
 				};
-				klass.listener2 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
+				klass.listener2 = function(value) {
+					expect(value).toEqual("new value");
 					return true;
 				};
 				spyOn(klass, 'listener1').andCallThrough();
@@ -135,8 +135,8 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		
 			it("Makes it possible to validate a property change", function() {
 			  var spy = function() {};
-				spy.validator = function(eventData) {
-					expect(eventData.test).toEqual("new value");
+				spy.validator = function(value) {
+					expect(value).toEqual("new value");
 					return false; // return: 'not valid'
 				};
 				
@@ -155,11 +155,11 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		  
 			it("Calls 'after' listeners on property changes", function(){
 				var klass = function() {};
-				klass.listener1 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
+				klass.listener1 = function(value) {
+					expect(value).toEqual("new value");
 				};
-				klass.listener2 = function(eventData) {
-					expect(eventData.test).toEqual("new value");
+				klass.listener2 = function(value) {
+					expect(value).toEqual("new value");
 				};
 				spyOn(klass, 'listener1').andCallThrough();
 				spyOn(klass, 'listener2').andCallThrough();

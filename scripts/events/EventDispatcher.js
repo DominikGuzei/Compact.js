@@ -4,12 +4,10 @@ define(['Mixin'], function(Mixin) {
 
 	.properties ({
 		eventListeners: {
-			value: {
-				filter: {},
-				validate: {},
-				on: {},
-				after: {}
-			}
+			filter: {},
+			validate: {},
+			on: {},
+			after: {}
 		}
 	})	
 

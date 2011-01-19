@@ -134,10 +134,7 @@ define(['utility/objects'], function(utility) {
 				var defaultProp = utility.deepCopy(defaults[prop]);
 				var preferredProp = utility.deepCopy(preferred[prop]);
 
-				if (defaultProp.getter) {
-					instancePropString = "_" + prop;
-				}
-				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp.value;
+				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;
 			}
 		}
 	};

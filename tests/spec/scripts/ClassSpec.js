@@ -9,19 +9,11 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 	
 	Class("com.example.Person")
 	.properties({
-		name: {
-			value: "Unknown"
-		},
-		custom: {
-			value: "some",
-		},
-		watched: {
-			value: "watch"
-		},
-		strange: {},
-		complex: {
-			value: complexProp
-		}
+		name: "unknown",
+		custom: "some",
+		watched: "watch",
+		strange: undefined,
+		complex: complexProp
 	})
 	.end(window);
 	
@@ -104,12 +96,8 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 
 				Class("test.initialize.Properties")
 				.properties({
-					defaultVar: {
-						value: "somevalue"
-					},
-					userChanged: {
-						value: "defaultvalue"
-					}
+					defaultVar: "somevalue",
+					userChanged: "defaultvalue"
 				})
 				.initialize(function() {
 					expect(this.defaultVar).toEqual("somevalue");

@@ -7,9 +7,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		
 		Class("properties.Changer") .extend(PropertyChangeDispatcher)
 		.properties({
-			test: {
-				value: "test"
-			}
+			test: "test"
 		})
 		.end(events);
 		

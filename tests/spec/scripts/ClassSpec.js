@@ -5,7 +5,7 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 		object: {},
 		array: [],
 		date: new Date()
-	}
+	};
 	
 	Class("com.example.Person")
 	.properties({
@@ -15,7 +15,7 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 		custom: {
 			value: "some",
 			getter: function() { return this._custom + "custom"; },
-			setter: function(value) { this._custom = value + "changed" },
+			setter: function(value) { this._custom = value + "changed"; },
 			watchable: true
 		},
 		watched: {
@@ -58,7 +58,7 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 		describe(".methods()", function() {
 		  Class("test.methods.Super")
 			.methods({
-				sayHello: function() { return "hello" }
+				sayHello: function() { return "hello"; }
 			})
 			.end(window);
 

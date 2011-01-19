@@ -1,4 +1,4 @@
-define(['Util'], function(Util) {
+define(['utility/objects'], function(utility) {
 	
 	var Class = function(_classpath) {
 		
@@ -52,13 +52,13 @@ define(['Util'], function(Util) {
 				var namespace = context; // reference to the last namespace object before class
 				var classname = classpath[classpath.length - 1]; // name of the class as string
 
-				namespace = Util.buildNamespace(namespace, classpath);
+				namespace = utility.appendObjectChain(namespace, classpath);
 				
 				// Define a class constructor if it is not a mixin
 				var klass = namespace[classname] = function() {
 					var userArgs = arguments[0] || {};
 					builder.superclass && builder.superclass.apply(this, arguments);
-					Util.addInstanceProperties(this, userArgs, builder.classProperties);
+					addInstanceProperties(this, userArgs, builder.classProperties);
 					builder.classConstructor.call(this);
 				};
 				
@@ -71,18 +71,116 @@ define(['Util'], function(Util) {
 				
 				if(builder.mixinClasses) {
 					for(var i=0; i < builder.mixinClasses.length; i++) {
-						Util.addProperties(this.classProperties, this.mixinClasses[i].__properties__, false);
-						Util.addProperties(this.classMethods, this.mixinClasses[i].__methods__, false);
+						utility.copyProperties(this.mixinClasses[i].__properties__, this.classProperties, false, true);
+						utility.copyProperties(this.mixinClasses[i].__methods__, this.classMethods, false, true);
 					}
 				}
 				
-				Util.buildPropertyAccessors(klass.prototype, builder.classProperties);
-				Util.addMethods(klass.prototype, this.classMethods, this.superclass);
+				addPropertyAccessors(klass.prototype, this.classProperties);
+				addPrototypeMethods(klass.prototype, this.classMethods, this.superclass);
 			}
 			
 		}; // end return
 	};
 	
+	
+	var addWatchableSetter = function(destination, propertyName, definition) {
+		
+		var setter = definition.setter || function(value) {
+			definition.getter ? this["_" + propertyName] = value : this[propertyName] = value;
+		};
+		
+		utility.addCamelCaseSetter(destination, propertyName, function(value) {
+			var validated = true;
+			this._filterChange && typeof(this._filterChange) == 'function' && (value = this._filterChange(propertyName, value));
+			this._beforeChange && typeof(this._beforeChange) == 'function' && (validated = this._beforeChange(propertyName, value));
+
+			if (validated) {
+				setter.call(this, value);
+				this._afterChange && typeof(this._afterChange) == 'function' && this._afterChange(propertyName, value);
+			}
+		});
+	};
+	
+	/**
+	 * Takes a properties definition and creates the setter and getter
+	 * on the given object.
+	 * 
+	 * @param {object} properties The definition object passed in .properties() 
+	 */
+
+	var addPropertyAccessors = function(destination, properties) {
+		for (var propertyName in properties) {
+			if (properties.hasOwnProperty(propertyName)) {
+				definition = properties[propertyName];
+				
+				definition.getter && utility.addCamelCaseGetter(destination, propertyName, definition.getter);
+				
+				if (definition.watchable) {
+					addWatchableSetter(destination, propertyName, definition);
+				} else if (definition.setter) {
+					utility.addCamelCaseSetter(destination, propertyName, definition.setter);
+				}
+			}
+		}
+		
+	};
+	
+	/**
+	 * Assigns all methods declared in the methods definition object
+	 * to the given obj. On sub classes it saves
+	 * a reference to the overwritten super method in each method. 
+	 * 
+	 * @param {Object} destination The Object all methods are added to
+	 * @param {function} superclass The base class to extend from
+	 * @param {object} methods The method definition object
+	 */
+
+	addPrototypeMethods = function(destination, methods, superclass) {
+
+		for (var method in methods) {
+			if (methods.hasOwnProperty(method)) {
+				destination[method] = (superclass && superclass.prototype[method]) ? (function(name, fn) {
+					return function() {
+						// add a reference to the same method on the super class
+						this.superMethod = superclass.prototype[name];
+						// apply the current context with arguments and superMethod reference
+						var ret = fn.apply(this, arguments);
+						// we dont need the reference anymore, so delete it.
+						delete this.superMethod;
+						// return the result of the applied method
+						return ret;
+					};
+				})(method, methods[method]) : methods[method];
+			}
+		}
+	};
+	
+	/**
+	 * Takes two property definition objects and adds them merged
+	 * to the given host object, overwriting the defaults where possible
+	 * 
+	 * @param {object} obj The host object the properties are added to
+	 * @param {object} userArgs User arguments passed as object literal
+	 * @param {object} properties The property definition object
+	 */
+
+	addInstanceProperties = function(destination, preferred, defaults) {
+		for (var prop in defaults) {
+			if (defaults.hasOwnProperty(prop)) {
+				var instancePropString = prop;
+				var defaultProp = utility.deepCopy(defaults[prop]);
+				var preferredProp = utility.deepCopy(preferred[prop]);
+
+				if (defaultProp.getter) {
+					instancePropString = "_" + prop;
+				}
+				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp.value;
+			}
+		}
+	};
+		
 	return Class;
+
 });
 	

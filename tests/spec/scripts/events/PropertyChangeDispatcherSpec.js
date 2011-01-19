@@ -5,11 +5,10 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 	  
 		var events = {};
 		
-		Class("properties.Changer") .mixin(PropertyChangeDispatcher)
+		Class("properties.Changer") .extend(PropertyChangeDispatcher)
 		.properties({
 			test: {
-				value: "test",
-				watchable: true
+				value: "test"
 			}
 		})
 		.end(events);
@@ -17,6 +16,54 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 		var instance;
 		beforeEach(function() {
 		  instance = new events.properties.Changer();
+		});
+		
+		describe("set('key', value)", function() {
+		  
+			it("Adds set method to the class prototype", function() {
+			  expect(events.properties.Changer.prototype.set).toBeTypeOf('function');
+			});
+			
+			it("Changes the value of the property", function() {
+			  instance.set("test", "changed");
+				expect(instance.test).toEqual("changed");
+			});
+			
+			it("Creates a new property if key does not exist yet", function() {
+			  instance.set("created", "value");
+				expect(instance.created).toEqual("value");
+			});
+		
+		});
+		
+		describe("set({ 'key' : value, 'key2: value })", function() {
+		  
+			it("Should be possible to provide an object with key:value pairs", function() {
+			  instance.set({
+					test: "bla",
+					sub: {}
+				});
+				
+				expect(instance.test).toEqual("bla");
+				expect(instance.sub).toEqual({});
+			});
+		
+		});
+		
+		describe("get('key')", function() {
+		  
+			it("Adds get method to the class prototype", function() {
+			  expect(events.properties.Changer.prototype.get).toBeTypeOf('function');
+			});
+		
+			it("Returns the value of the property", function() {
+			  expect(instance.get('test')).toEqual("test");
+			});
+			
+			it("throws error when key is not defined on object", function() {
+			  expect(instance.get).toThrow();
+			});
+		
 		});
 		
 		describe("_beforeFilter", function() {
@@ -37,7 +84,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				instance.filter("testChange", klass.listener1);
 				instance.filter("testChange", klass.listener2);
 			
-				instance.setTest("new value");
+				instance.set("test", "new value");
 				
 				expect(klass.listener1).toHaveBeenCalled();
 				expect(klass.listener2).toHaveBeenCalled();
@@ -55,7 +102,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				spyOn(spy, 'listener').andCallThrough();
 				
 				instance.filter("testChange", spy.listener);
-				instance.setTest("new value");
+				instance.set("test", "new value");
 				
 				expect(spy.listener).toHaveBeenCalled();
 				expect(instance.test).toEqual("filtered value");
@@ -81,7 +128,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				instance.validate("testChange", klass.listener1);
 				instance.validate("testChange", klass.listener2);
 			
-				instance.setTest("new value");
+				instance.set("test", "new value");
 				
 				expect(klass.listener1).toHaveBeenCalled();
 				expect(klass.listener2).toHaveBeenCalled();
@@ -98,7 +145,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				spyOn(spy, 'validator').andCallThrough();
 				
 				instance.validate("testChange", spy.validator);
-				instance.setTest("new value");
+				instance.set("test", "new value");
 				
 				expect(spy.validator).toHaveBeenCalled();
 				expect(instance.test).toEqual("test");
@@ -122,7 +169,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				instance.after("testChange", klass.listener1);
 				instance.after("testChange", klass.listener2);
 			
-				instance.setTest("new value");
+				instance.set("test", "new value");
 				
 				expect(klass.listener1).toHaveBeenCalled();
 				expect(klass.listener2).toHaveBeenCalled();

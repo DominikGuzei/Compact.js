@@ -1,4 +1,4 @@
-define(['Mixin', 'events/EventDispatcher'], function(Mixin, EventDispatcher) {
+define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 	
 	/**
 	 * PropertyChangeDispatcher mixes in EventDispatcher and
@@ -10,9 +10,40 @@ define(['Mixin', 'events/EventDispatcher'], function(Mixin, EventDispatcher) {
 	 * on and after property changes.
 	 */
 	
-	Mixin("PropertyChangeDispatcher") .mixin(EventDispatcher)
+	Class("PropertyChangeDispatcher") .mixin(EventDispatcher)
 	
 	.methods({
+		
+		get: function(key) {
+			if(!this[key]) {
+				throw new Error("No property '" + key + "' defined");
+			}
+			return this[key];
+		},
+		
+		set: function(key, value) {
+			
+			if(typeof(key) == 'object') {
+				for(property in key) {
+					if(key.hasOwnProperty(property)) {
+						this.set(property, key[property]);
+					}
+				}
+			}
+			
+			if(typeof(key) == 'string') {
+				var validated = true;
+				value = this._filterChange(key, value);
+				validated = this._beforeChange(key, value);
+
+				if (validated) {
+					this[key] = value;
+					this._afterChange(key, value);
+				}
+			}
+			
+		},
+		
 		/**
 		 * Is called before a property changes and provides
 		 * the possibility to filter the value and change it

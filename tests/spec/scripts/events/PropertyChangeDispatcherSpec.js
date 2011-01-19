@@ -81,8 +81,8 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				spyOn(klass, 'listener1').andCallThrough();
 				spyOn(klass, 'listener2').andCallThrough();
 				
-				instance.filter("testChange", klass.listener1);
-				instance.filter("testChange", klass.listener2);
+				instance.filter("change:test", klass.listener1);
+				instance.filter("change:test", klass.listener2);
 			
 				instance.set("test", "new value");
 				
@@ -101,7 +101,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				
 				spyOn(spy, 'listener').andCallThrough();
 				
-				instance.filter("testChange", spy.listener);
+				instance.filter("change:test", spy.listener);
 				instance.set("test", "new value");
 				
 				expect(spy.listener).toHaveBeenCalled();
@@ -125,8 +125,8 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				spyOn(klass, 'listener1').andCallThrough();
 				spyOn(klass, 'listener2').andCallThrough();
 				
-				instance.validate("testChange", klass.listener1);
-				instance.validate("testChange", klass.listener2);
+				instance.validate("change:test", klass.listener1);
+				instance.validate("change:test", klass.listener2);
 			
 				instance.set("test", "new value");
 				
@@ -144,7 +144,7 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				
 				spyOn(spy, 'validator').andCallThrough();
 				
-				instance.validate("testChange", spy.validator);
+				instance.validate("change:test", spy.validator);
 				instance.set("test", "new value");
 				
 				expect(spy.validator).toHaveBeenCalled();
@@ -166,8 +166,8 @@ define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyCha
 				spyOn(klass, 'listener1').andCallThrough();
 				spyOn(klass, 'listener2').andCallThrough();
 				
-				instance.after("testChange", klass.listener1);
-				instance.after("testChange", klass.listener2);
+				instance.after("change:test", klass.listener1);
+				instance.after("change:test", klass.listener2);
 			
 				instance.set("test", "new value");
 				

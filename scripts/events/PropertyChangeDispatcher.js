@@ -53,7 +53,7 @@ define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 		 * @param {*} value Value the property changes to
 		 */
 		_filterChange: function(propertyName, value) {
-			var eventName = propertyName + "Change";
+			var eventName = "change:" + propertyName;
 			var eventData = {};
 			eventData[propertyName] = value;
 			return this.filterEvent(eventName, eventData)[propertyName];
@@ -69,7 +69,7 @@ define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 		 * @param {*} value Value the property changes to
 		 */
 		_beforeChange: function(propertyName, value) {
-			var eventName = propertyName + "Change";
+			var eventName = "change:" + propertyName;
 			var eventData = {};
 			eventData[propertyName] = value;
 			var validated = this.validateEvent(eventName, eventData);
@@ -88,7 +88,7 @@ define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 		_afterChange: function(propertyName, value) {
 			var eventData = {};
 			eventData[propertyName] = value;
-			this._dispatch("after", propertyName + "Change", eventData);
+			this._dispatch("after", "change:" + propertyName, eventData);
 		}
 		
 	})

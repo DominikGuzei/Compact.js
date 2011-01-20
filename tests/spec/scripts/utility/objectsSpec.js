@@ -108,28 +108,6 @@ define(['utility/objects'], function(objectsUtility) {
 				expect(copy.complex.array).toEqual(["test", "values"]);
 		  });
 		});
-		
-		describe("addCamelCaseSetter", function() {
-		  
-			it("Adds a function to the object that is named like a setter for the property", function() {
-			  var object = {};
-				var setter = function() {};
-				objectsUtility.addCamelCaseSetter(object, "test", setter);
-				expect(object.setTest).toBe(setter);
-			});
-		
-		});
-		
-		describe("addCamelCaseGetter", function() {
-		  
-			it("Adds a function to the object that is named like a setter for the property", function() {
-			  var object = {};
-				var getter = function() {};
-				objectsUtility.addCamelCaseGetter(object, "test", getter);
-				expect(object.getTest).toBe(getter);
-			});
-		
-		});
 	
 	});
 	

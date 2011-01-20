@@ -68,38 +68,7 @@ define(function() {
 			}
 
 			return c;
-		},
-		
-		/**
-		 * Adds a function to the destination object
-		 * that is named like a setter (eg: set + PropertyName)
-		 * 
-		 * @param {Object} destination The Object the setter is appended to
-		 * @param {String} propertyName The name of the property the setter
-		 * is generated for
-		 * @param {Function} setter The setter function that is added 
-		 */
-		
-		addCamelCaseSetter: function(destination, propertyName, setter) {
-			var camelCaseName = "set" + propertyName[0].toUpperCase() + propertyName.substring(1);
-			destination[camelCaseName] = setter;
-		},
-		
-		/**
-		 * Adds a function to the destination object
-		 * that is named like a getter (eg: get + PropertyName)
-		 * 
-		 * @param {Object} destination The Object the getter is appended to
-		 * @param {String} propertyName The name of the property the getter
-		 * is generated for
-		 * @param {Function} getter The getter function that is added 
-		 */
-		
-		addCamelCaseGetter: function(destination, propertyName, getter) {
-			var camelCaseName = "get" + propertyName[0].toUpperCase() + propertyName.substring(1);
-			destination[camelCaseName] = getter;
-		}
-		
+		}		
 	};
 });
 

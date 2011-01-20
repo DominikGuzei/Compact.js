@@ -1,9 +1,15 @@
 define(['model/Store', 'model/Model'], function(Store, Model) {
 	
 	describe("model/Store", function() {
-	  var store;
+
+		var store;
+		
 		beforeEach(function() {
 		  store = Store.getInstance();
+		});
+		
+		afterEach(function() {
+		  Store.instance = undefined;
 		});
 		
 		describe("getInstance", function() {
@@ -60,7 +66,6 @@ define(['model/Store', 'model/Model'], function(Store, Model) {
 			});
 		
 		});
-	
 	});
 	
 });

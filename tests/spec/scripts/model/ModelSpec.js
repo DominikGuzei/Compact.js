@@ -1,4 +1,4 @@
-define(['model/Model'], function(Model) {
+define(['model/Model', 'model/Store'], function(Model, Store) {
 	
 	describe("model/Model", function() {
 		
@@ -25,7 +25,7 @@ define(['model/Model'], function(Model) {
 		
 		describe("get", function() {
 		  
-			it("Returns the value of the model property", function() {
+			it("Returns the value of the model attribute", function() {
 			  instance.attributes.test = "value";
 				expect(instance.get("test")).toEqual("value");
 			});
@@ -34,12 +34,12 @@ define(['model/Model'], function(Model) {
 		
 		describe("set", function() {
 		  
-			it("Sets the value of a model property", function() {
+			it("Sets the value of a model attribute", function() {
 			  instance.set("test", "value");
 				expect(instance.attributes.test).toEqual("value");
 			});
 			
-			it("Sets all properties of an object literal", function() {
+			it("Sets all attributes of the model", function() {
 			  instance.set({
 					test: "value",
 					name: "test"
@@ -48,13 +48,81 @@ define(['model/Model'], function(Model) {
 				expect(instance.attributes.name).toEqual("test");
 			});
 			
-			it("Is possible to validate the change of a model property", function() {
+			it("Is possible to validate the change of a model attribute", function() {
 			  instance.attributes.test = "value";
 				instance.validate("change:test", function(value) {
 					return false;
 				});
 				instance.set("test", "changed");
 				expect(instance.attributes.test).toEqual("value");
+			});
+		
+			it("Is possible to listen on a change of a attribute", function() {
+			  instance.attributes.test = "value";
+				var changed;
+				instance.on("change:test", function(value) {
+					changed = value;
+				});
+				instance.set("test", "changed");
+				expect(changed).toEqual("changed");
+			});
+		
+		});
+		
+		describe("isNew", function() {
+		  
+			it("Tells if the model was not yet saved to the server", function() {
+			  expect(instance.isNew()).toBeTruthy();
+				instance.id = 1;
+				expect(instance.isNew()).not.toBeTruthy();
+			});
+		
+		});
+		
+		describe("save", function() {
+		  
+			var store;
+
+			beforeEach(function() {
+			  store = Store.getInstance();
+			});
+
+			afterEach(function() {
+			  Store.instance = undefined;
+			});
+		
+			it("Tells the Store to create the record if it is new", function() {
+				var called = false;
+				store.on("create", function(model) {
+					expect(model).toBe(instance);
+					called = true;
+				});
+			  instance.save();
+				expect(called).toBeTruthy();
+			});
+			
+			it("Tells the Store to update the record if it exists persistently", function() {
+				var called = false;
+				instance.id = 1;
+				store.on("update", function(model) {
+					expect(model).toBe(instance);
+					called = true;
+				});
+			  instance.save();
+				expect(called).toBeTruthy();
+			});
+		
+		});
+		
+		describe("toJSON", function() {
+		  
+			it("Returns the attributes of the model as json string", function() {
+			  instance.set({
+					name: "value",
+					test: { inside: "hello" },
+					arr: [1,2,3]
+				});
+				expect(instance.toJSON()).toEqual('{"name":"value","test":{"inside":"hello"},"arr":[1,2,3]}');
 			});
 		
 		});

@@ -1,12 +1,14 @@
-define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
+define(['Class', 'events/EventDispatcher', 'model/Store'], function(Class, EventDispatcher, Store) {
 	
 	Class("Model") .mixin(EventDispatcher)
-	.properties({
+	
+	.properties ({
 		id: null,
 		clientId: null,
 		attributes: {}
 	})
-	.methods({
+	
+	.methods ({
 		get: function(key) {
 			if(!this.attributes[key]) {
 				throw new Error("No property '" + key + "' defined on this model");
@@ -34,6 +36,19 @@ define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 					this.attributes[key] = value;
 				}
 			}
+		},
+		
+		save: function() {
+			var method = this.isNew() ? "create" : "update";
+			Store.getInstance().synchronize(method, this);
+		},
+		
+		isNew: function() {
+			return this.id ? false : true;
+		},
+		
+		toJSON: function() {
+			return JSON.stringify(this.attributes);
 		}
 	})
 	.end(this);

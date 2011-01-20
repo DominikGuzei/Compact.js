@@ -18,17 +18,20 @@ define(['utility/collection/forEach'], function(forEach) {
 	 * Return the results of applying the iterator to each element.
 	 * Delegates to **ECMAScript 5**'s native `map` if available.
 	 * 
-	 * @param {Object/Array} obj The object or array that is mapped into the result array
+	 * @param {Object/Array} subject The object or array that is mapped into the result array
 	 * @param {Function} iterator The function that gets called for each property/index
 	 * @param {Object} context The context the iterator is bound to
 	 */
-	return function(obj, iterator, context) {
+	return function(subject, iterator, context) {
 	  var results = [];
-    if (obj == null) return results;
-    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-    forEach(obj, function(value, index, list) {
+	
+    if (subject == null) return results;
+    if (nativeMap && subject.map === nativeMap) return object.map(iterator, context);
+
+    forEach(subject, function(value, index, list) {
       results[results.length] = iterator.call(context, value, index, list);
     });
+
     return results;
   };
 	

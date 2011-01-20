@@ -13,13 +13,13 @@ define(['utility/collection/some'], function(some) {
 	 * test (iterator). The function returns as soon as it finds an acceptable element, 
 	 * and doesn't traverse the entire list.
 	 * 
-	 * @param {Object/Array} obj The object or array that is searched
+	 * @param {Object/Array} subject The object or array that is searched
 	 * @param {Function} iterator The function that gets called for each property/index
 	 * @param {Object} context The context the iterator is bound to
 	 */
-	return function(obj, iterator, context) {
+	return function(subject, iterator, context) {
     var result;
-    some(obj, function(value, index, list) {
+    some(subject, function(value, index, list) {
       if (iterator.call(context, value, index, list)) {
         result = value;
         return true;

@@ -20,23 +20,26 @@ define(['utility/typeof'], function(type) {
 	 * Handles objects implementing `forEach`, arrays, and raw objects.
 	 * Delegates to **ECMAScript 5**'s native `forEach` if available.
 	 * 
-	 * @param {Object/Array} obj The object or array to iterate over
+	 * @param {Object/Array} subject The object or array to iterate over
 	 * @param {Function} iterator The function that gets called for each property/index
 	 * @param {Object} context The context the iterator is bound to
 	 */
-	return function(obj, iterator, context) {
+	return function(subject, iterator, context) {
 	  var value;
-    if (obj == null) return;
-    if (nativeforEach && obj.forEach === nativeforEach) {
-      obj.forEach(iterator, context);
-    } else if (type.isNumber(obj.length)) {
-      for (var i = 0, l = obj.length; i < l; i++) {
-        if (iterator.call(context, obj[i], i, obj) == false) return;
+    if (subject == null) return;
+
+    if (nativeforEach && subject.forEach === nativeforEach) {
+      subject.forEach(iterator, context);
+
+    } else if (type.isNumber(subject.length)) {
+      for (var i = 0, l = subject.length; i < l; i++) {
+        if (iterator.call(context, subject[i], i, subject) == false) return;
       }
+
     } else {
-      for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) {
-          if (iterator.call(context, obj[key], key, obj) == false) return;
+      for (var key in subject) {
+        if (hasOwnProperty.call(subject, key)) {
+          if (iterator.call(context, subject[key], key, subject) == false) return;
         }
       }
     }

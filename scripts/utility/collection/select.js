@@ -14,17 +14,20 @@ define(['utility/collection/forEach'], function(forEach) {
 	 * the values that pass a truth test (iterator). 
 	 * Delegates to the native filter method, if it exists.
 	 * 
-	 * @param {Object/Array} obj The object or array from which the values are selected
+	 * @param {Object/Array} subject The object or array from which the values are selected
 	 * @param {Function} iterator The function that gets called for each property/index
 	 * @param {Object} context The context the iterator is bound to
 	 */
-	return function(obj, iterator, context) {
+	return function(subject, iterator, context) {
     var results = [];
-    if (obj == null) return results;
-    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
-    forEach(obj, function(value, index, list) {
+    
+		if (subject == null) return results;
+		if (nativeFilter && subject.filter === nativeFilter) return subject.filter(iterator, context);
+
+    forEach(subject, function(value, index, list) {
       if (iterator.call(context, value, index, list)) results[results.length] = value;
     });
+
     return results;
   };
 });

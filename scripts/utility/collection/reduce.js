@@ -17,20 +17,21 @@ function(forEach, bind) {
 	 * into a single value. Memo is the initial state of the reduction, 
 	 * and each successive step of it should be returned by iterator.
 	 * 
-	 * @param {Object/Array} obj The object or array that is reduced into the result
+	 * @param {Object/Array} subject The object or array that is reduced into the result
 	 * @param {Function} iterator The function that gets called for each property/index
 	 * @param {*} memo The value that gets passed to each iteration, the "memory"
 	 * @param {Object} context The context the iterator is bound to
 	 */
-	return function(obj, iterator, memo, context) {
+	return function(subject, iterator, memo, context) {
 	  var initial = memo !== void 0;
-    if (obj == null) obj = [];
-    if (nativeReduce && obj.reduce === nativeReduce) {
+    if (subject == null) subject = [];
+
+    if (nativeReduce && subject.reduce === nativeReduce) {
       if (context) iterator = bind(iterator, context);
-      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+      return initial ? subject.reduce(iterator, memo) : subject.reduce(iterator);
     }
 
-    forEach(obj, function(value, index, list) {
+    forEach(subject, function(value, index, list) {
       if (!initial && index === 0) {
         memo = value;
         initial = true;

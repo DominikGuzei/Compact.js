@@ -13,12 +13,12 @@ define(function() {
 	 * pre-fill them, also known as currying.
 	 * 
 	 * @param {Function} func The function that is bound to an object
-	 * @param {Object} obj The object the function is bound to
+	 * @param {Object} object The object the function is bound to
 	 */
-	return function(func, obj) {
+	return function(func, object) {
     var args = slice.call(arguments, 2);
     return function() {
-      return func.apply(obj || {}, args.concat(slice.call(arguments)));
+      return func.apply(object || {}, args.concat(slice.call(arguments)));
     };
   };
 	

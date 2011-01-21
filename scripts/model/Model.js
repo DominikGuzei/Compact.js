@@ -43,6 +43,10 @@ define(['Class', 'events/EventDispatcher', 'model/Store'], function(Class, Event
 			Store.getInstance().synchronize(method, this);
 		},
 		
+		destroy: function() {
+			Store.getInstance().synchronize("destroy", this);
+		},
+		
 		isNew: function() {
 			return this.id ? false : true;
 		},

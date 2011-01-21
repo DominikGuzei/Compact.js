@@ -3,8 +3,14 @@ define(['model/Model', 'model/Store'], function(Model, Store) {
 	describe("model/Model", function() {
 		
 		var instance;
+		var store;
 		beforeEach(function() {
 		  instance = new Model();
+			store = Store.getInstance();
+		});
+
+		afterEach(function() {
+		  Store.instance = undefined;
 		});
 		
 		describe("default attributes", function() {
@@ -80,16 +86,6 @@ define(['model/Model', 'model/Store'], function(Model, Store) {
 		});
 		
 		describe("save", function() {
-		  
-			var store;
-
-			beforeEach(function() {
-			  store = Store.getInstance();
-			});
-
-			afterEach(function() {
-			  Store.instance = undefined;
-			});
 		
 			it("Tells the Store to create the record if it is new", function() {
 				var called = false;
@@ -109,6 +105,20 @@ define(['model/Model', 'model/Store'], function(Model, Store) {
 					called = true;
 				});
 			  instance.save();
+				expect(called).toBeTruthy();
+			});
+		
+		});
+		
+		describe("destroy", function() {
+		  
+			it("Tells the Store to send a out an event to delete the model", function() {
+			  var called = false;
+				store.on("destroy", function(model) {
+					expect(model).toBe(instance);
+					called = true;
+				});
+			  instance.destroy();
 				expect(called).toBeTruthy();
 			});
 		

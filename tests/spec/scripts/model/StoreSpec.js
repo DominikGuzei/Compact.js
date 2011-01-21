@@ -57,11 +57,11 @@ define(['model/Store', 'model/Model'], function(Store, Model) {
 			});
 			
 			it("Dispatches an event that a model/collection should be deleted on the server/storage", function() {
-				store.on("delete", function(modelToCreate) {
+				store.on("destroy", function(modelToCreate) {
 					expect(modelToCreate).toBe(model);
 					called = true;
 				});
-				store.synchronize("delete",model);
+				store.synchronize("destroy",model);
 				expect(called).toBeTruthy();
 			});
 		

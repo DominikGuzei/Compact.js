@@ -4,19 +4,28 @@ define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
 	
 	Class("Store") .mixin(EventDispatcher)
 	.methods({
-		synchronize: function(method, model) {
+		
+		/**
+		 * Dispatches an event with basic CRUD
+		 * operation and a subject model or collection
+		 * 
+		 * @param {String} method The CRUD method name
+		 * @param {Model/Collection} subject The model or collection to
+		 * apply the CRUD method on
+		 */
+		synchronize: function(method, subject) {
 			switch(method) {
 				case "create":
-					this.onEvent("create", model);
+					this.onEvent("create", subject);
 					break;
 				case "read":
-					this.onEvent("read", model);
+					this.onEvent("read", subject);
 					break;
 				case "update":
-					this.onEvent("update", model);
+					this.onEvent("update", subject);
 					break;
-				case "delete":
-					this.onEvent("delete", model);
+				case "destroy":
+					this.onEvent("destroy", subject);
 					break;
 			}
 		}

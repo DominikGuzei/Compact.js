@@ -1,4 +1,6 @@
-define(['utility/objects'], function(objectsUtil) {
+define(['utility/object/copyProperties', 'utility/object/appendObjectChain'], 
+
+function(copyProperties, appendObjectChain) {
 	
 	var Mixin = function(_mixinpath) {
 		
@@ -40,7 +42,7 @@ define(['utility/objects'], function(objectsUtil) {
 				var namespace = context; // reference to the last namespace object before class
 				var mixinname = mixinpath[mixinpath.length - 1]; // name of the class as string
 
-				namespace = objectsUtil.appendObjectChain(namespace, mixinpath);
+				namespace = appendObjectChain(namespace, mixinpath);
 				var mixin = namespace[mixinname];
 				mixin.__mixin__ = true;
 				mixin.__properties__ = {};
@@ -49,13 +51,13 @@ define(['utility/objects'], function(objectsUtil) {
 				// add all methods from other mixins to own methods
 				if(this.mixinClasses) {
 					for(var i=0; i < this.mixinClasses.length; i++) {
-						objectsUtil.copyProperties(this.mixinClasses[i].__properties__, mixin.__properties__, true, true);
-						objectsUtil.copyProperties(this.mixinClasses[i].__methods__, mixin.__methods__, true, true);
+						copyProperties(this.mixinClasses[i].__properties__, mixin.__properties__, true, true);
+						copyProperties(this.mixinClasses[i].__methods__, mixin.__methods__, true, true);
 					}
 				}
 				
-				objectsUtil.copyProperties(this.mixinProperties, mixin.__properties__,  true, true);
-				objectsUtil.copyProperties(this.mixinMethods, mixin.__methods__, true, true);
+				copyProperties(this.mixinProperties, mixin.__properties__,  true, true);
+				copyProperties(this.mixinMethods, mixin.__methods__, true, true);
 				
 			}
 			

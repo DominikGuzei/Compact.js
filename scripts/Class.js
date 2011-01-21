@@ -1,4 +1,8 @@
-define(['utility/objects'], function(utility) {
+define(['utility/object/copyProperties', 
+				'utility/object/appendObjectChain',
+				'utility/object/deepCopy'], 
+
+function(copyProperties, appendObjectChain, deepCopy) {
 	
 	var Class = function(_classpath) {
 		
@@ -57,7 +61,7 @@ define(['utility/objects'], function(utility) {
 				var namespace = context; // reference to the last namespace object before class
 				var classname = classpath[classpath.length - 1]; // name of the class as string
 
-				namespace = utility.appendObjectChain(namespace, classpath);
+				namespace = appendObjectChain(namespace, classpath);
 				
 				// Define a class constructor if it is not a mixin
 				var klass = namespace[classname] = function() {
@@ -76,13 +80,13 @@ define(['utility/objects'], function(utility) {
 				
 				if(builder.mixinClasses) {
 					for(var i=0; i < builder.mixinClasses.length; i++) {
-						utility.copyProperties(this.mixinClasses[i].__properties__, this.classProperties, false, true);
-						utility.copyProperties(this.mixinClasses[i].__methods__, this.classMethods, false, true);
+						copyProperties(this.mixinClasses[i].__properties__, this.classProperties, false, true);
+						copyProperties(this.mixinClasses[i].__methods__, this.classMethods, false, true);
 					}
 				}
 				
 				addPrototypeMethods(klass.prototype, this.classMethods, this.superclass);
-				utility.copyProperties(this.statics, klass, true, true);
+				copyProperties(this.statics, klass, true, true);
 			}
 			
 		}; // end return
@@ -131,8 +135,8 @@ define(['utility/objects'], function(utility) {
 		for (var prop in defaults) {
 			if (defaults.hasOwnProperty(prop)) {
 				var instancePropString = prop;
-				var defaultProp = utility.deepCopy(defaults[prop]);
-				var preferredProp = utility.deepCopy(preferred[prop]);
+				var defaultProp = deepCopy(defaults[prop]);
+				var preferredProp = deepCopy(preferred[prop]);
 
 				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;
 			}

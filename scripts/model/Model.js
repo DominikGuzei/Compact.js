@@ -4,7 +4,6 @@ define(['Class', 'events/EventDispatcher', 'model/Store'], function(Class, Event
 	
 	.properties ({
 		id: null,
-		clientId: null,
 		attributes: {}
 	})
 	

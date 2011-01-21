@@ -22,10 +22,6 @@ define(['model/Model', 'model/Store'], function(Model, Store) {
 			it("Has an undefined id at creation", function() {
 			  expect(instance.id).toBe(null);
 			});
-			
-			it("Has an undefined clientId at creation", function() {
-			  expect(instance.clientId).toBe(null);
-			});
 		
 		});
 		

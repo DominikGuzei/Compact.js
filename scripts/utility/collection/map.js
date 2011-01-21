@@ -26,7 +26,7 @@ define(['utility/collection/forEach'], function(forEach) {
 	  var results = [];
 	
     if (subject == null) return results;
-    if (nativeMap && subject.map === nativeMap) return object.map(iterator, context);
+    if (nativeMap && subject.map === nativeMap) return subject.map(iterator, context);
 
     forEach(subject, function(value, index, list) {
       results[results.length] = iterator.call(context, value, index, list);

@@ -6,8 +6,7 @@
 define(['utility/collection/map'], function(map) {
 
 	/**
-	 * getValues(
-	 * )
+	 * getValues()
 	 * Retrieve the values of an object's properties.
 	 * 
 	 * @param {Object} subject The subject to return the values from

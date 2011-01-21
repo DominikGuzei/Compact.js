@@ -1,6 +1,6 @@
-define(['utility/object/deepCopy'], function(deepCopy) {
+define(['compact/utility/object/deepCopy'], function(deepCopy) {
 	
-	describe("utility/object", function() {
+	describe("compact/utility/object/deepCopy", function() {
 		
 		describe("deepCopy", function() {
 		  it("Returns an identical copy of any object", function() {

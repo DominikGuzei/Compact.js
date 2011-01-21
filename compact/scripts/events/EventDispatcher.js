@@ -1,4 +1,4 @@
-define(['Mixin'], function(Mixin) {
+define(['compact/Mixin'], function(Mixin) {
 	
 	Mixin("EventDispatcher") 
 

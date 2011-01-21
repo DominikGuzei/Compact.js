@@ -14,28 +14,40 @@
 <body>
 
 <script type="text/javascript">
-	require( { baseUrl: "../scripts" },
-		['../tests/spec/scripts/utility/object/appendObjectChainSpec',
-		 '../tests/spec/scripts/utility/object/deepCopySpec',
-		 '../tests/spec/scripts/utility/object/copyPropertiesSpec',
-		 '../tests/spec/scripts/utility/object/getValuesSpec',
+	require( { 
+			baseUrl: "../", 
+			"packages": [
+	        {
+	            name: "compact",
+	            lib: "scripts"
+	        },
+					{
+	            name: "tests",
+	            lib: "spec/scripts"
+	        }
+	    ]
+		},
+		['tests/utility/object/appendObjectChainSpec',
+		 'tests/utility/object/deepCopySpec',
+		 'tests/utility/object/copyPropertiesSpec',
+		 'tests/utility/object/getValuesSpec',
 		
-		 '../tests/spec/scripts/utility/collection/forEachSpec',
-		 '../tests/spec/scripts/utility/collection/mapSpec',
-		 '../tests/spec/scripts/utility/collection/reduceSpec',
-		 '../tests/spec/scripts/utility/collection/findSpec',
-		 '../tests/spec/scripts/utility/collection/someSpec',
-		 '../tests/spec/scripts/utility/collection/selectSpec',
+		 'tests/utility/collection/forEachSpec',
+		 'tests/utility/collection/mapSpec',
+		 'tests/utility/collection/reduceSpec',
+		 'tests/utility/collection/findSpec',
+		 'tests/utility/collection/someSpec',
+		 'tests/utility/collection/selectSpec',
 		
-		 '../tests/spec/scripts/ClassSpec',
-		 '../tests/spec/scripts/MixinSpec',
+		 'tests/ClassSpec',
+		 'tests/MixinSpec',
 		
-		 '../tests/spec/scripts/events/EventDispatcherSpec',
-		 '../tests/spec/scripts/events/PropertyChangeDispatcherSpec',
+		 'tests/events/EventDispatcherSpec',
+		 'tests/events/PropertyChangeDispatcherSpec',
 		
-		 '../tests/spec/scripts/model/StoreSpec',
-		 '../tests/spec/scripts/model/ModelSpec',
-		 '../tests/spec/scripts/model/persistence/LocalStorageSpec',
+		 'tests/model/StoreSpec',
+		 'tests/model/ModelSpec',
+		 'tests/model/persistence/LocalStorageSpec',
 		
 		], 
 		

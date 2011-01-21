@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['utility/collection/forEach'], function(forEach) {
+define(['compact/utility/collection/forEach'], function(forEach) {
 	
 	var nativeSome = Array.prototype.some;
 

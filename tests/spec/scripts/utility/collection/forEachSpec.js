@@ -1,6 +1,6 @@
-define(['utility/collection/forEach'], function(forEach) {
+define(['compact/utility/collection/forEach'], function(forEach) {
 	
-	describe("utility/collection/forEach", function() {
+	describe("compact/utility/collection/forEach", function() {
 		
 		it("Handles every element of an array", function() {
 		  var array = [1,2,3];

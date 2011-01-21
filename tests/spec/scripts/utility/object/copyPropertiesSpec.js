@@ -1,6 +1,6 @@
-define(['utility/object/copyProperties'], function(copyProperties) {
+define(['compact/utility/object/copyProperties'], function(copyProperties) {
 	
-	describe("copyProperties", function() {
+	describe("compact/utility/object/copyProperties", function() {
 	  
 		it("Adds all properties from source to destination by reference", function() {
 		  var source = {

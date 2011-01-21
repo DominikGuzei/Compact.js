@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['utility/collection/map'], function(map) {
+define(['compact/utility/collection/map'], function(map) {
 
 	/**
 	 * getValues()

@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['utility/collection/some'], function(some) {
+define(['compact/utility/collection/some'], function(some) {
 
 	/** 
 	* 

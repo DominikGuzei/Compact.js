@@ -1,4 +1,4 @@
-define(['utility/object/copyProperties', 'utility/object/appendObjectChain'], 
+define(['compact/utility/object/copyProperties', 'compact/utility/object/appendObjectChain'], 
 
 function(copyProperties, appendObjectChain) {
 	

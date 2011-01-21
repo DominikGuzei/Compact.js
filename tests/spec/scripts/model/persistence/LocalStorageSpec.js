@@ -1,8 +1,8 @@
-define(['model/Store', 'model/Model', 'model/persistence/LocalStorage'], 
+define(['compact/model/Store', 'compact/model/Model', 'compact/model/persistence/LocalStorage'], 
 
 function(Store, Model, LocalStorage) {
 	
-	describe("model/persistence/LocalStorage", function() {
+	describe("compact/model/persistence/LocalStorage", function() {
 
 		var store;
 		var localStore;

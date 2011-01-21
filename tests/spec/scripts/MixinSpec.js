@@ -1,7 +1,7 @@
 
-define(['Mixin'], function(Mixin) {
+define(['compact/Mixin'], function(Mixin) {
 	
-	describe("Mixin", function() {	
+	describe("compact/Mixin", function() {	
 		
 		describe("Mixin()", function() {
 		  it("should provide a namespace object for the Mixin", function() {

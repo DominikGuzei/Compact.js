@@ -1,4 +1,6 @@
-define(['Class', 'events/EventDispatcher', 'model/Store'], function(Class, EventDispatcher, Store) {
+define(['compact/Class', 'compact/events/EventDispatcher', 'compact/model/Store'], 
+
+function(Class, EventDispatcher, Store) {
 	
 	Class("Model") .mixin(EventDispatcher)
 	

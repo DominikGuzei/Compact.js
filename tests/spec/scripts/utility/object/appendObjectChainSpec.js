@@ -1,6 +1,6 @@
-define(['utility/object/appendObjectChain'], function(appendObjectChain) {
+define(['compact/utility/object/appendObjectChain'], function(appendObjectChain) {
 		
-		describe("utility/object/appendObjectChain", function() {
+		describe("compact/utility/object/appendObjectChain", function() {
 		  
 			it("Adds the objects in a chain like a namespace declaration", function() {
 			  var namespace = {};

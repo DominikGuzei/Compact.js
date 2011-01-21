@@ -3,8 +3,8 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['utility/collection/forEach', 
-			  'utility/function/bind'], 
+define(['compact/utility/collection/forEach', 
+			  'compact/utility/function/bind'], 
 
 function(forEach, bind) {
 	

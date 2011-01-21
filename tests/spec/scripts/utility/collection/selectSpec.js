@@ -1,6 +1,6 @@
-define(['utility/collection/select'], function(select) {
+define(['compact/utility/collection/select'], function(select) {
 	
-	describe("utility/collection/select", function() {
+	describe("compact/utility/collection/select", function() {
 		
 		it("Returns an array with all values where the iterator returned true", function() {
 		  var array = [1,2,3,4,5,6];

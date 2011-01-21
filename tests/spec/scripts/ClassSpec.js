@@ -1,5 +1,5 @@
 
-define(['Class', 'Mixin'], function(Class, Mixin) {
+define(['compact/Class', 'compact/Mixin'], function(Class, Mixin) {
 	
 	var complexProp = {
 		object: {},
@@ -18,7 +18,7 @@ define(['Class', 'Mixin'], function(Class, Mixin) {
 	.end(window);
 	
 	
-	describe("Class", function() {	
+	describe("compact/Class", function() {	
 		
 		describe("Class()", function() {
 		  it("should provide a namespace", function() {

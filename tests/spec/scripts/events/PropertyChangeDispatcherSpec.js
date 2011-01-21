@@ -1,5 +1,7 @@
 
-define(['Class', 'events/PropertyChangeDispatcher'], function(Class, PropertyChangeDispatcher) {
+define(['compact/Class', 'compact/events/PropertyChangeDispatcher'], 
+
+function(Class, PropertyChangeDispatcher) {
 	
 	describe("PropertyChangeDispatcher", function() {
 	  

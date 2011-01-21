@@ -1,6 +1,6 @@
-define(['utility/collection/find'], function(find) {
+define(['compact/utility/collection/find'], function(find) {
 	
-	describe("utility/collection/find", function() {
+	describe("compact/utility/collection/find", function() {
 		
 		it("Returns the first value where the iterator returns true", function() {
 		  var array = [1,2,3];

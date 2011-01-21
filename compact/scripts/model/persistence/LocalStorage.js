@@ -1,8 +1,8 @@
-define(['Class', 'model/Store', 
-				'utility/object/deepCopy', 
-				'utility/collection/map',
-				'utility/object/getValues',
-				'utility/collection/forEach'], 
+define(['compact/Class', 'compact/model/Store', 
+				'compact/utility/object/deepCopy', 
+				'compact/utility/collection/map',
+				'compact/utility/object/getValues',
+				'compact/utility/collection/forEach'], 
 
 function(Class, Store, deepCopy, map, getValues, forEach) {
 	

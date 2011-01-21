@@ -1,6 +1,6 @@
-define(['utility/collection/some'], function(some) {
+define(['compact/utility/collection/some'], function(some) {
 	
-	describe("utility/collection/some", function() {
+	describe("compact/utility/collection/some", function() {
 		
 		it("Returns true if the iterator returs true for any value", function() {
 		  var array = [1,2,3];

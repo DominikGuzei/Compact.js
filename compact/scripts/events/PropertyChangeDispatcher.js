@@ -1,4 +1,6 @@
-define(['Class', 'events/EventDispatcher'], function(Class, EventDispatcher) {
+define(['compact/Class', 'compact/events/EventDispatcher'], 
+
+function(Class, EventDispatcher) {
 	
 	/**
 	 * PropertyChangeDispatcher mixes in EventDispatcher and

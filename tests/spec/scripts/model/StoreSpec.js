@@ -1,6 +1,6 @@
-define(['model/Store', 'model/Model'], function(Store, Model) {
+define(['compact/model/Store', 'compact/model/Model'], function(Store, Model) {
 	
-	describe("model/Store", function() {
+	describe("compact/model/Store", function() {
 
 		var store;
 		

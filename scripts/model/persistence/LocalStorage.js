@@ -31,6 +31,13 @@ define(['Class', 'model/Store', 'utility/object/deepCopy'], function(Class, Stor
 			this.data[model.localStorageId] = deepCopy(model.attributes);
 		},
 		
+		/**
+		 * Deletes the model from the localStorage and
+		 * removes the localStorageId from the model
+		 * 
+		 * @param {Model} model The model to destroy 
+		 */
+		
 		destroy: function(model) {
 			if(model.localStorageId) {
 				delete this.data[model.localStorageId];

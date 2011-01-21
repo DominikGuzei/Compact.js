@@ -1,11 +1,17 @@
-define(['Class', 'model/Store', 'utility/object/deepCopy'], function(Class, Store, deepCopy) {
+define(['Class', 'model/Store', 
+				'utility/object/deepCopy', 
+				'utility/collection/map',
+				'utility/object/getValues',
+				'utility/collection/forEach'], 
+
+function(Class, Store, deepCopy, map, getValues, forEach) {
 	
 	Class("LocalStorage")
 	
 	.properties ({
 		data: {},
 		name: "defaultStore",
-		highestLocalModelId: 0
+		highestLocalModelId: 1
 	})
 	
 	.methods ({
@@ -20,15 +26,15 @@ define(['Class', 'model/Store', 'utility/object/deepCopy'], function(Class, Stor
 		 * @param {Model} model The model to be saved 
 		 */
 		put: function(model) {
-			if(!model.localStorageId) {
+			if(model.localStorageId == undefined) {
 				model.localStorageId = model.id || this.getNextLocalModelId();
 			} else {
-				if(model.id != model.localStorageId) {
+				if(model.id && model.id != model.localStorageId) {
 					delete this.data[model.localStorageId];
 					model.localStorageId = model.id;
 				}
 			}
-			this.data[model.localStorageId] = deepCopy(model.attributes);
+			this.data[model.localStorageId] = model;
 		},
 		
 		/**
@@ -42,14 +48,20 @@ define(['Class', 'model/Store', 'utility/object/deepCopy'], function(Class, Stor
 			if(model.localStorageId) {
 				delete this.data[model.localStorageId];
 			  delete model["localStorageId"];
+				return model;
 			}
+			throw "Model not found: " + model.id;
 		},
 		
 		/**
 		 * Saves the whole data JSONified to the LocalStorage 
 		 */
 		save: function() {
-			localStorage.setItem(this.name, JSON.stringify(this.data));
+			var modelAttributes = {};
+			forEach(this.data, function(model) {
+				modelAttributes[model.localStorageId] = model.attributes;
+			});
+			localStorage.setItem(this.name, JSON.stringify(modelAttributes));
 		},
 		
 		/**
@@ -57,12 +69,31 @@ define(['Class', 'model/Store', 'utility/object/deepCopy'], function(Class, Stor
 		 * data property and returns it 
 		 */
 		
-		read: function() {
+		load: function() {
 			if(localStorage[this.name]) {
-				this.data = JSON.parse(localStorage[this.name]);
+				var modelAttributes = JSON.parse(localStorage[this.name]);
+				var self = this;
+				
+				forEach(modelAttributes, function(savedAttributes, key) {
+					var id = (key[0] == "#") ? undefined : key;
+					self.data[key] = new Model({
+						id: id,
+						attributes: savedAttributes
+					});
+					self.data[key].localStorageId = key;
+				});
 				return this.data;
 			}
 			return false;
+		},
+		
+		/**
+		 * Returns an array of all Models generated of the
+		 * data saved into the LocalStorage 
+		 */
+		
+		findAll: function() {
+			return getValues(this.data);
 		},
 		
 		/**

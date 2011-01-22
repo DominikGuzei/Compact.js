@@ -4,89 +4,164 @@ define(['compact/utility/object/copyProperties',
 
 function(copyProperties, appendObjectChain, deepCopy) {
 	
-	var Class = function(_classpath) {
-		
-		/**
-		 * Return a chainable builder object that saves the
-		 * given input and composes the class at the .end() 
-		 */
+	/**
+	 * Takes a fully qualified java-like class path and returns 
+	 * an anonymous specification builder object that is used to describe 
+	 * the parts that are used to build the javascript class.
+	 * 
+	 * @param {String} classPathString The fully qualified class path
+	 * @returns {Object} #anonymous The specification object used to
+	 * specify and build the class in the given context.
+	 */
+	
+	var Class = function(classPathString) {
 		
 		return {
+			/**
+			 * The superclass of the class to create 
+			 * @type {Function}
+			 */
 			superclass: null,
-			classConstructor: function() {},
-			classProperties: {},
-			classMethods: {},
-			 
+			
+			/**
+			 * The initialize function that can be defined for 
+			 * custom setup. Is called automatically on instanciation.
+			 * @type {Function}
+			 */
+			initializer: function() {},
+			
+			/**
+			 * The specification of class properties to add 
+			 * with their default values assigned.
+			 * e.g.: { propertyName: "value", property2:... }
+			 * @type {Object} 
+			 */
+			propertiesDefinition: {},
+			
+			/**
+			 * The specification of methods to add
+			 * e.g: { method1: function() { return this.value }, method2: ... }
+			 * @type {Object} 
+			 */
+			methodsDefinition: {},
+			
+			/**
+			 * The specification of static properties and/or methods
+			 * e.g: { staticMethod: function() {}, staticProp: "value", ... }
+			 * @type {Object} 
+			 */
+			staticsDefinition: {},
+			
+			/**
+			 * Sets the superclass for the class to create on the 
+			 * specification builder
+			 * 
+			 * @param {Function} superclass
+			 * @returns {Object} #anonymous The specification-builder object 
+			 */ 
 			extend: function(superclass) {
 				this.superclass = superclass;
 				return this;
 			},
 			
-			initialize: function(init) {
-				this.classConstructor = init;
-				return this;
-			},
-			
-			properties: function(properties) {
-				this.classProperties = properties;
-				return this;
-			},
-			
-			methods: function(methods) {
-				this.classMethods = methods;
-				return this;
-			},
-			
-			statics: function(statics) {
-				this.statics = statics;
-				return this;
-			},
-			
-			mixin: function() {
-				this.mixinClasses = arguments;
+			/**
+			 * Sets the initializer function for the class 
+			 * on the specification builder
+			 * 
+			 * @param {Function} initializer
+			 * @returns {Object} #anonymous The specification-builder object 
+			 */
+			initialize: function(initializer) {
+				this.initializer = initializer;
 				return this;
 			},
 			
 			/**
-			 * Construct the class with all given information passed in
-			 * by the other calls.
+			 * Sets the properties for the class on the specification builder
 			 * 
-			 * @param {object} context The object the namespace is applied to
+			 * @param {Object} properties
+			 * @returns {Object} #anonymous The specification-builder object 
+			 */
+			properties: function(propertiesDefinition) {
+				this.propertiesDefinition = propertiesDefinition;
+				return this;
+			},
+			
+			/**
+			 * Sets the methods for the class on the specification builder
+			 * 
+			 * @param {Object} methods
+			 * @returns {Object} #anonymous The specification-builder object 
+			 */
+			methods: function(methodsDefinition) {
+				this.methodsDefinition = methodsDefinition;
+				return this;
+			},
+			
+			/**
+			 * Sets the static methods/properties for the class 
+			 * on the specification builder
+			 * 
+			 * @param {Object} statics The static methods/properties
+			 * @returns {Object} #anonymous The specification-builder object 
+			 */
+			statics: function(staticsDefinition) {
+				this.staticsDefinition = staticsDefinition;
+				return this;
+			},
+			
+			/**
+			 * Takes an abitrary number of mixins which properties
+			 * and methods are added to this class.
+			 * @param {Object, Object, ..} arguments Arbitrary number of mixins
+			 */
+			mixin: function() {
+				this.mixins = arguments;
+				return this;
+			},
+			
+			/**
+			 * Constructs the class with all given information 
+			 * of the specification-builder object. The class path
+			 * is appended to the context object.
+			 * 
+			 * @param {object} context The object the class path is appended to
 			 */
 			end: function(context) {
-				var builder = this;
+				var classSpecification = this;
 				
 				// Construct the namespace for the class
-				var classpath = _classpath.split("."); // the full class path as array of strings
+				var classPathArray = classPathString.split("."); // the full class path as array of strings
 				var namespace = context; // reference to the last namespace object before class
-				var classname = classpath[classpath.length - 1]; // name of the class as string
+				var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
 
-				namespace = appendObjectChain(namespace, classpath);
+				namespace = appendObjectChain(namespace, classPathArray);
 				
-				// Define a class constructor if it is not a mixin
-				var klass = namespace[classname] = function() {
+				// define a class constructor that automatically calls
+				// all constructors in the class hierarchy with the argument object
+				var classToCreate = namespace[classname] = function() {
 					var userArgs = arguments[0] || {};
-					builder.superclass && builder.superclass.apply(this, arguments);
-					addInstanceProperties(this, userArgs, builder.classProperties);
-					builder.classConstructor.call(this);
+					classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
+					addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
+					classSpecification.initializer.call(this);
 				};
 				
-				klass.constructor = klass;
+				classToCreate.constructor = classToCreate;
 				
 				// copy the superclass prototype to the class prototype
-				if(builder.superclass) {
-					namespace[classname].prototype.__proto__ = builder.superclass.prototype;
+				if(classSpecification.superclass) {
+					classToCreate.prototype.__proto__ = classSpecification.superclass.prototype;
 				}
 				
-				if(builder.mixinClasses) {
-					for(var i=0; i < builder.mixinClasses.length; i++) {
-						copyProperties(this.mixinClasses[i].__properties__, this.classProperties, false, true);
-						copyProperties(this.mixinClasses[i].__methods__, this.classMethods, false, true);
+				if(classSpecification.mixins) {
+					for(var i=0; i < classSpecification.mixins.length; i++) {
+						copyProperties(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
+						copyProperties(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
 					}
 				}
 				
-				addPrototypeMethods(klass.prototype, this.classMethods, this.superclass);
-				copyProperties(this.statics, klass, true, true);
+				addPrototypeMethods(classToCreate.prototype, classSpecification.methodsDefinition, classSpecification.superclass);
+				copyProperties(classSpecification.staticsDefinition, classToCreate, true, true);
 			}
 			
 		}; // end return

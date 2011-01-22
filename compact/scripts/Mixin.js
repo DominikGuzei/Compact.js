@@ -2,66 +2,94 @@ define(['compact/utility/object/copyProperties', 'compact/utility/object/appendO
 
 function(copyProperties, appendObjectChain) {
 	
-	var Mixin = function(_mixinpath) {
-		
-		/**
-		 * Return a chainable builder object that saves the
-		 * given input and composes the class at the .end() 
-		 */
+	/**
+	 * Takes a fully qualified java-like class path and returns the mixin
+	 * specification builder that is used to add properties and methods 
+	 * as well as those of other mixins created the same way.
+	 * 
+	 * @param {String} mixinClassPathString The fully qualified class path
+	 * @returns {Object} The specification-builder
+	 */
+	
+	var Mixin = function(classPathString) {
 		
 		return {
-			
-			mixinProperties: {},
-			mixinMethods: {},
-			
-			properties: function(properties) {
-				this.mixinProperties = properties;
-				return this;
-			},
-			
-			methods: function(methods) {
-				this.mixinMethods = methods;
-				return this;
-			},
-			
-			mixin: function() {
-				this.mixinClasses = arguments;
-				return this;
-			},
-			
-			/**
-			 * Construct the mixin with all given information passed in
-			 * by the other calls.
-			 * 
-			 * @param {object} context The object the namespace is applied to
-			 */
-			end: function(context) {
-				
-				// Construct the namespace for the class
-				var mixinpath = _mixinpath.split("."); // the full class path as array of strings
-				var namespace = context; // reference to the last namespace object before class
-				var mixinname = mixinpath[mixinpath.length - 1]; // name of the class as string
 
-				namespace = appendObjectChain(namespace, mixinpath);
-				var mixin = namespace[mixinname];
-				mixin.__mixin__ = true;
-				mixin.__properties__ = {};
-				mixin.__methods__ = {};
-				
-				// add all methods from other mixins to own methods
-				if(this.mixinClasses) {
-					for(var i=0; i < this.mixinClasses.length; i++) {
-						copyProperties(this.mixinClasses[i].__properties__, mixin.__properties__, true, true);
-						copyProperties(this.mixinClasses[i].__methods__, mixin.__methods__, true, true);
+				/**
+				 * The specification of class properties to add 
+				 * with their default values assigned.
+				 * e.g.: { propertyName: "value", property2:... }
+				 * @type {Object} 
+				 */
+				propertiesDefinition: {},
+
+				/**
+				 * The specification of methods to add
+				 * e.g: { method1: function() { return this.value }, method2: ... }
+				 * @type {Object} 
+				 */
+				methodsDefinition: {},
+
+				/**
+				 * Sets the properties for the class on the specification builder
+				 * 
+				 * @param {Object} properties
+				 * @returns {Object} #anonymous The specification-builder object 
+				 */
+				properties: function(properties) {
+					this.propertiesDefinition = properties;
+					return this;
+				},
+
+				/**
+				 * Sets the methods for the class on the specification builder
+				 * 
+				 * @param {Object} methods
+				 * @returns {Object} #anonymous The specification-builder object 
+				 */
+				methods: function(methods) {
+					this.methodsDefinition = methods;
+					return this;
+				},
+
+				mixin: function() {
+					this.mixins = arguments;
+					return this;
+				},
+
+				/**
+				 * Construct the mixin with all given information passed in
+				 * by the other calls.
+				 * 
+				 * @param {object} context The object the namespace is applied to
+				 */
+				end: function(context) {
+
+					// Construct the namespace for the class
+					var classPathArray = classPathString.split("."); // the full class path as array of strings
+					var namespace = context; // reference to the last namespace object before class
+					var mixinName = classPathArray[classPathArray.length - 1]; // name of the class as string
+
+					namespace = appendObjectChain(namespace, classPathArray);
+					var mixin = namespace[mixinName];
+					mixin.__mixin__ = true;
+					mixin.__properties__ = {};
+					mixin.__methods__ = {};
+
+					// add all methods from other mixins to own methods
+					if(this.mixins) {
+						for(var i=0; i < this.mixins.length; i++) {
+							copyProperties(this.mixins[i].__properties__, mixin.__properties__, true, true);
+							copyProperties(this.mixins[i].__methods__, mixin.__methods__, true, true);
+						}
 					}
+
+					copyProperties(this.propertiesDefinition, mixin.__properties__,  true, true);
+					copyProperties(this.methodsDefinition, mixin.__methods__, true, true);
 				}
-				
-				copyProperties(this.mixinProperties, mixin.__properties__,  true, true);
-				copyProperties(this.mixinMethods, mixin.__methods__, true, true);
-				
-			}
-			
-		}; // end return
+
+		}; // end mixinBuilder
+		
 	}; // end Mixin
 	
 	return Mixin;

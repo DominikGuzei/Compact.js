@@ -18,7 +18,7 @@ define(['compact/Class', 'compact/Mixin'], function(Class, Mixin) {
 	.end(window);
 	
 	
-	describe("compact/Class", function() {	
+	describe("compact/utility/class/Class", function() {	
 		
 		describe("Class()", function() {
 		  it("should provide a namespace", function() {

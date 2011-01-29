@@ -38,7 +38,7 @@ define(['compact/utility/typeof'], function(type) {
 
     } else {
       for (var key in subject) {
-        if (hasOwnProperty.call(subject, key)) {
+        if (Object.hasOwnProperty.call(subject, key)) {
           if (iterator.call(context, subject[key], key, subject) == false) return;
         }
       }

@@ -113,7 +113,7 @@ function(copyProperties, appendObjectChain, deepCopy) {
 			/**
 			 * Takes an abitrary number of mixins which properties
 			 * and methods are added to this class.
-			 * @param {Object, Object, ..} arguments Arbitrary number of mixins
+			 * @param {Object} arguments Arbitrary number of mixins
 			 */
 			mixin: function() {
 				this.mixins = arguments;
@@ -129,35 +129,19 @@ function(copyProperties, appendObjectChain, deepCopy) {
 			 */
 			end: function(context) {
 				var classSpecification = this;
-				
-				// Construct the namespace for the class
-				var classPathArray = classPathString.split("."); // the full class path as array of strings
-				var namespace = context; // reference to the last namespace object before class
-				var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
-
-				namespace = appendObjectChain(namespace, classPathArray);
-				
-				// define a class constructor that automatically calls
-				// all constructors in the class hierarchy with the argument object
-				var classToCreate = namespace[classname] = function() {
-					var userArgs = arguments[0] || {};
-					classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
-					addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
-					classSpecification.initializer.call(this);
-				};
-				
-				classToCreate.constructor = classToCreate;
+				var classInfo = constructClassPath(classPathString, context);
+				var classToCreate = buildClassConstructor(classInfo.namespace, classInfo.name, classSpecification);
 				
 				// copy the superclass prototype to the class prototype
 				if(classSpecification.superclass) {
-					classToCreate.prototype.__proto__ = classSpecification.superclass.prototype;
+				  function temporarySuperclass() {};
+				  temporarySuperclass.prototype = classSpecification.superclass.prototype;
+					classToCreate.prototype = new temporarySuperclass();
 				}
+				classToCreate.prototype.constructor = classToCreate;
 				
 				if(classSpecification.mixins) {
-					for(var i=0; i < classSpecification.mixins.length; i++) {
-						copyProperties(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
-						copyProperties(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
-					}
+					addMixinDefinitions(classSpecification);
 				}
 				
 				addPrototypeMethods(classToCreate.prototype, classSpecification.methodsDefinition, classSpecification.superclass);
@@ -166,6 +150,39 @@ function(copyProperties, appendObjectChain, deepCopy) {
 			
 		}; // end return
 	};
+	
+	
+	function constructClassPath(classPathString, context) {
+		// Construct the namespace for the class
+		var classPathArray = classPathString.split("."); // the full class path as array of strings
+		var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
+		var namespace = appendObjectChain(context, classPathArray);
+		
+		return { 
+			namespace: namespace,
+			name: classname
+		};
+	}
+	
+	function buildClassConstructor(namespace, classname, classSpecification) {
+		// define a class constructor that automatically calls
+		// all constructors in the class hierarchy with the argument object
+		var classConstructor = namespace[classname] = function() {
+			var userArgs = arguments[0] || {};
+			classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
+			addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
+			classSpecification.initializer.call(this);
+		};
+		
+		return classConstructor;
+	}
+	
+	function addMixinDefinitions(classSpecification) {
+		for(var i=0; i < classSpecification.mixins.length; i++) {
+			copyProperties(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
+			copyProperties(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
+		}
+	}
 	
 	/**
 	 * Assigns all methods declared in the methods definition object
@@ -177,25 +194,31 @@ function(copyProperties, appendObjectChain, deepCopy) {
 	 * @param {object} methods The method definition object
 	 */
 
-	addPrototypeMethods = function(destination, methods, superclass) {
+	 function addPrototypeMethods(destination, methods, superclass) {
 
-		for (var method in methods) {
-			if (methods.hasOwnProperty(method)) {
-				destination[method] = (superclass && superclass.prototype[method]) ? (function(name, fn) {
+		for (var methodName in methods) {
+			if (methods.hasOwnProperty(methodName)) {
+				destination[methodName] = (superclass && superclass.prototype[methodName]) ? 
+				
+				(function(methodName, methodOfThisClass) {
+					
 					return function() {
 						// add a reference to the same method on the super class
-						this.superMethod = superclass.prototype[name];
+						this.superMethod = superclass.prototype[methodName];
 						// apply the current context with arguments and superMethod reference
-						var ret = fn.apply(this, arguments);
+						var returnValue = methodOfThisClass.apply(this, arguments);
 						// we dont need the reference anymore, so delete it.
 						delete this.superMethod;
 						// return the result of the applied method
-						return ret;
+						return returnValue;
 					};
-				})(method, methods[method]) : methods[method];
+					
+				})(methodName, methods[methodName]) 
+				
+				: methods[methodName];
 			}
 		}
-	};
+	}
 	
 	/**
 	 * Takes two property definition objects and adds them merged
@@ -206,7 +229,7 @@ function(copyProperties, appendObjectChain, deepCopy) {
 	 * @param {object} properties The property definition object
 	 */
 
-	addInstanceProperties = function(destination, preferred, defaults) {
+  function addInstanceProperties(destination, preferred, defaults) {
 		for (var prop in defaults) {
 			if (defaults.hasOwnProperty(prop)) {
 				var instancePropString = prop;
@@ -216,7 +239,7 @@ function(copyProperties, appendObjectChain, deepCopy) {
 				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;
 			}
 		}
-	};
+	}
 		
 	return Class;
 

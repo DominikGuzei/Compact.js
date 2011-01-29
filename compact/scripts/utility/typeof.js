@@ -5,7 +5,7 @@
 
 define(function() {
 	
-	return {
+	var type = {
 		
 			// Is a given value a DOM element?
 		  isElement: function(obj) {
@@ -66,8 +66,10 @@ define(function() {
 		  // Is a given variable undefined?
 		  isUndefined: function(obj) {
 		    return obj === void 0;
-		  },
+		  }
 		
-	}
+	};
+	
+	return type;
 	
 });

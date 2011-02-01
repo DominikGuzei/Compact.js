@@ -1,14 +1,15 @@
 define(['compact/Mixin'], function(Mixin) {
 	
 	/**
-	 * The Observable Mixin implements the basic
-	 * Observer Pattern and turns the host class into
-	 * a observable subject that allows other objects
-	 * to register themselves to get notified of specific
-	 * events dispatched by it.
+	 * observable 
+	 * 
+	 * Implements the basic Observer Pattern and turns 
+	 * the host class into a observable subject that 
+	 * allows other objects to register themselves to 
+	 * get notified of specific events dispatched by it.
 	 */
 	
-	Mixin("Observable") 
+	Mixin("observable") 
 
 	.properties ({
 	  
@@ -33,7 +34,7 @@ define(['compact/Mixin'], function(Mixin) {
 		 * 
 		 */
 		addEventListener: function(eventName, listener) {
-			return this._addListener("eventListeners", eventName, listener);
+			return this._addCallbackToCollection("eventListeners", eventName, listener);
 		},
 		
 		/**
@@ -41,11 +42,11 @@ define(['compact/Mixin'], function(Mixin) {
 		 * with the help of a register information object
 		 * returned by the addEventListener method.
 		 * 
-		 * @param {Object} registerInfo Holds the information
+		 * @param {Object} callbackInfo Holds the information
 		 * of the previously registered callback/event.
 		 */
-		removeEventListener: function(registerInfo) {
-			this[registerInfo.collection][registerInfo.eventName].splice(registerInfo.index, 1);
+		removeEventListener: function(callbackInfo) {
+			this._removeCallbackFromCollection(callbackInfo.collection, callbackInfo.eventName, callbackInfo.index);
 		},
 	  
 	  /**
@@ -71,22 +72,38 @@ define(['compact/Mixin'], function(Mixin) {
 		 * @param {String} collection Name of the collection
 		 * @param {String} eventName
 		 * @param {Function} listener The callback
+		 * 
+		 * @returns {Object} Holds the information
+ 		 * of the registered callback/event.
 		 */
-		_addListener: function(collection, eventName, listener) {
+		_addCallbackToCollection: function(collection, eventName, callback) {
 			
 			if(!this[collection][eventName]) {
 				this[collection][eventName] = [];
 			}
-			this[collection][eventName].push(listener);
+			this[collection][eventName].push(callback);
 			return {
 				collection: collection,
 				eventName: eventName,
 				index: this[collection][eventName].length -1
 			};
+		},
+		
+		/**
+		 * A generic way to remove callbacks from specific
+		 * callback collections.
+		 * 
+		 * @param {String} collection Name of the collection
+		 * @param {String} eventName
+		 * @param {Integer} index The index of the callback in the event array
+		 */
+		_removeCallbackFromCollection: function(collection, eventName, index) {
+		  this[collection][eventName].splice(index, 1);
 		}
+		
 	})
 
 	.end(this);
 	
-	return this.Observable;
+	return this.observable;
 });

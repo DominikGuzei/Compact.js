@@ -30,7 +30,7 @@ define(['compact/model/Store', 'compact/model/Model'], function(Store, Model) {
 			});
 		
 			it("Dispatches an event that a model/collection should be created", function() {
-				store.on("create", function(modelToCreate) {
+				store.addEventListener("create", function(modelToCreate) {
 					expect(modelToCreate).toBe(model);
 					called = true;
 				});
@@ -39,7 +39,7 @@ define(['compact/model/Store', 'compact/model/Model'], function(Store, Model) {
 			});
 			
 			it("Dispatches an event that a model/collection should be fetched from a server/storage", function() {
-				store.on("read", function(modelToCreate) {
+				store.addEventListener("read", function(modelToCreate) {
 					expect(modelToCreate).toBe(model);
 					called = true;
 				});
@@ -48,7 +48,7 @@ define(['compact/model/Store', 'compact/model/Model'], function(Store, Model) {
 			});
 			
 			it("Dispatches an event that a model/collection should be updated to a server/storage", function() {
-				store.on("update", function(modelToCreate) {
+				store.addEventListener("update", function(modelToCreate) {
 					expect(modelToCreate).toBe(model);
 					called = true;
 				});
@@ -57,7 +57,7 @@ define(['compact/model/Store', 'compact/model/Model'], function(Store, Model) {
 			});
 			
 			it("Dispatches an event that a model/collection should be deleted on the server/storage", function() {
-				store.on("destroy", function(modelToCreate) {
+				store.addEventListener("destroy", function(modelToCreate) {
 					expect(modelToCreate).toBe(model);
 					called = true;
 				});

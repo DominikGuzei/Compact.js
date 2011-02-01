@@ -1,15 +1,17 @@
 
-define(['compact/Class', 'compact/events/Observable'], function(Class, Observable) {
+define(['compact/Class', 'compact/events/observable'], 
+
+function(Class, observable) {
 	
-	describe("events/Observable", function() {
+	describe("events/observable", function() {
 		
 		// used to test if the listeners are called with the right event
 		var dispatchedEvent = { value: "default" };
 		
 		// namespace to append the test class to
-		var observable = this;
+		var observableNamespace = this;
 		
-		Class("Test") .mixin(Observable)
+		Class("Test") .mixin(observable)
 		.methods({
 			change: function(name) {
 				dispatchedEvent.value = name;
@@ -17,13 +19,21 @@ define(['compact/Class', 'compact/events/Observable'], function(Class, Observabl
 				return dispatchedEvent;
 			}
 		})
-		.end(observable)
+		.end(observableNamespace)
 		
 		// we need an instance of the test class for each spec and add a listener to it
 		beforeEach(function() {
-		  this.instance = new observable.Test();
+		  this.instance = new observableNamespace.Test();
 		  this.listener = jasmine.createSpy();
 		  this.listenerInfo = this.instance.addEventListener("change", this.listener);
+		});
+		
+		describe("eventListeners", function() {
+		  
+		  it("has an eventListeners collection for event callbacks", function() {
+		    expect(this.instance.eventListeners).toBeDefined();
+		  });
+		  
 		});
 		
 		describe("addEventListener", function() {

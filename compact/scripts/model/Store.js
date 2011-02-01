@@ -1,10 +1,10 @@
-define(['compact/Class', 'compact/events/EventDispatcher'], 
+define(['compact/Class', 'compact/events/observable'], 
 
 function(Class, EventDispatcher) {
 	
 	var namespace = this;
 	
-	Class("Store") .mixin(EventDispatcher)
+	Class("Store") .mixin(observable)
 	.methods({
 		
 		/**
@@ -18,16 +18,16 @@ function(Class, EventDispatcher) {
 		synchronize: function(method, subject) {
 			switch(method) {
 				case "create":
-					this.onEvent("create", subject);
+					this.dispatchEvent("create", subject);
 					break;
 				case "read":
-					this.onEvent("read", subject);
+					this.dispatchEvent("read", subject);
 					break;
 				case "update":
-					this.onEvent("update", subject);
+					this.dispatchEvent("update", subject);
 					break;
 				case "destroy":
-					this.onEvent("destroy", subject);
+					this.dispatchEvent("destroy", subject);
 					break;
 			}
 		}

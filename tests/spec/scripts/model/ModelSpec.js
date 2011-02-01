@@ -54,8 +54,8 @@ function(Model, Store) {
 			
 			it("Is possible to validate the change of a model attribute", function() {
 			  instance.attributes.test = "value";
-				instance.validate("change:test", function(value) {
-					return false;
+				instance.addEventValidator("change:test", function(value, errors) {
+					errors.push("some error");
 				});
 				instance.set("test", "changed");
 				expect(instance.attributes.test).toEqual("value");
@@ -64,7 +64,7 @@ function(Model, Store) {
 			it("Is possible to listen on a change of a attribute", function() {
 			  instance.attributes.test = "value";
 				var changed;
-				instance.on("change:test", function(value) {
+				instance.addEventListener("changed:test", function(value) {
 					changed = value;
 				});
 				instance.set("test", "changed");
@@ -87,7 +87,7 @@ function(Model, Store) {
 		
 			it("Tells the Store to create the record if it is new", function() {
 				var called = false;
-				store.on("create", function(model) {
+				store.addEventListener("create", function(model) {
 					expect(model).toBe(instance);
 					called = true;
 				});
@@ -98,7 +98,7 @@ function(Model, Store) {
 			it("Tells the Store to update the record if it exists persistently", function() {
 				var called = false;
 				instance.id = 1;
-				store.on("update", function(model) {
+				store.addEventListener("update", function(model) {
 					expect(model).toBe(instance);
 					called = true;
 				});
@@ -112,7 +112,7 @@ function(Model, Store) {
 		  
 			it("Tells the Store to send a out an event to delete the model", function() {
 			  var called = false;
-				store.on("destroy", function(model) {
+				store.addEventListener("destroy", function(model) {
 					expect(model).toBe(instance);
 					called = true;
 				});

@@ -1,11 +1,11 @@
 define(['compact/Mixin', 
-        'compact/events/observable',
-        'compact/events/validatable'], 
+        'compact/events/Observable',
+        'compact/events/Validatable'], 
 
-function(Mixin, observable, validatable) {
+function(Mixin, Observable, Validatable) {
 	
 	/**
-	 * accessible
+	 * Accessible
 	 *  
 	 * Mixes in observable and validatable to
 	 * implement watchable/validatable property. This allows 
@@ -13,7 +13,7 @@ function(Mixin, observable, validatable) {
 	 * and to (in)validate those changes externally
 	 */
 	
-	Mixin("accessible") .mixin( observable, validatable )
+	Mixin("Accessible") .mixin( Observable, Validatable )
 	
 	.methods({
 		
@@ -78,5 +78,5 @@ function(Mixin, observable, validatable) {
 	
 	.end(this);
 
-	return this.accessible;
+	return this.Accessible;
 });

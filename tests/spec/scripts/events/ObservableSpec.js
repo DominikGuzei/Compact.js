@@ -1,9 +1,9 @@
 
-define(['compact/Class', 'compact/events/observable'], 
+define(['compact/Class', 'compact/events/Observable'], 
 
-function(Class, observable) {
+function(Class, Observable) {
 	
-	describe("events/observable", function() {
+	describe("events/Observable", function() {
 		
 		// used to test if the listeners are called with the right event
 		var dispatchedEvent = { value: "default" };
@@ -11,7 +11,7 @@ function(Class, observable) {
 		// namespace to append the test class to
 		var observableNamespace = this;
 		
-		Class("Test") .mixin(observable)
+		Class("Test") .mixin(Observable)
 		.methods({
 			change: function(name) {
 				dispatchedEvent.value = name;

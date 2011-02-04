@@ -1,11 +1,11 @@
 define(['compact/Class',
         'compact/utility/object/json',
-        'compact/model/accessible', 
+        'compact/model/Accessible', 
         'compact/model/Store'], 
 
-function(Class, JSON, accessible, Store) {
+function(Class, JSON, Accessible, Store) {
 	
-	Class("Model") .mixin(accessible)
+	Class("Model") .mixin(Accessible)
 	
 	.properties ({
 		id: null,

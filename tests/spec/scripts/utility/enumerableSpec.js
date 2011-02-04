@@ -1,11 +1,11 @@
 
 define(['compact/Mixin',
         'compact/Class', 
-        'compact/utility/enumerable'], 
+        'compact/utility/Enumerable'], 
 
-function(Mixin, Class, enumerable) {
+function(Mixin, Class, Enumerable) {
 	
-	describe("compact/utility/enumerable", function() {	
+	describe("compact/utility/Enumerable", function() {	
 		
 		/**
 		 * Declaring a test class that is used 
@@ -13,7 +13,7 @@ function(Mixin, Class, enumerable) {
 		 */
 		var namespace = this;
 		
-		Class("Enumerable") .mixin( enumerable )
+		Class("Enumerable") .mixin( Enumerable )
 		.properties({
 		  collection: {
 		    num: 1,

@@ -10,7 +10,7 @@ define(['compact/Mixin',
 function(Mixin, find, map, reduce, select, forEach, some) {
 	
 	/**
-	 * enumerable
+	 * Enumerable
 	 * 
 	 * Provides a set of useful methods to work with
 	 * collections of values (like Arrays, Models). 
@@ -23,7 +23,7 @@ function(Mixin, find, map, reduce, select, forEach, some) {
 	 * this method and require no further customization.
 	 */
 	
-	Mixin("enumerable")	
+	Mixin("Enumerable")	
 
 	.methods ({
 		
@@ -80,5 +80,5 @@ function(Mixin, find, map, reduce, select, forEach, some) {
 
 	.end(this);
 	
-	return this.enumerable;
+	return this.Enumerable;
 });

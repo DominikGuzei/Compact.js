@@ -1,10 +1,10 @@
-define(['compact/Class', 'compact/events/observable'], 
+define(['compact/Class', 'compact/events/Observable'], 
 
-function(Class, EventDispatcher) {
+function(Class, Observable) {
 	
 	var namespace = this;
 	
-	Class("Store") .mixin(observable)
+	Class("Store") .mixin(Observable)
 	.methods({
 		
 		/**

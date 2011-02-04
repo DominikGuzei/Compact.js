@@ -1,4 +1,4 @@
-define(['compact/utility/object/deepCopy'], function(deepCopy) {
+define(['compact/object/deepCopy'], function(deepCopy) {
 
 	/**
 	 * copyProperties

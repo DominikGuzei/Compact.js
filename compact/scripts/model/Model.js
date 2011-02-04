@@ -1,5 +1,5 @@
 define(['compact/Class',
-        'compact/utility/object/json',
+        'compact/format/json',
         'compact/model/Accessible', 
         'compact/model/Store'], 
 

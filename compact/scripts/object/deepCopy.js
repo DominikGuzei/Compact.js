@@ -7,21 +7,23 @@ define(function() {
 	 */
 	
 	var deepCopy = function(obj) {
+
 		if (typeof obj !== 'object' || obj === null) {
 			return obj;
 		}
 		if(obj instanceof Date) {
 			return new Date(obj);
 		}
-		var c = obj instanceof Array ? [] : {};
+		var copy = obj instanceof Array ? [] : {};
 
 		for (var i in obj) {
 			if (obj.hasOwnProperty(i)) {
-				c[i] = deepCopy(obj[i]);
+				copy[i] = deepCopy(obj[i]);
 			}
 		}
 
-		return c;
+		return copy;
+		
 	}
 	
 	return deepCopy;

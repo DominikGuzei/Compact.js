@@ -1,5 +1,5 @@
 define(['compact/Class', 'compact/model/Store', 
-				'compact/utility/object/deepCopy', 
+				'compact/object/deepCopy', 
 				'compact/collection/map',
 				'compact/collection/values',
 				'compact/collection/each'], 

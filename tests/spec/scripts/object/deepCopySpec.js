@@ -1,9 +1,10 @@
-define(['compact/utility/object/deepCopy'], function(deepCopy) {
+define(['compact/object/deepCopy'], function(deepCopy) {
 	
-	describe("compact/utility/object/deepCopy", function() {
+	describe("compact/object/deepCopy", function() {
 		
 		describe("deepCopy", function() {
 		  it("Returns an identical copy of any object", function() {
+
 				var test = {
 					name: "test",
 					number: 1,
@@ -12,7 +13,10 @@ define(['compact/utility/object/deepCopy'], function(deepCopy) {
 					complex: { 
 						inside: { name: "inside" },
 						array: ["test", "values"]
-					}
+					},
+					date: new Date(),
+					undef: undefined,
+					nul: null
 				};
 				var copy = deepCopy(test);
 				expect(copy).not.toBe(test);
@@ -27,6 +31,11 @@ define(['compact/utility/object/deepCopy'], function(deepCopy) {
 				expect(copy.complex.inside).toEqual({ name: "inside" });
 				expect(copy.complex.array).not.toBe(test.complex.array);
 				expect(copy.complex.array).toEqual(["test", "values"]);
+				expect(copy.date).toEqual(test.date);
+				expect(copy.date).not.toBe(test.date);
+				
+				expect(copy.undef).toBe(undefined);
+				expect(copy.nul).toBe(null);
 		  });
 		});
 	

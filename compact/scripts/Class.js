@@ -1,6 +1,6 @@
-define(['compact/utility/object/copyProperties', 
-				'compact/utility/object/appendObjectChain',
-				'compact/utility/object/deepCopy'], 
+define(['compact/object/copyProperties', 
+				'compact/object/appendObjectChain',
+				'compact/object/deepCopy'], 
 
 function(copyProperties, appendObjectChain, deepCopy) {
 	

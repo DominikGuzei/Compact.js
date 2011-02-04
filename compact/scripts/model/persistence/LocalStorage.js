@@ -1,7 +1,7 @@
 define(['compact/Class', 'compact/model/Store', 
 				'compact/utility/object/deepCopy', 
 				'compact/collection/map',
-				'compact/utility/object/getValues',
+				'compact/collection/values',
 				'compact/collection/forEach'], 
 
 function(Class, Store, deepCopy, map, getValues, forEach) {

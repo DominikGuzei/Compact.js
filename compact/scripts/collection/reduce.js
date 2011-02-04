@@ -4,7 +4,7 @@
  */
 
 define(['compact/collection/each', 
-			  'compact/utility/function/bind'], 
+			  'compact/object/bind'], 
 
 function(each, bind) {
 	

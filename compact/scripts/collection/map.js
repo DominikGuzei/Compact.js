@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/forEach'], function(forEach) {
+define(['compact/collection/each'], function(each) {
 	
 	var nativeMap = Array.prototype.map;
 
@@ -28,7 +28,7 @@ define(['compact/collection/forEach'], function(forEach) {
     if (subject == null) return results;
     if (nativeMap && subject.map === nativeMap) return subject.map(iterator, context);
 
-    forEach(subject, function(value, index, list) {
+    each(subject, function(value, index, list) {
       results[results.length] = iterator.call(context, value, index, list);
     });
 

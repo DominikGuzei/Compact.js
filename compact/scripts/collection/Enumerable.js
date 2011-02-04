@@ -3,11 +3,11 @@ define(['compact/Mixin',
         'compact/collection/map',
         'compact/collection/reduce',
         'compact/collection/select',
-        'compact/collection/forEach',
+        'compact/collection/each',
         'compact/collection/some',
         ], 
 
-function(Mixin, find, map, reduce, select, forEach, some) {
+function(Mixin, find, map, reduce, select, each, some) {
 	
 	/**
 	 * Enumerable
@@ -36,42 +36,42 @@ function(Mixin, find, map, reduce, select, forEach, some) {
     },
 
     /**
-    * Wrapper around compact/utility/forEach
+    * Wrapper around compact/collection/each
     */
     each: function(iterator, context) {
-      return forEach(this._enumerableCollection(), iterator, context);
+      return each(this._enumerableCollection(), iterator, context);
     },
 
     /**
-    * Wrapper around compact/utility/find
+    * Wrapper around compact/collection/find
     */
     find: function(iterator, context) {
       return find(this._enumerableCollection(), iterator, context);
     },
 
     /**
-    * Wrapper around compact/utility/map
+    * Wrapper around compact/collection/map
     */
     map: function(iterator, context) {
       return map(this._enumerableCollection(), iterator, context);
     },
 
     /**
-    * Wrapper around compact/utility/reduce
+    * Wrapper around compact/collection/reduce
     */
     reduce: function(iterator, context) {
       return reduce(this._enumerableCollection(), iterator, context);
     },
 
     /**
-    * Wrapper around compact/utility/select
+    * Wrapper around compact/collection/select
     */
     select: function(iterator, context) {
       return select(this._enumerableCollection(), iterator, context);
     },
  		 
  		/**
-    * Wrapper around compact/utility/some 
+    * Wrapper around compact/collection/some 
     */
     any: function(iterator, context) {
       return some(this._enumerableCollection(), iterator, context);

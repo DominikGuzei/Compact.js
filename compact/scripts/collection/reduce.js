@@ -3,10 +3,10 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/forEach', 
+define(['compact/collection/each', 
 			  'compact/utility/function/bind'], 
 
-function(forEach, bind) {
+function(each, bind) {
 	
 	var nativeReduce = Array.prototype.reduce;
 
@@ -31,7 +31,7 @@ function(forEach, bind) {
       return initial ? subject.reduce(iterator, memo) : subject.reduce(iterator);
     }
 
-    forEach(subject, function(value, index, list) {
+    each(subject, function(value, index, list) {
       if (!initial && index === 0) {
         memo = value;
         initial = true;

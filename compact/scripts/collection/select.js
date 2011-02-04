@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/forEach'], function(forEach) {
+define(['compact/collection/each'], function(each) {
 
 	var nativeFilter = Array.prototype.filter;
 
@@ -24,7 +24,7 @@ define(['compact/collection/forEach'], function(forEach) {
 		if (subject == null) return results;
 		if (nativeFilter && subject.filter === nativeFilter) return subject.filter(iterator, context);
 
-    forEach(subject, function(value, index, list) {
+    each(subject, function(value, index, list) {
       if (iterator.call(context, value, index, list)) results[results.length] = value;
     });
 

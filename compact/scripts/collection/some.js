@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/forEach'], function(forEach) {
+define(['compact/collection/each'], function(each) {
 	
 	var nativeSome = Array.prototype.some;
 
@@ -24,7 +24,7 @@ define(['compact/collection/forEach'], function(forEach) {
     if (subject == null) return result;
     if (nativeSome && subject.some === nativeSome) return subject.some(iterator, context);
 
-    forEach(subject, function(value, index, list) {
+    each(subject, function(value, index, list) {
       if (result = iterator.call(context, value, index, list)) return false;
     });
 

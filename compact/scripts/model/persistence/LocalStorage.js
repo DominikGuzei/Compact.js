@@ -2,9 +2,9 @@ define(['compact/Class', 'compact/model/Store',
 				'compact/utility/object/deepCopy', 
 				'compact/collection/map',
 				'compact/collection/values',
-				'compact/collection/forEach'], 
+				'compact/collection/each'], 
 
-function(Class, Store, deepCopy, map, getValues, forEach) {
+function(Class, Store, deepCopy, map, values, each) {
 	
 	Class("LocalStorage")
 	
@@ -58,7 +58,7 @@ function(Class, Store, deepCopy, map, getValues, forEach) {
 		 */
 		save: function() {
 			var modelAttributes = {};
-			forEach(this.data, function(model) {
+			each(this.data, function(model) {
 				modelAttributes[model.localStorageId] = model.attributes;
 			});
 			localStorage.setItem(this.name, JSON.stringify(modelAttributes));
@@ -74,7 +74,7 @@ function(Class, Store, deepCopy, map, getValues, forEach) {
 				var modelAttributes = JSON.parse(localStorage[this.name]);
 				var self = this;
 				
-				forEach(modelAttributes, function(savedAttributes, key) {
+				each(modelAttributes, function(savedAttributes, key) {
 					var id = (key[0] == "#") ? undefined : key;
 					self.data[key] = new Model({
 						id: id,
@@ -93,7 +93,7 @@ function(Class, Store, deepCopy, map, getValues, forEach) {
 		 */
 		
 		findAll: function() {
-			return getValues(this.data);
+			return values(this.data);
 		},
 		
 		/**

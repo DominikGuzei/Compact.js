@@ -230,11 +230,12 @@ function(copyProperties, appendObjectChain, deepCopy) {
 	 */
 
   function addInstanceProperties(destination, preferred, defaults) {
+
 		for (var prop in defaults) {
 			if (defaults.hasOwnProperty(prop)) {
 				var instancePropString = prop;
 				var defaultProp = deepCopy(defaults[prop]);
-				var preferredProp = deepCopy(preferred[prop]);
+				var preferredProp = preferred[prop];
 
 				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;
 			}

@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/utility/typeof'], function(type) {
+define(['compact/language/typeof'], function(type) {
 	
 	var nativeforEach = Array.prototype.forEach;
 

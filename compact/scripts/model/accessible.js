@@ -17,21 +17,42 @@ function(Mixin, Observable, Validatable) {
 	
 	.methods({
 		
+		/**
+		 * Returns the value for the key in the collection
+		 * @param {String} key 
+		 */
 		get: function(key) {
-			return this.getter(key);
+			return this._accessibleCollection()[key];
 		},
 		
-		getter: function(key) {
-		  return this[key];
-		},
-		
+		/**
+		 * Sets values for keys on the collection.
+		 * Can be used to set multiple values at once
+		 * with an object literal with key-value mapping
+		 * to the accessible collection.
+		 * 
+		 * @param {String/Object} key A string key to set a single
+		 * value, or an object with key/values that should all be set at once
+		 * @param {*} value If a single change -> the value for the key
+		 */
 		set: function(key, value) {
 			
 			if(typeof(key) == 'object') {
-				for(property in key) {
-					if(key.hasOwnProperty(property)) {
-						this.set(property, key[property]);
-					}
+			  var changedValues = key;
+			  var validateResults = this.validateEvent("change", changedValues);
+				
+				if(validateResults.isValid) {
+				  for(property in key) {
+  					if(key.hasOwnProperty(property)) {
+  						this.set(property, key[property]);
+  					}
+  				}
+				  this.dispatchEvent("changed", changedValues);
+				  
+				} else {
+				  this.dispatchEvent("invalid:change", {
+			      errors: validateResults.errors
+			    });
 				}
 			}
 			
@@ -40,39 +61,40 @@ function(Mixin, Observable, Validatable) {
 			}
 		},
 		
+		/**
+		 * Used by the set method to change each value
+		 * separately and dispatch corresponding events.
+		 * 
+		 * @param {String} key
+		 * @param {*} value 
+		 */
 		change: function(key, value) {
-		  
-		  var generalResult = this.validateEvent("change", {
-        key: key,
-        value: value
-      });
       
 		  var specificResult = this.validateEvent("change:" + key, value);
       
-			if (generalResult.isValid && specificResult.isValid) {
-			  
-				this.setter(key, value);
-				
-				this.dispatchEvent("changed", {
-				  key: key,
-				  value: value
-				});
-				this.dispatchEvent("changed:" + key, value);
-				
+			if (specificResult.isValid) {			  
+				this._accessibleCollection()[key] = value;
+				this.dispatchEvent("changed:" + key, value);	
 			} else {
-			  
-			  this.dispatchEvent("invalid:change", { 
-			    key: key, 
-			    value: value, 
-			    errors: generalResult.errors.concat(specificResult.errors)
-			  });
-			  
+			  this.dispatchEvent("invalid:change:" + key, {
+			    key: key,
+			    value: value,
+		      errors: specificResult.errors
+		    });
 			}
+			
+			return specificResult;
 		},
 		
-		setter: function(key, value) {
-		  this[key] = value;
-		}
+		/**
+		 * Returns the collection object/array that
+		 * should be used to be accessible.
+		 * Override this method to inject your custom
+		 * collection that is used instead. 
+		 */
+		_accessibleCollection: function() {
+		  return this;
+		},
 		
 	})
 	

@@ -14,12 +14,8 @@ function(Class, JSON, Accessible, Store) {
 	
 	.methods ({
 		
-		setter: function(key, value) {
-		  this.attributes[key] = value;
-		},
-		
-		getter: function(key) {
-		  return this.attributes[key];
+		_accessibleCollection: function() {
+		  return this.attributes;
 		},
 		
 		save: function() {

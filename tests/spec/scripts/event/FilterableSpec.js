@@ -1,11 +1,11 @@
 
 define(['compact/Class', 
-        'compact/events/Observable', 
-        'compact/events/Filterable'], 
+        'compact/event/Observable', 
+        'compact/event/Filterable'], 
 
 function(Class, Observable, Filterable) {
 	
-	describe("events/Filterable", function() {
+	describe("compact/event/Filterable", function() {
 	  
 	  // used to test if the filters are called with the right event
 		var filteredEvent = { value: "default" };

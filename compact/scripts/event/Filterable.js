@@ -1,14 +1,14 @@
 define(['compact/Mixin'], function(Mixin) {
 	
 	/**
-	 * filterable
+	 * Filterable
 	 *  
 	 * Enables listeners to filter/modify event data before 
 	 * it is used. Depends on the compact/events/observable 
 	 * to add callbacks to its collection.
 	 */
 	
-	Mixin("filterable") 
+	Mixin("Filterable") 
 
 	.properties ({
 	  
@@ -71,5 +71,5 @@ define(['compact/Mixin'], function(Mixin) {
 
 	.end(this);
 	
-	return this.filterable;
+	return this.Filterable;
 });

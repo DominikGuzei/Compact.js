@@ -1,9 +1,9 @@
 
-define(['compact/Class', 'compact/events/Observable'], 
+define(['compact/Class', 'compact/event/Observable'], 
 
 function(Class, Observable) {
 	
-	describe("events/Observable", function() {
+	describe("compact/event/Observable", function() {
 		
 		// used to test if the listeners are called with the right event
 		var dispatchedEvent = { value: "default" };

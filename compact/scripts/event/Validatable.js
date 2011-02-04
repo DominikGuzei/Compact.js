@@ -1,7 +1,7 @@
 define(['compact/Mixin'], function(Mixin) {
 	
 	/**
-	 * validatable
+	 * Validatable
 	 * 
 	 * Enables listeners to tell the Observable if it is
 	 * valid to dispatch an event. It is the Observables 
@@ -10,7 +10,7 @@ define(['compact/Mixin'], function(Mixin) {
 	 * callbacks to its validators collection.
 	 */
 	
-	Mixin("validatable") 
+	Mixin("Validatable") 
 
 	.properties ({
 	  
@@ -77,5 +77,5 @@ define(['compact/Mixin'], function(Mixin) {
 
 	.end(this);
 	
-	return this.validatable;
+	return this.Validatable;
 });

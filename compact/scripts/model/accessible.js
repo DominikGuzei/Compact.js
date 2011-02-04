@@ -1,6 +1,6 @@
 define(['compact/Mixin', 
-        'compact/events/Observable',
-        'compact/events/Validatable'], 
+        'compact/event/Observable',
+        'compact/event/Validatable'], 
 
 function(Mixin, Observable, Validatable) {
 	

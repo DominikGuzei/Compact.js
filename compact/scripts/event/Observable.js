@@ -1,7 +1,7 @@
 define(['compact/Mixin'], function(Mixin) {
 	
 	/**
-	 * observable 
+	 * Observable 
 	 * 
 	 * Implements the basic Observer Pattern and turns 
 	 * the host class into a observable subject that 
@@ -9,7 +9,7 @@ define(['compact/Mixin'], function(Mixin) {
 	 * get notified of specific events dispatched by it.
 	 */
 	
-	Mixin("observable") 
+	Mixin("Observable") 
 
 	.properties ({
 	  
@@ -105,5 +105,5 @@ define(['compact/Mixin'], function(Mixin) {
 
 	.end(this);
 	
-	return this.observable;
+	return this.Observable;
 });

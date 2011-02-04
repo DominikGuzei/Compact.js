@@ -1,13 +1,13 @@
 
-define(['compact/Class', 'compact/model/accessible'], 
+define(['compact/Class', 'compact/model/Accessible'], 
 
-function(Class, accessible) {
+function(Class, Accessible) {
 	
-	describe("compact/model/accessible", function() {
+	describe("compact/model/Accessible", function() {
 	  
 		var accessibleNamespace = {};
 		
-		Class("Test") .mixin(accessible)
+		Class("Test") .mixin(Accessible)
 		.properties({
 			test: "test"
 		})

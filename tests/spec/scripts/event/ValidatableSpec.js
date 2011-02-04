@@ -1,11 +1,11 @@
 
 define(['compact/Class', 
-        'compact/events/observable', 
-        'compact/events/validatable'], 
+        'compact/event/Observable', 
+        'compact/event/Validatable'], 
 
-function(Class, observable, validatable) {
+function(Class, Observable, Validatable) {
 	
-	describe("events/validatable", function() {
+	describe("compact/event/Validatable", function() {
 		
 		// used to test if the validators are called with the right event
 		var validatedEvent = { value: "default" };
@@ -13,7 +13,7 @@ function(Class, observable, validatable) {
 		// namespace to append the test class to
 		var validatableNamespace = this;
 		
-		Class("Test") .mixin(observable, validatable)
+		Class("Test") .mixin(Observable, Validatable)
 		.properties({
 		  name: "default"
 		})

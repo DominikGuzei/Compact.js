@@ -1,4 +1,4 @@
-define(['compact/Class', 'compact/events/Observable'], 
+define(['compact/Class', 'compact/event/Observable'], 
 
 function(Class, Observable) {
 	

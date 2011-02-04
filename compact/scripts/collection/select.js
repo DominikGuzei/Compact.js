@@ -3,7 +3,7 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/utility/collection/forEach'], function(forEach) {
+define(['compact/collection/forEach'], function(forEach) {
 
 	var nativeFilter = Array.prototype.filter;
 

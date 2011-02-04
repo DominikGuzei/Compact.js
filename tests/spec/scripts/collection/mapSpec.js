@@ -1,6 +1,6 @@
-define(['compact/utility/collection/map'], function(map) {
+define(['compact/collection/map'], function(map) {
 	
-	describe("compact/utility/collection/map", function() {
+	describe("compact/collection/map", function() {
 		
 		it("Returns a new array with each value iterated over", function() {
 		  var array = [1,2,3];

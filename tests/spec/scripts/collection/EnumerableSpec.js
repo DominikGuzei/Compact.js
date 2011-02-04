@@ -1,11 +1,11 @@
 
 define(['compact/Mixin',
         'compact/Class', 
-        'compact/utility/Enumerable'], 
+        'compact/collection/Enumerable'], 
 
 function(Mixin, Class, Enumerable) {
 	
-	describe("compact/utility/Enumerable", function() {	
+	describe("compact/collection/Enumerable", function() {	
 		
 		/**
 		 * Declaring a test class that is used 

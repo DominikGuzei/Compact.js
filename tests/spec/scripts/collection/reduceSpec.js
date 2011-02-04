@@ -1,6 +1,6 @@
-define(['compact/utility/collection/reduce'], function(reduce) {
+define(['compact/collection/reduce'], function(reduce) {
 	
-	describe("compact/utility/collection/reduce", function() {
+	describe("compact/collection/reduce", function() {
 		
 		it("Returns a single result from a list of array values", function() {
 		  var array = [1,2,3];

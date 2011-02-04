@@ -1,10 +1,10 @@
 define(['compact/Mixin',
-        'compact/utility/collection/find',
-        'compact/utility/collection/map',
-        'compact/utility/collection/reduce',
-        'compact/utility/collection/select',
-        'compact/utility/collection/forEach',
-        'compact/utility/collection/some',
+        'compact/collection/find',
+        'compact/collection/map',
+        'compact/collection/reduce',
+        'compact/collection/select',
+        'compact/collection/forEach',
+        'compact/collection/some',
         ], 
 
 function(Mixin, find, map, reduce, select, forEach, some) {

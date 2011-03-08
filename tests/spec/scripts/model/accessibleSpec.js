@@ -17,7 +17,31 @@ function(Class, Accessible) {
 		  this.instance = new accessibleNamespace.Test();
 		});
 		
-		describe("default set('key', value)", function() {
+		describe("beforeChange", function() {
+		  
+		  it("returns a string representing the scope of an event that is dispatched before a change", function() {
+		    expect(this.instance.beforeChange("test")).toEqual("accessible:change:test");
+		  });
+		  
+		});
+		
+		describe("afterChange", function() {
+      
+      it("returns a string representing the scope of an event that is dispatched after a change", function() {
+        expect(this.instance.afterChange("test")).toEqual("accessible:changed:test");
+      });
+      
+    });
+    
+    describe("invalidChange", function() {
+      
+      it("returns a string representing the scope of an event that was invalidated", function() {
+        expect(this.instance.invalidChange("test")).toEqual("accessible:invalid:test");
+      });
+      
+    });
+		
+		describe("set('key', value)", function() {
 			
 			it("Changes the value of the property", function() {
 			  this.instance.set("test", "changed");
@@ -29,9 +53,9 @@ function(Class, Accessible) {
 				expect(this.instance.created).toEqual("value");
 			});
 			
-			it("is possible to invalidate the change", function() {
+			it("invalidates the change", function() {
 			  var called = false;
-			  this.instance.addEventValidator("change:test", function(value, errors) {
+			  this.instance.addEventValidator(this.instance.beforeChange("test"), function(value, errors) {
 			    errors.push("I have a problem with this");
 			    called = true;
 			  });
@@ -44,12 +68,12 @@ function(Class, Accessible) {
 			
 			it("listens to the invalid change", function() {
 			  
-			  this.instance.addEventValidator("change:test", function(value, errors) {
+			  this.instance.addEventValidator(this.instance.beforeChange("test"), function(value, errors) {
 			    errors.push("I have a problem with this");
 			  });
         
 			  var called = false;
-			  this.instance.addEventListener("invalid:change:test", function(details) {
+			  this.instance.addEventListener(this.instance.invalidChange("test"), function(details) {
 			    called = true;
 			    expect(details.key).toEqual("test");
 			    expect(details.value).toEqual("bla");
@@ -60,6 +84,14 @@ function(Class, Accessible) {
 			  expect(called).toBeTruthy();
 			});
 		
+		  it("dispatches an event after the value changed", function() {
+		    
+		    var testCallbackSpy = jasmine.createSpy();
+		    this.instance.addEventListener(this.instance.afterChange("test"), testCallbackSpy);
+		    this.instance.set("test", "blub");
+		    expect(testCallbackSpy).toHaveBeenCalledWith("blub");
+		    
+		  });
 		});
 		
 		
@@ -78,7 +110,7 @@ function(Class, Accessible) {
 			it("is possible to invalidate all changes", function() {
 			  
 			  var called = false;
-			  this.instance.addEventValidator("change", function(values, errors) {
+			  this.instance.addEventValidator(this.instance.beforeChange(), function(values, errors) {
 			    errors.push("Not changing");
 			    called = true;
 			  });
@@ -95,12 +127,12 @@ function(Class, Accessible) {
 			
 			it("listens to the invalidate event", function() {
 			  
-			  this.instance.addEventValidator("change", function(values, errors) {
+			  this.instance.addEventValidator(this.instance.beforeChange(), function(values, errors) {
 			    errors.push("Not changing");
 			  });
 			  
 			  var called = false;
-			  this.instance.addEventListener("invalid:change", function(details) {
+			  this.instance.addEventListener(this.instance.invalidChange(), function(details) {
 			    called = true;
 			    expect(details.errors[0]).toEqual("Not changing");
 			  });
@@ -128,6 +160,29 @@ function(Class, Accessible) {
 			  expect(this.instance.get).toThrow();
 			});
 		
+		});
+		
+		describe("_accessibleCollection", function() {
+		  
+		  var local = {};
+		  Class("Test") .mixin(Accessible)
+      .properties({
+        attributes: {}
+      })
+      .methods({
+        _accessibleCollection: function() {
+          return this.attributes;
+        }
+      })
+      .end(local);
+		  
+		  it("can define the collection, accessible works on", function() {
+		    var accessible = new local.Test();
+		    expect(accessible.attributes.test).not.toBeDefined();
+		    accessible.set("test", "value");
+		    expect(accessible.attributes.test).toEqual("value");
+		  });
+		  
 		});
 		
 	});

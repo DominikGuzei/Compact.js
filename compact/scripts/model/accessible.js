@@ -39,7 +39,7 @@ function(Mixin, Observable, Validatable) {
 			
 			if(typeof(key) == 'object') {
 			  var changedValues = key;
-			  var validateResults = this.validateEvent("change", changedValues);
+			  var validateResults = this.validateEvent(this.beforeChange(), changedValues);
 				
 				if(validateResults.isValid) {
 				  for(property in key) {
@@ -47,10 +47,10 @@ function(Mixin, Observable, Validatable) {
   						this.set(property, key[property]);
   					}
   				}
-				  this.dispatchEvent("changed", changedValues);
+				  this.dispatchEvent(this.afterChange(), changedValues);
 				  
 				} else {
-				  this.dispatchEvent("invalid:change", {
+				  this.dispatchEvent(this.invalidChange(), {
 			      errors: validateResults.errors
 			    });
 				}
@@ -62,6 +62,48 @@ function(Mixin, Observable, Validatable) {
 		},
 		
 		/**
+		 * Used for adding listeners to the accessible
+		 * that should be called before a change happens.
+		 * This function just provides a safer way to add
+		 * the correct event name, it could also be added
+		 * manually as simple string, which would be more
+		 * error prone in case the implementation changes.
+		 * 
+		 * @param {String} key The property name that should be observed
+		 * @returns {String} The fully scoped event name 
+		 */
+		 
+		beforeChange: function(key) {
+		  return key ? "accessible:change:" + key : "accessible:change";
+		},
+		
+		/**
+     * Used for adding listeners to the accessible
+     * that should be called after a change happens.
+     * For details see beforeChange
+     * 
+     * @param {String} key The property name that should be observed
+     * @returns {String} The fully scoped event name 
+     */
+     
+    afterChange: function(key) {
+      return key ? "accessible:changed:" + key : "accessible:changed";
+    },
+    
+    /**
+     * Used for adding listeners to the accessible
+     * that should be called after a change was invalidated.
+     * For details see beforeChange
+     * 
+     * @param {String} key The property name that should be observed
+     * @returns {String} The fully scoped event name 
+     */
+     
+    invalidChange: function(key) {
+      return key ? "accessible:invalid:" + key : "accessible:invalid";
+    },
+		
+		/**
 		 * Used by the set method to change each value
 		 * separately and dispatch corresponding events.
 		 * 
@@ -70,13 +112,13 @@ function(Mixin, Observable, Validatable) {
 		 */
 		change: function(key, value) {
       
-		  var specificResult = this.validateEvent("change:" + key, value);
+		  var specificResult = this.validateEvent(this.beforeChange(key), value);
       
 			if (specificResult.isValid) {			  
 				this._accessibleCollection()[key] = value;
-				this.dispatchEvent("changed:" + key, value);	
+				this.dispatchEvent(this.afterChange(key), value);	
 			} else {
-			  this.dispatchEvent("invalid:change:" + key, {
+			  this.dispatchEvent(this.invalidChange(key), {
 			    key: key,
 			    value: value,
 		      errors: specificResult.errors

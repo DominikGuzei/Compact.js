@@ -27,52 +27,6 @@ function(Model, Store) {
 		
 		});
 		
-		describe("get", function() {
-		  
-			it("Returns the value of the model attribute", function() {
-			  instance.attributes.test = "value";
-				expect(instance.get("test")).toEqual("value");
-			});
-		
-		});
-		
-		describe("set", function() {
-		  
-			it("Sets the value of a model attribute", function() {
-			  instance.set("test", "value");
-				expect(instance.attributes.test).toEqual("value");
-			});
-			
-			it("Sets all attributes of the model", function() {
-			  instance.set({
-					test: "value",
-					name: "test"
-				});
-				expect(instance.attributes.test).toEqual("value");
-				expect(instance.attributes.name).toEqual("test");
-			});
-			
-			it("Is possible to validate the change of a model attribute", function() {
-			  instance.attributes.test = "value";
-				instance.addEventValidator("change:test", function(value, errors) {
-					errors.push("some error");
-				});
-				instance.set("test", "changed");
-				expect(instance.attributes.test).toEqual("value");
-			});
-		
-			it("Is possible to listen on a change of a attribute", function() {
-			  instance.attributes.test = "value";
-				var changed;
-				instance.addEventListener("changed:test", function(value) {
-					changed = value;
-				});
-				instance.set("test", "changed");
-				expect(changed).toEqual("changed");
-			});
-		
-		});
-		
 		describe("isNew", function() {
 		  
 			it("Tells if the model was not yet saved to the server", function() {

@@ -1,6 +1,6 @@
 define(['compact/Class',
         'compact/format/json',
-        'compact/model/Accessible', 
+        'compact/collection/Accessible', 
         'compact/model/Store'], 
 
 function(Class, JSON, Accessible, Store) {

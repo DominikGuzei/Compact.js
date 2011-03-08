@@ -1,5 +1,5 @@
 
-define(['compact/Class', 'compact/model/Accessible'], 
+define(['compact/Class', 'compact/collection/Accessible'], 
 
 function(Class, Accessible) {
 	

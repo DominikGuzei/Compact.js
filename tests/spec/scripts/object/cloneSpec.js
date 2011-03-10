@@ -1,8 +1,8 @@
-define(['compact/object/deepCopy'], function(deepCopy) {
+define(['compact/object/clone'], function(clone) {
 	
-	describe("compact/object/deepCopy", function() {
+	describe("compact/object/clone", function() {
 		
-		describe("deepCopy", function() {
+		describe("clone", function() {
 		  it("Returns an identical copy of any object", function() {
 
 				var test = {
@@ -18,7 +18,7 @@ define(['compact/object/deepCopy'], function(deepCopy) {
 					undef: undefined,
 					nul: null
 				};
-				var copy = deepCopy(test);
+				var copy = clone(test);
 				expect(copy).not.toBe(test);
 				expect(copy.name).toEqual("test");
 				expect(copy.number).toEqual(1);

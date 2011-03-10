@@ -1,12 +1,12 @@
 define(function() {
 
 	/**
-	 * deepCopy
+	 * clone
 	 * Makes a deep copy of any object or array
 	 * @param {object} obj the object to make a deep copy from 
 	 */
 	
-	var deepCopy = function(obj) {
+	var clone = function(obj) {
 
 		if (typeof obj !== 'object' || obj === null) {
 			return obj;
@@ -18,7 +18,7 @@ define(function() {
 
 		for (var i in obj) {
 			if (obj.hasOwnProperty(i)) {
-				copy[i] = deepCopy(obj[i]);
+				copy[i] = clone(obj[i]);
 			}
 		}
 
@@ -26,6 +26,6 @@ define(function() {
 		
 	}
 	
-	return deepCopy;
+	return clone;
 	
 });

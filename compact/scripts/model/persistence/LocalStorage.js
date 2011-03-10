@@ -1,12 +1,13 @@
 define(['compact/Class', 'compact/model/Store', 
-				'compact/object/deepCopy', 
+				'compact/object/clone',
+				'compact/collection/Enumerable',
 				'compact/collection/map',
-				'compact/collection/values',
+				'compact/object/values',
 				'compact/collection/each'], 
 
-function(Class, Store, deepCopy, map, values, each) {
+function(Class, Store, clone, Enumerable, map, values, each) {
 	
-	Class("LocalStorage")
+	Class("LocalStorage") .mixin( Enumerable )
 	
 	.properties ({
 		data: {},
@@ -41,7 +42,8 @@ function(Class, Store, deepCopy, map, values, each) {
 		 * Deletes the model from the localStorage and
 		 * removes the localStorageId from the model
 		 * 
-		 * @param {Model} model The model to destroy 
+		 * @param {Model} model The model to destroy
+		 * @return the destroyed model or null if not found
 		 */
 		
 		destroy: function(model) {
@@ -50,7 +52,7 @@ function(Class, Store, deepCopy, map, values, each) {
 			  delete model["localStorageId"];
 				return model;
 			}
-			throw "Model not found: " + model.id;
+			return null;
 		},
 		
 		/**
@@ -58,7 +60,7 @@ function(Class, Store, deepCopy, map, values, each) {
 		 */
 		save: function() {
 			var modelAttributes = {};
-			each(this.data, function(model) {
+			this.each(function(model) {
 				modelAttributes[model.localStorageId] = model.attributes;
 			});
 			localStorage.setItem(this.name, JSON.stringify(modelAttributes));
@@ -72,16 +74,19 @@ function(Class, Store, deepCopy, map, values, each) {
 		load: function() {
 			if(localStorage[this.name]) {
 				var modelAttributes = JSON.parse(localStorage[this.name]);
-				var self = this;
 				
 				each(modelAttributes, function(savedAttributes, key) {
 					var id = (key[0] == "#") ? undefined : key;
-					self.data[key] = new Model({
+					
+					this.data[key] = new Model({
 						id: id,
 						attributes: savedAttributes
 					});
-					self.data[key].localStorageId = key;
-				});
+					
+					this.data[key].localStorageId = key;
+					
+				}, this);
+				
 				return this.data;
 			}
 			return false;
@@ -93,7 +98,7 @@ function(Class, Store, deepCopy, map, values, each) {
 		 */
 		
 		findAll: function() {
-			return values(this.data);
+			return this.values();
 		},
 		
 		/**
@@ -101,7 +106,9 @@ function(Class, Store, deepCopy, map, values, each) {
 		 */
 		getNextLocalModelId: function() {
 			return "#" + this.highestLocalModelId++;
-		}
+		},
+		
+		_enumerableCollection: function() { return this.data }
 		
 	})
 	.end(this);

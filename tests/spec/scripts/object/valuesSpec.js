@@ -1,6 +1,6 @@
-define(['compact/collection/values'], function(getValues) {
+define(['compact/object/values'], function(getValues) {
 	
-	describe("compact/collection/values", function() {
+	describe("compact/object/values", function() {
 		
 		it("Returns an array of values for each item in the collection", function() {
 			var test = {

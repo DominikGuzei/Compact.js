@@ -1,7 +1,7 @@
-define(['compact/object/deepCopy'], function(deepCopy) {
+define(['compact/object/clone'], function(clone) {
 
 	/**
-	 * copyProperties
+	 * copy
 	 * Copies all properties of one object to another
 	 * 
 	 * @param {Object} destination The object the properties are added to
@@ -14,7 +14,7 @@ define(['compact/object/deepCopy'], function(deepCopy) {
 	return function(source, destination, overwrite, byReference) {
 		for (var propertyName in source) {
 			if (source.hasOwnProperty(propertyName)) {
-				var sourceProperty = byReference ? source[propertyName] : deepCopy(source[propertyName]);
+				var sourceProperty = byReference ? source[propertyName] : clone(source[propertyName]);
 				if (overwrite) {
 					destination[propertyName] = sourceProperty;
 				} else {

@@ -1,6 +1,6 @@
-define(['compact/object/copyProperties'], function(copyProperties) {
+define(['compact/object/copy'], function(copy) {
 	
-	describe("compact/object/copyProperties", function() {
+	describe("compact/object/copy", function() {
 	  
 		it("Adds all properties from source to destination by reference", function() {
 		  var source = {
@@ -11,7 +11,7 @@ define(['compact/object/copyProperties'], function(copyProperties) {
 			};
 			
 			var destination = {};
-			copyProperties(source, destination, false, true);
+			copy(source, destination, false, true);
 			
 			expect(destination.name).toEqual(source.name);
 			expect(destination.number).toEqual(source.number);
@@ -29,7 +29,7 @@ define(['compact/object/copyProperties'], function(copyProperties) {
 			};
 			
 			var destination = {};
-			copyProperties(source, destination, false, false);
+			copy(source, destination, false, false);
 			
 			expect(destination.name).toEqual(source.name);
 			expect(destination.number).toEqual(source.number);
@@ -48,7 +48,7 @@ define(['compact/object/copyProperties'], function(copyProperties) {
 				name: "destination"
 			};
 			
-			copyProperties(source, destination, true, true);
+			copy(source, destination, true, true);
 			
 			expect(destination.name).toEqual("source");
 		});
@@ -62,7 +62,7 @@ define(['compact/object/copyProperties'], function(copyProperties) {
 				name: "destination"
 			};
 			
-			copyProperties(source, destination, false, true);
+			copy(source, destination, false, true);
 			
 			expect(destination.name).toEqual("destination");
 		});

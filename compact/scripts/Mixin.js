@@ -1,6 +1,6 @@
-define(['compact/object/copyProperties', 'compact/object/appendObjectChain'], 
+define(['compact/object/copy', 'compact/object/appendObjectChain'], 
 
-function(copyProperties, appendObjectChain) {
+function(copy, appendObjectChain) {
 	
 	/**
 	 * Takes a fully qualified java-like class path and returns the mixin
@@ -79,13 +79,13 @@ function(copyProperties, appendObjectChain) {
 					// add all methods from other mixins to own methods
 					if(this.mixins) {
 						for(var i=0; i < this.mixins.length; i++) {
-							copyProperties(this.mixins[i].__properties__, mixin.__properties__, true, true);
-							copyProperties(this.mixins[i].__methods__, mixin.__methods__, true, true);
+							copy(this.mixins[i].__properties__, mixin.__properties__, true, true);
+							copy(this.mixins[i].__methods__, mixin.__methods__, true, true);
 						}
 					}
 
-					copyProperties(this.propertiesDefinition, mixin.__properties__,  true, true);
-					copyProperties(this.methodsDefinition, mixin.__methods__, true, true);
+					copy(this.propertiesDefinition, mixin.__properties__,  true, true);
+					copy(this.methodsDefinition, mixin.__methods__, true, true);
 				}
 
 		}; // end mixinBuilder

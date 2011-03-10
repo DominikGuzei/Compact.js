@@ -1,8 +1,8 @@
-define(['compact/object/copyProperties', 
+define(['compact/object/copy', 
 				'compact/object/appendObjectChain',
-				'compact/object/deepCopy'], 
+				'compact/object/clone'], 
 
-function(copyProperties, appendObjectChain, deepCopy) {
+function(copy, appendObjectChain, clone) {
 	
 	/**
 	 * Takes a fully qualified java-like class path and returns 
@@ -145,7 +145,7 @@ function(copyProperties, appendObjectChain, deepCopy) {
 				}
 				
 				addPrototypeMethods(classToCreate.prototype, classSpecification.methodsDefinition, classSpecification.superclass);
-				copyProperties(classSpecification.staticsDefinition, classToCreate, true, true);
+				copy(classSpecification.staticsDefinition, classToCreate, true, true);
 			}
 			
 		}; // end return
@@ -179,8 +179,8 @@ function(copyProperties, appendObjectChain, deepCopy) {
 	
 	function addMixinDefinitions(classSpecification) {
 		for(var i=0; i < classSpecification.mixins.length; i++) {
-			copyProperties(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
-			copyProperties(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
+			copy(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
+			copy(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
 		}
 	}
 	
@@ -234,7 +234,7 @@ function(copyProperties, appendObjectChain, deepCopy) {
 		for (var prop in defaults) {
 			if (defaults.hasOwnProperty(prop)) {
 				var instancePropString = prop;
-				var defaultProp = deepCopy(defaults[prop]);
+				var defaultProp = clone(defaults[prop]);
 				var preferredProp = preferred[prop];
 
 				destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;

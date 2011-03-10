@@ -58,6 +58,13 @@
         expect(this.collection.remove( this.model )).toBe( this.model );
       });
       
+      it("Dispatches an remove event if a model was removed", function() {
+        var callback = jasmine.createSpy();
+        this.collection.addEventListener("remove", callback);
+        this.collection.remove( this.model );
+        expect(callback).toHaveBeenCalledWith( this.model );
+      });
+      
     });
     
   });

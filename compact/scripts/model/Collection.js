@@ -25,9 +25,11 @@
       },
       
       remove: function(model) {
-        return this.find(function(currentModel, index) {
+        var removedModel = this.find(function(currentModel, index) {
           return model == currentModel ? this.models.splice(index, 1) : false;
         }, this);
+        if(removedModel) this.dispatchEvent("remove", removedModel);
+        return removedModel;
       },
       
       _enumerableCollection: function() {

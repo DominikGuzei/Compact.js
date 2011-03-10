@@ -1,9 +1,11 @@
 
-  define(['compact/Class', 'compact/collection/Enumerable'],
+  define(['compact/Class', 
+          'compact/collection/Enumerable',
+          'compact/event/Observable'],
   
   function(Class, Enumerable) {
     
-    Class("Collection") .mixin(Enumerable)
+    Class("Collection") .mixin( Enumerable, Observable )
     
     .properties({
       models: []
@@ -19,6 +21,7 @@
       
       add: function(model) {
         this.models.push(model);
+        this.dispatchEvent("add", model);
       },
       
       remove: function(model) {

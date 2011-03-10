@@ -24,11 +24,20 @@
     
     describe("add", function() {
       
+      beforeEach(function() {
+        this.model = new Model({ id: 1 });
+      });
+      
       it("Adds the given model to the collection", function() {
-        var model = new Model({ id: 1 });
-        this.collection.add(model);
-        
-        expect(this.collection.get(1)).toBe( model );
+        this.collection.add(this.model);
+        expect(this.collection.get(1)).toBe( this.model );
+      });
+      
+      it("Dispatches an add event with the added model as data", function() {
+        var callback = jasmine.createSpy();
+        this.collection.addEventListener("add", callback);
+        this.collection.add(this.model);
+        expect(callback).toHaveBeenCalledWith(this.model);
       });
       
     });

@@ -1,8 +1,8 @@
 define(['compact/object/copy', 
-				'compact/object/appendObjectChain',
+				'compact/object/chain',
 				'compact/object/clone'], 
 
-function(copy, appendObjectChain, clone) {
+function(copy, chain, clone) {
 	
 	/**
 	 * Takes a fully qualified java-like class path and returns 
@@ -156,7 +156,7 @@ function(copy, appendObjectChain, clone) {
 		// Construct the namespace for the class
 		var classPathArray = classPathString.split("."); // the full class path as array of strings
 		var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
-		var namespace = appendObjectChain(context, classPathArray);
+		var namespace = chain(context, classPathArray);
 		
 		return { 
 			namespace: namespace,

@@ -1,6 +1,6 @@
-define(['compact/object/copy', 'compact/object/appendObjectChain'], 
+define(['compact/object/copy', 'compact/object/chain'], 
 
-function(copy, appendObjectChain) {
+function(copy, chain) {
 	
 	/**
 	 * Takes a fully qualified java-like class path and returns the mixin
@@ -70,7 +70,7 @@ function(copy, appendObjectChain) {
 					var namespace = context; // reference to the last namespace object before class
 					var mixinName = classPathArray[classPathArray.length - 1]; // name of the class as string
 
-					namespace = appendObjectChain(namespace, classPathArray);
+					namespace = chain(namespace, classPathArray);
 					var mixin = namespace[mixinName];
 					mixin.__mixin__ = true;
 					mixin.__properties__ = {};

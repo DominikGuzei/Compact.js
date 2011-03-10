@@ -1,7 +1,7 @@
 define(function() {
 
 	/**
-	 * appendObjectChain
+	 * chain
 	 * 
 	 * Takes a object and appends an object chain 
 	 * with the objects included in the chainArray

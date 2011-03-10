@@ -16,9 +16,9 @@ function(Mixin, find, map, reduce, select, each, some) {
 	 * collections of values (like Arrays, Models). 
 	 * 
 	 * To use it with your own Class you have to add
-	 * it as mixin and define a '_getCollection' method
+	 * it as mixin and define a '_enumerableCollection' method
 	 * that returns the object or array of your class
-	 * that represents your collection data. All other
+	 * that represents your enumerable data. All other
 	 * methods defined by enumerable work with your
 	 * this method and require no further customization.
 	 */
@@ -30,6 +30,8 @@ function(Mixin, find, map, reduce, select, each, some) {
     /**
     * Override this method in your mixed Class
     * to return your custom collection.
+    * 
+    * @return the enumerable object
     */
     _enumerableCollection: function() {
       return this;

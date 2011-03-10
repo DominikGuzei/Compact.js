@@ -93,7 +93,7 @@ function(Store, Model, LocalStorage) {
 		
 		
 		
-		describe("findAll", function() {
+		describe("all", function() {
 		  
 			it("Returns an array of all models", function() {
 			  
@@ -105,7 +105,7 @@ function(Store, Model, LocalStorage) {
 				localStore.put(model2);
 				localStore.put(model3);
 				
-				var result = localStore.findAll();
+				var result = localStore.all();
 				expect(result.length).toEqual(3);
 				expect(result[0]).toBe(model);
 				expect(result[1]).toBe(model2);

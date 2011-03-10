@@ -1,11 +1,9 @@
 define(['compact/Class', 'compact/model/Store', 
-				'compact/object/clone',
 				'compact/collection/Enumerable',
-				'compact/collection/map',
 				'compact/object/values',
 				'compact/collection/each'], 
 
-function(Class, Store, clone, Enumerable, map, values, each) {
+function(Class, Store, Enumerable, values, each) {
 	
 	Class("LocalStorage") .mixin( Enumerable )
 	
@@ -97,8 +95,8 @@ function(Class, Store, clone, Enumerable, map, values, each) {
 		 * data saved into the LocalStorage 
 		 */
 		
-		findAll: function() {
-			return this.values();
+		all: function() {
+			return values(this.data);
 		},
 		
 		/**

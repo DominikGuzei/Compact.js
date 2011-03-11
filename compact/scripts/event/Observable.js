@@ -1,4 +1,8 @@
-define(['compact/Mixin'], function(Mixin) {
+define([
+  'compact/Mixin'
+], 
+
+function(Mixin) {
 	
 	/**
 	 * Observable 

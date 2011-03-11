@@ -1,11 +1,12 @@
-define(['compact/Mixin',
-        'compact/collection/find',
-        'compact/collection/map',
-        'compact/collection/reduce',
-        'compact/collection/select',
-        'compact/collection/each',
-        'compact/collection/some',
-        ], 
+define([
+  'compact/Mixin',
+  'compact/collection/find',
+  'compact/collection/map',
+  'compact/collection/reduce',
+  'compact/collection/select',
+  'compact/collection/each',
+  'compact/collection/some',
+], 
 
 function(Mixin, find, map, reduce, select, each, some) {
 	

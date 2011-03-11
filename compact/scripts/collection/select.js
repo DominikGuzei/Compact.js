@@ -3,31 +3,39 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/each'], function(each) {
+define([
+  'compact/collection/each'
+], 
 
-	var nativeFilter = Array.prototype.filter;
+function(each) {
 
-	/** 
-	 * select
-	 * 
-	 * Looks through each value in the list, returning an array of all 
-	 * the values that pass a truth test (iterator). 
-	 * Delegates to the native filter method, if it exists.
-	 * 
-	 * @param {Object/Array} subject The object or array from which the values are selected
-	 * @param {Function} iterator The function that gets called for each property/index
-	 * @param {Object} context The context the iterator is bound to
-	 */
-	return function(subject, iterator, context) {
+  var nativeFilter = Array.prototype.filter;
+
+  /**
+   * select
+   *
+   * Looks through each value in the list, returning an array of all
+   * the values that pass a truth test (iterator).
+   * Delegates to the native filter method, if it exists.
+   *
+   * @param {Object/Array} subject The object or array from which the values are selected
+   * @param {Function} iterator The function that gets called for each property/index
+   * @param {Object} context The context the iterator is bound to
+   */
+  return function(subject, iterator, context) {
     var results = [];
-    
-		if (subject == null) return results;
-		if (nativeFilter && subject.filter === nativeFilter) return subject.filter(iterator, context);
+
+    if (subject == null)
+      return results;
+    if (nativeFilter && subject.filter === nativeFilter)
+      return subject.filter(iterator, context);
 
     each(subject, function(value, index, list) {
-      if (iterator.call(context, value, index, list)) results[results.length] = value;
+      if (iterator.call(context, value, index, list))
+        results[results.length] = value;
     });
 
     return results;
   };
+
 });

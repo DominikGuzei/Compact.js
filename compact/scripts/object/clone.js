@@ -1,31 +1,31 @@
-define(function() {
+define( function() {
 
-	/**
-	 * clone
-	 * Makes a deep copy of any object or array
-	 * @param {object} obj the object to make a deep copy from 
-	 */
-	
-	var clone = function(obj) {
+  /**
+   * clone
+   * Makes a deep copy of any object or array
+   * @param {object} obj the object to make a deep copy from
+   */
 
-		if (typeof obj !== 'object' || obj === null) {
-			return obj;
-		}
-		if(obj instanceof Date) {
-			return new Date(obj);
-		}
-		var copy = obj instanceof Array ? [] : {};
+  var clone = function(obj) {
 
-		for (var i in obj) {
-			if (obj.hasOwnProperty(i)) {
-				copy[i] = clone(obj[i]);
-			}
-		}
+    if (typeof obj !== 'object' || obj === null) {
+      return obj;
+    }
+    if(obj instanceof Date) {
+      return new Date(obj);
+    }
+    var copy = obj instanceof Array ? [] : {};
 
-		return copy;
-		
-	}
-	
-	return clone;
-	
+    for (var i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        copy[i] = clone(obj[i]);
+      }
+    }
+
+    return copy;
+
+  }
+
+  return clone;
+
 });

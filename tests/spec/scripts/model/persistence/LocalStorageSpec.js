@@ -1,4 +1,8 @@
-define(['compact/model/Store', 'compact/model/Model', 'compact/model/persistence/LocalStorage'], 
+define([
+  'compact/model/Store', 
+  'compact/model/Model', 
+  'compact/model/persistence/LocalStorage'
+], 
 
 function(Store, Model, LocalStorage) {
 	

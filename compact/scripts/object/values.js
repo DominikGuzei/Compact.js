@@ -3,18 +3,24 @@
  * http://documentcloud.github.com/underscore/
  */
 
-define(['compact/collection/map'], function(map) {
+define([
+  'compact/collection/map'
+], 
 
-	/**
-	 * getValues()
-	 * Retrieve the values of an object's properties.
-	 * 
-	 * @param {Object} subject The subject to return the values from
-	 * @return array of values in the object
-	 */ 
-	return function(subject) {
-	  return map(subject, function(value) {
-			return value;
-		});
-	};
+function(map) {
+
+  /**
+   * getValues()
+   * Retrieve the values of an object's properties.
+   *
+   * @param {Object} subject The subject to return the values from
+   * @return array of values in the object
+   */
+  return function(subject) {
+    return map(subject, function(value) {
+      return value;
+    });
+
+  };
+
 });

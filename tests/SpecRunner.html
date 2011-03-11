@@ -1,65 +1,65 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">
+"http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-  <title>Class.js Tests</title>
-  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.0.1/jasmine.css">
-  <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine-html.js"></script>
+  <head>
+    <title>Class.js Tests</title>
+    <link rel="stylesheet" type="text/css" href="lib/jasmine-1.0.1/jasmine.css">
+    <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine.js">
+    </script>
+    <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine-html.js">
+    </script>
+    <!-- include source files here... -->
+    <script type="text/javascript" src="lib/require.js">
+    </script>
+    <script type="text/javascript" src="spec/SpecHelper.js">
+    </script>
+  </head>
+  <body>
 
-  <!-- include source files here... -->
-  <script type="text/javascript" src="lib/require.js"></script>
-	<script type="text/javascript" src="spec/SpecHelper.js"></script>
-</head>
-<body>
+    <script type="text/javascript">
+      require( {
+        baseUrl: "../",
+        "packages": [
+        {
+          name: "compact",
+          lib: "scripts"
+        },
+        {
+          name: "tests",
+          lib: "spec/scripts"
+        }
+        ]
+      },
+      ['tests/object/chainSpec',
+      'tests/object/cloneSpec',
+      'tests/object/copySpec',
+      'tests/object/valuesSpec',
 
-<script type="text/javascript">
-	require( { 
-			baseUrl: "../", 
-			"packages": [
-	        {
-	            name: "compact",
-	            lib: "scripts"
-	        },
-					{
-	            name: "tests",
-	            lib: "spec/scripts"
-	        }
-	    ]
-		},
-		['tests/object/chainSpec',
-		 'tests/object/cloneSpec',
-		 'tests/object/copySpec',
-		 'tests/object/valuesSpec',
-		
-		 'tests/collection/eachSpec',
-		 'tests/collection/mapSpec',
-		 'tests/collection/reduceSpec',
-		 'tests/collection/findSpec',
-		 'tests/collection/someSpec',
-		 'tests/collection/selectSpec',
-		
-		 'tests/collection/EnumerableSpec',
-		 'tests/collection/AccessibleSpec',
-		
-		 'tests/ClassSpec',
-		 'tests/MixinSpec',
-		
-		 'tests/event/ObservableSpec',
-		 'tests/event/FilterableSpec',
-		 'tests/event/ValidatableSpec',
-		
-		 'tests/model/ModelSpec',
-		 'tests/model/CollectionSpec',
-		 'tests/model/StoreSpec',
-		 'tests/model/persistence/LocalStorageSpec',
-		], 
-		
-		function(ClassSpec) {
-	  	jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-	  	jasmine.getEnv().execute();
-		});
-</script>
+      'tests/collection/eachSpec',
+      'tests/collection/mapSpec',
+      'tests/collection/reduceSpec',
+      'tests/collection/findSpec',
+      'tests/collection/someSpec',
+      'tests/collection/selectSpec',
 
-</body>
+      'tests/collection/EnumerableSpec',
+      'tests/collection/AccessibleSpec',
+
+      'tests/ClassSpec',
+      'tests/MixinSpec',
+
+      'tests/event/ObservableSpec',
+      'tests/event/FilterableSpec',
+      'tests/event/ValidatableSpec',
+
+      'tests/model/ModelSpec',
+      'tests/model/CollectionSpec',
+      'tests/model/StoreSpec',
+      'tests/model/persistence/LocalStorageSpec',
+      ], function(ClassSpec) {
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        jasmine.getEnv().execute();
+      });
+    </script>
+  </body>
 </html>

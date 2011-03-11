@@ -1,7 +1,9 @@
 
-define(['compact/Class', 
-        'compact/event/Observable', 
-        'compact/event/Validatable'], 
+define([
+  'compact/Class', 
+  'compact/event/Observable', 
+  'compact/event/Validatable'
+], 
 
 function(Class, Observable, Validatable) {
 	

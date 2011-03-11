@@ -13,7 +13,7 @@ function(Mixin, Observable, Validatable) {
 	 * and to (in)validate those changes externally
 	 */
 	
-	Mixin("Accessible") .mixin( Observable, Validatable )
+	return Mixin("Accessible") .mixin( Observable, Validatable )
 	
 	.methods({
 		
@@ -140,7 +140,5 @@ function(Mixin, Observable, Validatable) {
 		
 	})
 	
-	.end(this);
-
-	return this.Accessible;
+	.end();
 });

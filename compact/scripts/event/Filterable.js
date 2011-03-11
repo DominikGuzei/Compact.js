@@ -8,7 +8,7 @@ define(['compact/Mixin'], function(Mixin) {
 	 * to add callbacks to its collection.
 	 */
 	
-	Mixin("Filterable") 
+	return Mixin("Filterable") 
 
 	.properties ({
 	  
@@ -69,7 +69,5 @@ define(['compact/Mixin'], function(Mixin) {
 		
 	})
 
-	.end(this);
-	
-	return this.Filterable;
+	.end();
 });

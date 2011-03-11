@@ -25,6 +25,12 @@ define(['compact/Class', 'compact/Mixin'], function(Class, Mixin) {
 				Class("com.example.Test").end(window);
 				expect(com.example.Test).toBeTypeOf('function');
 			});
+			
+			it("returns the created class when .end() is called", function() {
+			  expect( Class("example").end() ).toBeTypeOf('function');
+			  expect( window.example ).not.toBeDefined();
+			});
+			
 		});
 
 		describe(".extend()", function() {
@@ -139,16 +145,20 @@ define(['compact/Class', 'compact/Mixin'], function(Class, Mixin) {
 		
 		describe(".statics()", function() {
 		  var test = {};
-			Class("statics.Class")
+			Class("Statics")
 			.statics({
-				prop: "property",
-				fn: function() { return "function" }
+				instance: null,
+				getInstance: function() { 
+				  if(!this.instance) this.instance = new this();
+				  return this.instance;
+				}
 			})
 			.end(test);
 			
 			it("Adds static properties and methods to the class", function() {
-			  expect(test.statics.Class.prop).toEqual("property");
-				expect(test.statics.Class.fn()).toEqual("function");
+			  expect(test.Statics.instance).toEqual(null);
+			  var instance = test.Statics.getInstance();
+				expect(test.Statics.getInstance()).toBe(instance);
 			});
 		});
 		

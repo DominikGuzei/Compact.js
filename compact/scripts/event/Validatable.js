@@ -10,7 +10,7 @@ define(['compact/Mixin'], function(Mixin) {
 	 * callbacks to its validators collection.
 	 */
 	
-	Mixin("Validatable") 
+	return Mixin("Validatable") 
 
 	.properties ({
 	  
@@ -75,7 +75,6 @@ define(['compact/Mixin'], function(Mixin) {
 		
 	})
 
-	.end(this);
-	
-	return this.Validatable;
+	.end();
+
 });

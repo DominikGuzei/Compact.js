@@ -145,7 +145,9 @@ function(copy, chain, clone) {
 				}
 				
 				addPrototypeMethods(classToCreate.prototype, classSpecification.methodsDefinition, classSpecification.superclass);
-				copy(classSpecification.staticsDefinition, classToCreate, true, true);
+				copy(classSpecification.staticsDefinition, classToCreate, true, true, classToCreate);
+				
+				return classToCreate;
 			}
 			
 		}; // end return
@@ -154,9 +156,10 @@ function(copy, chain, clone) {
 	
 	function constructClassPath(classPathString, context) {
 		// Construct the namespace for the class
+
 		var classPathArray = classPathString.split("."); // the full class path as array of strings
-		var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
-		var namespace = chain(context, classPathArray);
+    var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
+    var namespace = chain(context || {}, classPathArray);
 		
 		return { 
 			namespace: namespace,
@@ -230,7 +233,6 @@ function(copy, chain, clone) {
 	 */
 
   function addInstanceProperties(destination, preferred, defaults) {
-
 		for (var prop in defaults) {
 			if (defaults.hasOwnProperty(prop)) {
 				var instancePropString = prop;

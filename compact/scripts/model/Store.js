@@ -2,9 +2,8 @@ define(['compact/Class', 'compact/event/Observable'],
 
 function(Class, Observable) {
 	
-	var namespace = this;
+	return Class("Store") .mixin(Observable)
 	
-	Class("Store") .mixin(Observable)
 	.methods({
 		
 		/**
@@ -32,17 +31,17 @@ function(Class, Observable) {
 			}
 		}
 	})
+	
 	.statics({
 		instance: undefined,
 		getInstance: function() {
-			if(!namespace.Store.instance) {
-				namespace.Store.instance = new namespace.Store();
+			if(!this.instance) {
+				this.instance = new this();
 			}
-			return namespace.Store.instance;
+			return this.instance;
 		}
 	})
-	.end(namespace);
 	
-	return namespace.Store;
-	
+	.end();
+
 });

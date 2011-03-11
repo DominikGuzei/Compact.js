@@ -9,7 +9,7 @@ define(['compact/Mixin'], function(Mixin) {
 	 * get notified of specific events dispatched by it.
 	 */
 	
-	Mixin("Observable") 
+	return Mixin("Observable") 
 
 	.properties ({
 	  
@@ -103,7 +103,5 @@ define(['compact/Mixin'], function(Mixin) {
 		
 	})
 
-	.end(this);
-	
-	return this.Observable;
+	.end();
 });

@@ -5,7 +5,7 @@ define(['compact/Class',
 
 function(Class, JSON, Accessible, Store) {
 	
-	Class("Model") .mixin(Accessible)
+	return Class("Model") .mixin(Accessible)
 	
 	.properties ({
 		id: null,
@@ -35,8 +35,6 @@ function(Class, JSON, Accessible, Store) {
 			return JSON.stringify(this.attributes);
 		}
 	})
-	.end(this);
-	
-	return this.Model;
+	.end();
 	
 });

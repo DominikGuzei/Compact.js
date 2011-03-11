@@ -3,9 +3,9 @@
           'compact/collection/Enumerable',
           'compact/event/Observable'],
   
-  function(Class, Enumerable) {
+  function(Class, Enumerable, Observable) {
     
-    Class("Collection") .mixin( Enumerable, Observable )
+    return Class("Collection") .mixin( Enumerable, Observable )
     
     .properties({
       models: []
@@ -38,8 +38,6 @@
       
     })
     
-    .end(this);
-    
-    return this.Collection;
-    
+    .end();
+
   });

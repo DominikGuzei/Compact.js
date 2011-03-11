@@ -1,11 +1,13 @@
-define(['compact/Class', 'compact/model/Store', 
+define(['compact/Class', 
+        'compact/model/Store',
+        'compact/model/Model',
 				'compact/collection/Enumerable',
 				'compact/object/values',
 				'compact/collection/each'], 
 
-function(Class, Store, Enumerable, values, each) {
+function(Class, Store, Model, Enumerable, values, each) {
 	
-	Class("LocalStorage") .mixin( Enumerable )
+	return Class("LocalStorage") .mixin( Enumerable )
 	
 	.properties ({
 		data: {},
@@ -109,8 +111,6 @@ function(Class, Store, Enumerable, values, each) {
 		_enumerableCollection: function() { return this.data }
 		
 	})
-	.end(this);
-	
-	return this.LocalStorage;
+	.end();
 	
 });

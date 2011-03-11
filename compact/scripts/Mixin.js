@@ -67,11 +67,11 @@ function(copy, chain) {
 
 					// Construct the namespace for the class
 					var classPathArray = classPathString.split("."); // the full class path as array of strings
-					var namespace = context; // reference to the last namespace object before class
 					var mixinName = classPathArray[classPathArray.length - 1]; // name of the class as string
-
-					namespace = chain(namespace, classPathArray);
+					var namespace = chain(context || {}, classPathArray);
+					
 					var mixin = namespace[mixinName];
+					
 					mixin.__mixin__ = true;
 					mixin.__properties__ = {};
 					mixin.__methods__ = {};
@@ -86,6 +86,8 @@ function(copy, chain) {
 
 					copy(this.propertiesDefinition, mixin.__properties__,  true, true);
 					copy(this.methodsDefinition, mixin.__methods__, true, true);
+					
+					return mixin;
 				}
 
 		}; // end mixinBuilder

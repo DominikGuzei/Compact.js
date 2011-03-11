@@ -1,4 +1,6 @@
-define(['compact/object/clone'], function(clone) {
+define(['compact/object/clone', 'compact/function/bind'], 
+
+function(clone, bind) {
 
 	/**
 	 * copy
@@ -11,14 +13,15 @@ define(['compact/object/clone'], function(clone) {
 	 * @param {Boolean} byReference Should object values be copied by reference?
 	 */
 
-	return function(source, destination, overwrite, byReference) {
+	return function(source, destination, overwrite, byReference, context) {
 		for (var propertyName in source) {
-			if (source.hasOwnProperty(propertyName)) {
+			
+			if (source.hasOwnProperty(propertyName)) {	
 				var sourceProperty = byReference ? source[propertyName] : clone(source[propertyName]);
-				if (overwrite) {
-					destination[propertyName] = sourceProperty;
-				} else {
-					destination[propertyName] = destination[propertyName] || sourceProperty;
+				destination[propertyName] = overwrite ? sourceProperty : destination[propertyName] || sourceProperty;
+				
+				if(typeof(destination[propertyName]) === 'function' && context) {
+				  destination[propertyName] = bind(destination[propertyName], context);
 				}
 			}
 		}

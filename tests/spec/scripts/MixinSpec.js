@@ -4,10 +4,17 @@ define(['compact/Mixin'], function(Mixin) {
 	describe("compact/Mixin", function() {	
 		
 		describe("Mixin()", function() {
+		  
 		  it("should provide a namespace object for the Mixin", function() {
 				Mixin("com.example.Test").end(this);
 				expect(this.com.example.Test).toBeTypeOf('object');
 			});
+			
+			it("returns the created mixin when .end() is called", function() {
+        expect( Mixin("example").end() ).toBeTypeOf('object');
+        expect( window.example ).not.toBeDefined();
+      });
+      
 		});
 		
 		describe("properties", function() {

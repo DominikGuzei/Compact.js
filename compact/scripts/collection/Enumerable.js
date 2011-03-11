@@ -23,7 +23,7 @@ function(Mixin, find, map, reduce, select, each, some) {
 	 * this method and require no further customization.
 	 */
 	
-	Mixin("Enumerable")	
+	return Mixin("Enumerable")	
 
 	.methods ({
 		
@@ -80,7 +80,5 @@ function(Mixin, find, map, reduce, select, each, some) {
     }
 	})
 
-	.end(this);
-	
-	return this.Enumerable;
+	.end();
 });

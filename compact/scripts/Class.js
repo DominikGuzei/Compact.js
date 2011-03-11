@@ -178,7 +178,7 @@ function(copy, chain, clone) {
       var userArgs = arguments[0] || {};
       classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
       addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
-      classSpecification.initializer.call(this);
+      classSpecification.initializer.call(this, userArgs);
     };
 
     return classConstructor;

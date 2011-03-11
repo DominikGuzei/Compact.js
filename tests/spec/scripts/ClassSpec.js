@@ -116,10 +116,27 @@ function(Class, Mixin) {
           expect(this.defaultVar).toEqual("somevalue");
           expect(this.userChanged).toEqual("uservalue");
         })
-
         .end(window);
+        
         var property = new test.initialize.Properties({
           userChanged: "uservalue"
+        });
+      });
+      
+      it("hands the complete user argument object to the initializer", function() {
+        var MyClass = Class("TestClass")
+        .properties({
+          defaultVar: "somevalue",
+        })
+        .initialize( function(userArguments) {
+          expect(userArguments.defaultVar).toEqual("changed");
+          expect(userArguments.extraValue).toEqual("extraValue");
+        })
+        .end();
+        
+        new MyClass({
+          defaultVar: "changed",
+          extraValue: "extraValue"
         });
       });
 

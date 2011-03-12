@@ -7,11 +7,12 @@ define([
   'compact/collection/each',
   'compact/collection/some',
   'compact/collection/reject',
-  'compact/collection/every'
+  'compact/collection/every',
+  'compact/collection/contains'
 ], 
 
 function(Mixin, find, map, reduce, select, 
-         each, some, reject, every) {
+         each, some, reject, every, contains) {
 	
 	/**
 	 * Enumerable
@@ -89,6 +90,10 @@ function(Mixin, find, map, reduce, select,
     
     reject: function(iterator, context) {
       return every(this._enumerableCollection(), context);
+    },
+    
+    contains: function(value) {
+      return contains(this._enumerableCollection(), value);
     }
 	})
 

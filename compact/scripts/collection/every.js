@@ -7,8 +7,8 @@ define([
 'compact/collection/each'
 ], function(each) {
 
-  var nativeEvery = Array.prototype.every;
-
+  var nativeEvery = Array.prototype.every,
+      breaker = {};
   /**
    * every
    *
@@ -21,7 +21,7 @@ define([
    * @param {Object} context The context the iterator is bound to
    */
   return function(obj, iterator, context) {
-    iterator = iterator || _.identity;
+    iterator = iterator || function(value) {return value;};
     var result = true;
     if (obj == null)
       return result;

@@ -147,7 +147,74 @@ function(Mixin, Class, Enumerable) {
       });
 
     });
+    
+    describe("reject", function() {
+      
+      it("Returns an array with all but those values where the iterator returned true", function() {
+        
+        expect( this.instance.reject(function(value) {
+          return value === 1;
+        }) ).toEqual([ { test: "test"}, [1,2] ]);
+  
+      });
+      
+    });
+    
+    describe("every", function() {
 
+      it("Returns true if the iterator returs true for all values", function() {
+        expect( this.instance.every(function() { return true })).toBe(true);
+      });
+      
+      it("Returns false if the iterator returns false for any value", function() {
+        expect( this.instance.every(function(value) {
+          return value === 1;
+        })).toBe(false);
+      });
+  
+    });
+    
+    describe("contains", function() {
+      
+      it("Returns true if the collection contains (===) the given value", function() {
+        expect( this.instance.contains( this.instance.collection.obj ) ).toBe(true);
+      });
+      
+      it("returns false if the collection doesnt contain the value", function() {
+        expect( this.instance.contains( {} ) ).toBe(false);
+      });
+  
+    });
+    
+    describe("invoke", function() {
+      
+      var Invoker = Class("Enumerable") .mixin( Enumerable )
+      .properties({
+        collection: {
+          arr: [1,2,3],
+          arr2: [1,2,3]
+        }
+      })
+      .methods({
+        _enumerableCollection: function() {
+          return this.collection;
+        }
+      })
+      .end();
+      
+      it("executes a method on every element in the collection", function() {
+        
+        var invoker = new Invoker();
+        expect(invoker.collection.arr).toEqual([1,2,3]);
+        expect(invoker.collection.arr2).toEqual([1,2,3]);
+        
+        invoker.invoke("splice", 0, 3);
+        
+        expect(invoker.collection.arr).toEqual([]);
+        expect(invoker.collection.arr2).toEqual([]);
+      });
+    });
+    
   });
 
 });

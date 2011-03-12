@@ -8,11 +8,13 @@ define([
   'compact/collection/some',
   'compact/collection/reject',
   'compact/collection/every',
-  'compact/collection/contains'
+  'compact/collection/contains',
+  'compact/collection/invoke'
 ], 
 
 function(Mixin, find, map, reduce, select, 
-         each, some, reject, every, contains) {
+         each, some, reject, every, contains,
+         invoke) {
 	
 	/**
 	 * Enumerable
@@ -85,15 +87,21 @@ function(Mixin, find, map, reduce, select,
     },
     
     reject: function(iterator, context) {
-      return reject(this._enumerableCollection(), context);
+      return reject(this._enumerableCollection(), iterator, context);
     },
     
-    reject: function(iterator, context) {
-      return every(this._enumerableCollection(), context);
+    every: function(iterator, context) {
+      return every(this._enumerableCollection(), iterator, context);
     },
     
     contains: function(value) {
       return contains(this._enumerableCollection(), value);
+    },
+    
+    invoke: function() {
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift(this._enumerableCollection());
+      invoke.apply(this, args);
     }
 	})
 

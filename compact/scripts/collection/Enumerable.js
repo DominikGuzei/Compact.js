@@ -6,10 +6,12 @@ define([
   'compact/collection/select',
   'compact/collection/each',
   'compact/collection/some',
-  'compact/collection/reject'
+  'compact/collection/reject',
+  'compact/collection/every'
 ], 
 
-function(Mixin, find, map, reduce, select, each, some, reject) {
+function(Mixin, find, map, reduce, select, 
+         each, some, reject, every) {
 	
 	/**
 	 * Enumerable
@@ -83,6 +85,10 @@ function(Mixin, find, map, reduce, select, each, some, reject) {
     
     reject: function(iterator, context) {
       return reject(this._enumerableCollection(), context);
+    },
+    
+    reject: function(iterator, context) {
+      return every(this._enumerableCollection(), context);
     }
 	})
 

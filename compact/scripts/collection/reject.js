@@ -9,7 +9,7 @@ define([
 
 function(each) {
   /**
-   * select
+   * reject
    *
    * Returns the values in list without the elements that the truth test (iterator) passes. 
    * The opposite of select.

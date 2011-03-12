@@ -10,7 +10,7 @@ define([
   var nativeEvery = Array.prototype.every;
 
   /**
-   * some
+   * every
    *
    * Returns true if any of the values in the list pass the iterator truth test.
    * Short-circuits and stops traversing the list if a true element is found.

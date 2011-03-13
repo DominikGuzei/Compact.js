@@ -43,7 +43,7 @@ function(Class, Observable, Filterable) {
     describe("addEventFilter", function() {
 
       it("adds the given function as filter for the event", function() {
-        expect(this.instance.eventFilters["change"][0]).toBe(this.filter);
+        expect(this.instance.eventFilters["change"][0].callback).toBe(this.filter);
       });
 
       it("returns a filter information object", function() {

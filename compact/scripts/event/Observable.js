@@ -37,8 +37,8 @@ function(Mixin) {
 		 * remove the registered callback later on.
 		 * 
 		 */
-		addEventListener: function(eventName, listener) {
-			return this._addCallbackToCollection("eventListeners", eventName, listener);
+		addEventListener: function(eventName, listener, context) {
+			return this._addCallbackToCollection("eventListeners", eventName, listener, context);
 		},
 		
 		/**
@@ -64,7 +64,7 @@ function(Mixin) {
 			var listeners = this.eventListeners[eventName];
 			if(listeners) {
 				for(var i=0; i<listeners.length; i++) {
-					listeners[i].call(this, eventData);
+					listeners[i].callback.call(listeners[i].context, eventData);
 				}
 			}
 		},
@@ -80,12 +80,15 @@ function(Mixin) {
 		 * @returns {Object} Holds the information
  		 * of the registered callback/event.
 		 */
-		_addCallbackToCollection: function(collection, eventName, callback) {
+		_addCallbackToCollection: function(collection, eventName, callback, context) {
 			
 			if(!this[collection][eventName]) {
 				this[collection][eventName] = [];
 			}
-			this[collection][eventName].push(callback);
+			this[collection][eventName].push({
+			  callback: callback,
+			  context: context || this
+			});
 			return {
 				collection: collection,
 				eventName: eventName,

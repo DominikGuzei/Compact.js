@@ -51,7 +51,7 @@ function(Class, Observable, Validatable) {
 		describe("addEventValidator", function() {
 		  
 		  it("adds the given function as validator for the event", function() {
-		    expect(this.instance.eventValidators["change:name"][0]).toBe(this.validator);
+		    expect(this.instance.eventValidators["change:name"][0].callback).toBe(this.validator);
 		  });
 		  
 		  it("returns a filter information object", function() {

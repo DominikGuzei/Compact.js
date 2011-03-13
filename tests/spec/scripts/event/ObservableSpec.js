@@ -42,7 +42,7 @@ function(Class, Observable) {
     describe("addEventListener", function() {
 
       it("adds the given function as callback for the event", function() {
-        expect(this.instance.eventListeners["change"][0]).toBe(this.listener);
+        expect(this.instance.eventListeners["change"][0].callback).toBe(this.listener);
       });
 
       it("returns a listener information object", function() {

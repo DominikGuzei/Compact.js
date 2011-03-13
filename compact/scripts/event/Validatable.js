@@ -37,8 +37,8 @@ function(Mixin) {
      * @returns {Object} register information, used to
      * remove the registered callback later on.
      */
-    addEventValidator: function(eventName, validator) {
-      return this._addCallbackToCollection("eventValidators", eventName, validator);
+    addEventValidator: function(eventName, validator, context) {
+      return this._addCallbackToCollection("eventValidators", eventName, validator, context);
     },
 
     /**
@@ -67,7 +67,7 @@ function(Mixin) {
 
       if(validators) {
         for(var i=0; i<validators.length; i++) {
-          validators[i].call(this, eventData, errors);
+          validators[i].callback.call(validators[i].context, eventData, errors);
         }
       }
 

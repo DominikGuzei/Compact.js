@@ -34,8 +34,8 @@ function(Mixin) {
      * @returns {Object} register information, used to
      * remove the registered callback later on.
      */
-    addEventFilter: function(eventName, filter) {
-      return this._addCallbackToCollection("eventFilters", eventName, filter);
+    addEventFilter: function(eventName, filter, context) {
+      return this._addCallbackToCollection("eventFilters", eventName, filter, context);
     },
 
     /**
@@ -64,7 +64,7 @@ function(Mixin) {
       var filters = this.eventFilters[eventName];
       if(filters) {
         for(var i=0; i<filters.length; i++) {
-          filters[i].call(this, eventData);
+          filters[i].callback.call(filters[i].context, eventData);
         }
       }
       return eventData;

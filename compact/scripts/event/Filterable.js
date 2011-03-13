@@ -46,8 +46,10 @@ function(Mixin) {
      * to easily remove the filter.
      */
 
-    removeEventFilter: function(filterInfo) {
-      this._removeCallbackFromCollection(filterInfo.collection, filterInfo.eventName, filterInfo.index);
+    removeEventFilter: function() {
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift("eventFilters");
+      this._removeCallbackFromCollection.apply(this, args);
     },
 
     /**

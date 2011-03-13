@@ -1,8 +1,9 @@
 define([
-  'compact/Mixin'
+  'compact/Mixin',
+  'compact/collection/each'
 ], 
 
-function(Mixin) {
+function(Mixin, each) {
 	
 	/**
 	 * Observable 
@@ -50,7 +51,9 @@ function(Mixin) {
 		 * of the previously registered callback/event.
 		 */
 		removeEventListener: function(callbackInfo) {
-			this._removeCallbackFromCollection(callbackInfo.collection, callbackInfo.eventName, callbackInfo.index);
+		  var args = Array.prototype.slice.call(arguments);
+      args.unshift("eventListeners");
+			this._removeCallbackFromCollection.apply(this, args);
 		},
 	  
 	  /**
@@ -104,7 +107,23 @@ function(Mixin) {
 		 * @param {String} eventName
 		 * @param {Integer} index The index of the callback in the event array
 		 */
-		_removeCallbackFromCollection: function(collection, eventName, index) {
+		_removeCallbackFromCollection: function() {
+		  var collection = arguments[0];
+		  var index = null;
+		  var eventName = "";
+		  
+		  if(arguments.length == 3) {
+		    eventName = arguments[1];
+		    var fn = arguments[2];
+		    
+		    each(this[collection][eventName], function(value, i) {
+		      if(fn == value) index = i;
+		    });
+		  } else {
+		    index = arguments[1].index;
+		    eventName = arguments[1].eventName;
+		  }
+		  
 		  this[collection][eventName].splice(index, 1);
 		}
 		

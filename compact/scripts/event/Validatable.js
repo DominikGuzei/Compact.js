@@ -48,7 +48,9 @@ function(Mixin) {
      */
 
     removeEventValidator: function(validatorInfo) {
-      this._removeCallbackFromCollection(validatorInfo.collection, validatorInfo.eventName, validatorInfo.index);
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift("eventValidators");
+      this._removeCallbackFromCollection.apply(this, args);
     },
 
     /**

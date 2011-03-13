@@ -61,6 +61,11 @@ function(Class, Observable) {
         this.instance.removeEventListener(this.listenerInfo);
         expect(this.instance.eventListeners["change"].length).toEqual( 0 );
       });
+      
+      it("can also be removed without the event name and function", function() {
+        this.instance.removeEventListener(this.listenerInfo.eventName, this.listener);
+        expect(this.instance.eventListeners["change"].length).toEqual( 0 );
+      });
 
     });
 

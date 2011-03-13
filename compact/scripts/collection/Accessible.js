@@ -61,6 +61,7 @@ function(Mixin, Observable, Validatable) {
 
       if(typeof(key) == 'string') {
         this.change(key, value);
+        this.dispatchEvent(this.afterChange(), this._accessibleCollection());
       }
     },
 

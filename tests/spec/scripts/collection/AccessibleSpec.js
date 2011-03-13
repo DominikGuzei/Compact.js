@@ -95,6 +95,13 @@ function(Class, Accessible) {
 		    expect(testCallbackSpy).toHaveBeenCalledWith("blub");
 		    
 		  });
+		  
+		  it("dispatches an global afterChange event", function() {
+		    var testCallbackSpy = jasmine.createSpy();
+        this.instance.addEventListener(this.instance.afterChange(), testCallbackSpy);
+        this.instance.set("test", "blub");
+        expect(testCallbackSpy).toHaveBeenCalledWith(this.instance);
+		  });
 		});
 		
 		

@@ -33,7 +33,11 @@ function(Class, Mixin) {
         expect( Class("example").end() ).toBeTypeOf('function');
         expect( window.example ).not.toBeDefined();
       });
-
+      
+      it("adds this.Class to every instance which points to its class", function() {
+        var person = new com.example.Person();
+        expect(person.Class).toBe(com.example.Person);
+      });
     });
 
     describe(".extend()", function() {

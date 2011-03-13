@@ -124,7 +124,7 @@ function(Mixin, each) {
 		    eventName = arguments[1].eventName;
 		  }
 		  
-		  this[collection][eventName].splice(index, 1);
+		  if(this[collection][eventName]) this[collection][eventName].splice(index, 1);
 		}
 		
 	})

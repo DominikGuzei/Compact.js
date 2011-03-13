@@ -16,20 +16,25 @@ function(Class, Model, each, bind, $) {
     parentElement: null,
     template: "empty",
     model: null,
-    events: null
+    events: null,
+    renderLock: false
   })
   
   .initialize(function() {
+    this.init = true;
     this.setTemplate(this.template);
-    this.setModel(new Model());
+    if(this.model) this.setModel(this.model);
     this.delegateEvents(this.events);
+    delete this["init"];
   })
   
   .methods({
     
     render: function() {
-      this.element.empty();
-      this.element.append( $.tmpl(this.template, this.model.attributes) );
+      if(!this.renderLock) {
+        this.element.empty();
+        this.element.append( $.tmpl(this.template, this.model.attributes) );
+      }
     },
     
     setTemplate: function(templateMarkup) {
@@ -37,14 +42,14 @@ function(Class, Model, each, bind, $) {
     },
     
     setModel: function(newModel) {
-      if(this.model) this.model.removeEventListener(this.model.afterChange(), this.render);
+      if(!this.init && this.model) this.model.removeEventListener(this.model.afterChange(), this.render);
       this.model = newModel;
       this.model.addEventListener(this.model.afterChange(), this.render, this);
       this.render();
     },
     
     appendTo: function(parent) {
-      this.parentElement = parent.append(this.element);
+      this.element.appendTo(parent);
     },
     
     remove: function() {
@@ -52,7 +57,6 @@ function(Class, Model, each, bind, $) {
     },
     
     delegateEvents: function(events) {
-      console.log(events);
       if (!(events || (events = this.events))) return;
       
       this.element.unbind();

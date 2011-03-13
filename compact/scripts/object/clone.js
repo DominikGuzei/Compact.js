@@ -7,7 +7,10 @@ define( function() {
    */
 
   var clone = function(obj) {
-
+    
+    if(obj && obj.jquery) {
+      return obj.clone();
+    }
     if (typeof obj !== 'object' || obj === null) {
       return obj;
     }

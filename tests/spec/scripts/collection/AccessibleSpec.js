@@ -156,7 +156,19 @@ function(Class, Accessible) {
 				expect(this.instance.test).toEqual("test");
 				expect(this.instance.sub).not.toBeDefined();
 			});
-		
+		  
+		  it("dispatches exactly one global afterChange event", function() {
+        var testCallbackSpy = jasmine.createSpy();
+        var changedProps = {
+          test: "bla",
+          sub: {}
+        };
+        this.instance.addEventListener(this.instance.afterChange(), testCallbackSpy);
+        this.instance.set(changedProps);
+        expect(testCallbackSpy).toHaveBeenCalledWith(changedProps);
+        expect(testCallbackSpy.callCount).toBe(1);
+      });
+		  
 		});
 		
 		

@@ -37,8 +37,10 @@ function(Mixin, Observable, Validatable) {
      * value, or an object with key/values that should all be set at once
      * @param {*} value If a single change -> the value for the key
      */
-    set: function(key, value) {
-
+    set: function(key, value, silent) {
+      
+      silent = silent || false;
+      
       if(typeof(key) == 'object') {
         var changedValues = key;
         var validateResults = this.validateEvent(this.beforeChange(), changedValues);
@@ -46,7 +48,7 @@ function(Mixin, Observable, Validatable) {
         if(validateResults.isValid) {
           for(property in key) {
             if(key.hasOwnProperty(property)) {
-              this.set(property, key[property]);
+              this.set(property, key[property], true);
             }
           }
           this.dispatchEvent(this.afterChange(), changedValues);
@@ -61,7 +63,7 @@ function(Mixin, Observable, Validatable) {
 
       if(typeof(key) == 'string') {
         this.change(key, value);
-        this.dispatchEvent(this.afterChange(), this._accessibleCollection());
+        if(!silent) this.dispatchEvent(this.afterChange(), this._accessibleCollection());
       }
     },
 

@@ -1,11 +1,13 @@
 define([
   'compact/Class',
   'compact/model/Model',
+  'compact/collection/each',
+  'compact/function/bind',
   'compact/lib/jquery',
   'compact/lib/jquery-tmpl'
 ], 
 
-function(Class, Model, $) {
+function(Class, Model, each, bind, $) {
 
   return Class("View")
   
@@ -14,11 +16,13 @@ function(Class, Model, $) {
     parentElement: null,
     template: "empty",
     model: null,
+    events: null
   })
   
   .initialize(function() {
     this.setTemplate(this.template);
     this.setModel(new Model());
+    this.delegateEvents(this.events);
   })
   
   .methods({
@@ -45,6 +49,26 @@ function(Class, Model, $) {
     
     remove: function() {
       this.element.remove();
+    },
+    
+    delegateEvents: function(events) {
+      console.log(events);
+      if (!(events || (events = this.events))) return;
+      
+      this.element.unbind();
+      var eventSplitter = /^(\w+)\s*(.*)$/;
+      
+      each(events, function(methodName, key) {
+        var match = key.match(eventSplitter);
+        var eventName = match[1], selector = match[2];
+        var method = bind(this[methodName], this);
+        
+        if (selector === '') {
+          this.element.bind(eventName, method);
+        } else {
+          this.element.delegate(selector, eventName, method);
+        }
+      }, this);
     }
   })
   

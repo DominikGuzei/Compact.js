@@ -1,10 +1,11 @@
 define([
   'compact/view/View',
   'compact/lib/jquery',
-  'compact/model/Model'
+  'compact/model/Model',
+  'compact/Class'
 ], 
 
-function(View, $, Model) {
+function(View, $, Model, Class) {
 
   describe("compact/view/View", function() {
 
@@ -100,6 +101,55 @@ function(View, $, Model) {
         
         this.view.remove();
         expect(wrapper.children().size()).toBe(0);
+      });
+      
+    });
+    
+    describe("events", function() {
+      
+      it("binds the event to the view element and calls given function", function() {
+
+        var ViewEvents = Class("ViewEvents").extend(View)
+        .properties({
+          events: {
+            "click" : "test"
+          }
+        })
+        .methods({
+          test: jasmine.createSpy()
+        })
+        .end();
+        
+        this.view = new ViewEvents();
+        this.view.element.trigger("click");
+        
+        expect(this.view.test).toHaveBeenCalled();
+      });
+      
+      it("delegates the event for specific selectors", function() {
+        var ViewDelegates = Class("ViewDelegates").extend(View)
+        .properties({
+          events: {
+            "click .test" : "test",
+            "click .second" : "test"
+          },
+          template: "<p class='test'></p><div class='second'></div>"
+        })
+        .methods({
+          test: jasmine.createSpy()
+        })
+        .end();
+        
+        this.view = new ViewDelegates();
+        
+        this.view.element.trigger("click");
+        expect(this.view.test).not.toHaveBeenCalled();
+        
+        this.view.element.find(".test").trigger("click");
+        expect(this.view.test).toHaveBeenCalled();
+        
+        this.view.element.find(".second").trigger("click");
+        expect(this.view.test.callCount).toBe(2);
       });
       
     });

@@ -11,6 +11,9 @@ define( function() {
     if(obj && obj.jquery) {
       return obj.clone();
     }
+    if(obj && typeof(obj.clone) === 'function') {
+      return obj.clone();
+    }
     if (typeof obj !== 'object' || obj === null) {
       return obj;
     }

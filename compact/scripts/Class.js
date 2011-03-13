@@ -176,8 +176,8 @@ function(copy, chain, clone) {
     // all constructors in the class hierarchy with the argument object
     var classConstructor = namespace[classname] = function() {
       var userArgs = arguments[0] || {};
-      classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
       addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
+      classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
       this.Class = namespace[classname];
       classSpecification.initializer.call(this, userArgs);
     };
@@ -240,11 +240,15 @@ function(copy, chain, clone) {
   function addInstanceProperties(destination, preferred, defaults) {
     for (var prop in defaults) {
       if (defaults.hasOwnProperty(prop)) {
+   
         var instancePropString = prop;
-        var defaultProp = clone(defaults[prop]);
-        var preferredProp = preferred[prop];
+        
+        if(!destination[instancePropString]) {
+          var defaultProp = clone(defaults[prop]);
+          var preferredProp = preferred[prop];
 
-        destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;
+          destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;addInstanceProperties
+        }
       }
     }
   }

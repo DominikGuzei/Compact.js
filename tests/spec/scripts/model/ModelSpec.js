@@ -94,6 +94,21 @@ function(Model, Store) {
       });
 
     });
+    
+    describe("clone", function() {
+      
+      it("returns an exact clone of the model", function() {
+        var testObject = {};
+        instance.set({
+          obj: testObject 
+        })
+        
+        var clone = instance.clone();
+        expect(clone.attributes.obj).not.toBe(testObject);
+        expect(clone.attributes.obj).toEqual(testObject);
+      });
+      
+    });
 
   });
 

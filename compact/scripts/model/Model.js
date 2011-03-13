@@ -2,10 +2,11 @@ define([
   'compact/Class',
   'compact/format/json',
   'compact/collection/Accessible',
-  'compact/model/Store'
+  'compact/model/Store',
+  'compact/object/clone'
 ], 
 
-function(Class, JSON, Accessible, Store) {
+function(Class, JSON, Accessible, Store, clone) {
 
   return Class("Model") .mixin(Accessible)
 
@@ -35,6 +36,14 @@ function(Class, JSON, Accessible, Store) {
 
     toJSON: function() {
       return JSON.stringify(this.attributes);
+    },
+    
+    clone: function() {
+      return new this.Class({
+        attributes: clone(this.attributes),
+        eventListeners: clone(this.eventListeners),
+        eventValidators: clone(this.eventValidators)
+      });
     }
 
   })

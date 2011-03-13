@@ -46,12 +46,13 @@ function(Mixin, Observable, Validatable) {
         var validateResults = this.validateEvent(this.beforeChange(), changedValues);
 
         if(validateResults.isValid) {
+          var changed = false;
           for(property in key) {
             if(key.hasOwnProperty(property)) {
-              this.set(property, key[property], true);
+              if(this.set(property, key[property], true)) changed = true;
             }
           }
-          this.dispatchEvent(this.afterChange(), changedValues);
+          if(changed) this.dispatchEvent(this.afterChange(), changedValues);
 
         }
         else {
@@ -62,8 +63,9 @@ function(Mixin, Observable, Validatable) {
       }
 
       if(typeof(key) == 'string') {
-        this.change(key, value);
-        if(!silent) this.dispatchEvent(this.afterChange(), this._accessibleCollection());
+        var changed = this.change(key, value);
+        if(changed && !silent) this.dispatchEvent(this.afterChange(), this._accessibleCollection());
+        return changed;
       }
     },
 
@@ -117,22 +119,25 @@ function(Mixin, Observable, Validatable) {
      * @param {*} value
      */
     change: function(key, value) {
-
-      var specificResult = this.validateEvent(this.beforeChange(key), value);
-
-      if (specificResult.isValid) {
-        this._accessibleCollection()[key] = value;
-        this.dispatchEvent(this.afterChange(key), value);
+      if(this._accessibleCollection()[key] !== value) {
+        var specificResult = this.validateEvent(this.beforeChange(key), value);
+  
+        if (specificResult.isValid) {
+          this._accessibleCollection()[key] = value;
+          this.dispatchEvent(this.afterChange(key), value);
+        }
+        else {
+          this.dispatchEvent(this.invalidChange(key), {
+            key: key,
+            value: value,
+            errors: specificResult.errors
+          });
+        }
+  
+        return true;
+      } else {
+        return false;
       }
-      else {
-        this.dispatchEvent(this.invalidChange(key), {
-          key: key,
-          value: value,
-          errors: specificResult.errors
-        });
-      }
-
-      return specificResult;
     },
 
     /**

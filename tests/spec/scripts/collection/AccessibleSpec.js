@@ -102,6 +102,13 @@ function(Class, Accessible) {
         this.instance.set("test", "blub");
         expect(testCallbackSpy).toHaveBeenCalledWith(this.instance);
 		  });
+		  
+		  it("dispatches no event if value stays the same", function() {
+		    var testCallbackSpy = jasmine.createSpy();
+        this.instance.addEventListener(this.instance.afterChange(), testCallbackSpy);
+        this.instance.set("test", "test");
+        expect(testCallbackSpy).not.toHaveBeenCalled();
+		  });
 		});
 		
 		
@@ -167,6 +174,16 @@ function(Class, Accessible) {
         this.instance.set(changedProps);
         expect(testCallbackSpy).toHaveBeenCalledWith(changedProps);
         expect(testCallbackSpy.callCount).toBe(1);
+      });
+      
+      it("dispatches no global afterChange event when all values stay the same", function() {
+        var testCallbackSpy = jasmine.createSpy();
+        var changedProps = {
+          test: "test"
+        };
+        this.instance.addEventListener(this.instance.afterChange(), testCallbackSpy);
+        this.instance.set(changedProps);
+        expect(testCallbackSpy).not.toHaveBeenCalled();
       });
 		  
 		});

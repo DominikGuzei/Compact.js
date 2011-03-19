@@ -29,8 +29,8 @@ function(Class, View, $) {
       }
     },
     
-    setTemplate: function(templateMarkup) {
-      this.template = $.template("", templateMarkup);
+    setTemplate: function(markup, name) {
+      this.template = $.template(name || "", markup);
     },
     
     setModel: function(newModel) {

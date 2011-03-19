@@ -16,12 +16,14 @@ require(
 ], 
 
 function(ContactView, Model, $) {
-  
-  window.contactView = new ContactView();
+
+  var contactView = new ContactView();
   var mirrorContact = new ContactView({
     model: contactView.model
   });
-  
   contactView.appendTo($("#application"));
+  contactView.render();
   mirrorContact.appendTo($("#application"));
+  mirrorContact.render();
+  
 });

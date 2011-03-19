@@ -1,23 +1,22 @@
 
 define([
  'compact/Class',
- 'compact/view/View',
+ 'compact/view/TemplateView',
  'model/ContactModel',
  'text!view/templates/ContactView.tmpl',
  'text!view/templates/ContactEdit.tmpl' 
 ],
 
-function(Class, View, ContactModel, contactViewTemplate, contactEditTemplate) {
+function(Class, TemplateView, ContactModel, contactViewTemplate, contactEditTemplate) {
   
-  return Class("ContactView") .extend(View)
+  return Class("ContactView") .extend(TemplateView)
   
   .properties({
     model: new ContactModel(),
     template: contactViewTemplate,
     events: {
       "click .editButton"          : "editButtonClicked",
-      "click .saveButton"          : "saveButtonClicked",
-      "keyup .name, .description"  : "dataChanged"
+      "click .saveButton"          : "saveButtonClicked"
     }
   })
   
@@ -28,20 +27,16 @@ function(Class, View, ContactModel, contactViewTemplate, contactEditTemplate) {
       this.render();
     },
     
-    dataChanged: function() {
+    saveButtonClicked: function() {
+      this.setTemplate(contactViewTemplate);
+      
       var name = this.element.find(".name").val();
       var description = this.element.find(".description").val();
-      this.renderLock = true;
+      
       this.model.set({
         name: name,
         description: description
       });
-      this.renderLock = false;
-    },
-    
-    saveButtonClicked: function() {
-      this.setTemplate(contactViewTemplate);
-      this.render();
     }
     
   })

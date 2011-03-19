@@ -19,23 +19,26 @@ function(Class, TemplateView, each, $) {
   
   .methods({
     
+    render: function() {
+      this.superMethod();
+      ko.applyBindings(this.viewModel, this.element[0]);
+    },
+    
     setModel: function(newModel) {
-      if(!newModel || this.model == newModel) { return; }
+      if(!newModel) { return; }
       
       this._removeModelBindings();
       
       this.model = newModel;
-      this.render();
-      
       this._setupModelBindings();
+      
+      this.render();
     },
     
     _setupModelBindings: function() {
       each(this.model.attributes, function(value, key) {
         this._addModelBinding(key, value);
       }, this);
-      
-      ko.applyBindings(this.viewModel, this.element[0]);
     },
     
     _addModelBinding: function(key, value) {
@@ -57,6 +60,8 @@ function(Class, TemplateView, each, $) {
     },
     
     _removeModelBindings: function() {
+      if(this._knockoutSubscriptions == [] && this._modelListeners == []) { return; }
+      
       each(this._knockoutSubscriptions, function(subscription, index, collection) {
         subscription.dispose();
       });

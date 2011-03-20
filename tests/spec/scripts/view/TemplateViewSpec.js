@@ -44,7 +44,7 @@ function(Class, TemplateView, Model, $) {
       beforeEach(function() {
         this.view.setTemplate("<p>${name}</p>")
         this.oldModel = this.view.model;
-        this.newModel = new Model({ attributes: { name: "new" } });
+        this.newModel = new Model({ data: { name: "new" } });
         this.view.setModel(this.newModel);
       });
       
@@ -66,7 +66,7 @@ function(Class, TemplateView, Model, $) {
       it("renders the template with the current model", function() {
         this.view.setTemplate("<p>${name}</p>");
         this.view.model = new Model({
-          attributes: { name: "Compact" }
+          data: { name: "Compact" }
         });
         expect( this.view.element.children().size() ).toBe(0);
         this.view.render();

@@ -64,7 +64,7 @@ function(Class, Store, Model, Enumerable, values, each) {
     save: function() {
       var modelAttributes = {};
       this.each( function(model) {
-        modelAttributes[model.localStorageId] = model.attributes;
+        modelAttributes[model.localStorageId] = model.data;
       });
 
       localStorage.setItem(this.name, JSON.stringify(modelAttributes));
@@ -84,7 +84,7 @@ function(Class, Store, Model, Enumerable, values, each) {
 
           this.data[key] = new Model({
             id: id,
-            attributes: savedAttributes
+            data: savedAttributes
           });
 
           this.data[key].localStorageId = key;

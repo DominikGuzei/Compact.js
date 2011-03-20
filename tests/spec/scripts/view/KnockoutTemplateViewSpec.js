@@ -19,7 +19,7 @@ function(KnockoutTemplateView, $, Model, Class) {
       
       beforeEach(function() {
         this.testModel = new Model({
-          attributes: {
+          data: {
             name: "compact",
             age: "young"
           }
@@ -31,7 +31,7 @@ function(KnockoutTemplateView, $, Model, Class) {
         expect(this.view.model).toBe(this.testModel);
       });
       
-      it("Creates a knockout viewModel that mirrors the model's attributes", function() {
+      it("Creates a knockout viewModel that mirrors the model's data", function() {
         expect(this.view.viewModel.name()).toEqual(this.view.model.get("name"));
         expect(this.view.viewModel.age()).toEqual(this.view.model.get("age"));
       });

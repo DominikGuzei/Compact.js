@@ -25,7 +25,7 @@ function(Class, View, $) {
     render: function() {
       this.element.empty();
       if(this.model) {
-        this.element.append( $.tmpl(this.template, this.model.attributes) );
+        this.element.append( $.tmpl(this.template, this.model.data) );
       }
     },
     

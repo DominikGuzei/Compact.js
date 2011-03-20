@@ -12,13 +12,13 @@ function(Class, JSON, Accessible, Store, clone) {
 
   .properties ({
     id: null,
-    attributes: {}
+    data: {}
   })
 
   .methods ({
 
     _accessibleCollection: function() {
-      return this.attributes;
+      return this.data;
     },
 
     save: function() {
@@ -35,12 +35,12 @@ function(Class, JSON, Accessible, Store, clone) {
     },
 
     toJSON: function() {
-      return JSON.stringify(this.attributes);
+      return JSON.stringify(this.data);
     },
     
     clone: function() {
       return new this.Class({
-        attributes: clone(this.attributes),
+        data: clone(this.data),
         eventListeners: clone(this.eventListeners),
         eventValidators: clone(this.eventValidators)
       });

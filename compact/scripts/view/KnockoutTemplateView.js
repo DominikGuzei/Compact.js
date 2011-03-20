@@ -2,12 +2,10 @@ define([
   'compact/Class',
   'compact/view/TemplateView',
   'compact/collection/each',
-  'compact/lib/jquery',
-  'compact/lib/jquery-tmpl',
   'compact/lib/knockout'
 ], 
 
-function(Class, TemplateView, each, $) {
+function(Class, TemplateView, each) {
 
   return Class("KnockoutTemplateView") .extend(TemplateView)
   
@@ -36,7 +34,7 @@ function(Class, TemplateView, each, $) {
     },
     
     _setupModelBindings: function() {
-      each(this.model.attributes, function(value, key) {
+      each(this.model.data, function(value, key) {
         this._addModelBinding(key, value);
       }, this);
     },
@@ -67,7 +65,7 @@ function(Class, TemplateView, each, $) {
       });
       this._knockoutSubscriptions = [];
       
-      each(this._modelListeners, function(listener, index, collection) {
+      each(this._modelListeners, function(listener, index, collection) {
         this.model.removeEventListener(listener);
       }, this);
       this._modelListeners = [];

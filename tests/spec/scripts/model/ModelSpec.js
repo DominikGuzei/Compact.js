@@ -18,10 +18,10 @@ function(Model, Store) {
       Store.instance = undefined;
     });
 
-    describe("default attributes", function() {
+    describe("default data", function() {
 
       it("Has an values object with model domain values", function() {
-        expect(instance.attributes).toBeDefined();
+        expect(instance.data).toBeDefined();
       });
 
       it("Has an undefined id at creation", function() {
@@ -84,7 +84,7 @@ function(Model, Store) {
 
     describe("toJSON", function() {
 
-      it("Returns the attributes of the model as json string", function() {
+      it("Returns the data of the model as json string", function() {
         instance.set({
           name: "value",
           test: { inside: "hello" },
@@ -104,8 +104,8 @@ function(Model, Store) {
         })
         
         var clone = instance.clone();
-        expect(clone.attributes.obj).not.toBe(testObject);
-        expect(clone.attributes.obj).toEqual(testObject);
+        expect(clone.data.obj).not.toBe(testObject);
+        expect(clone.data.obj).toEqual(testObject);
       });
       
     });

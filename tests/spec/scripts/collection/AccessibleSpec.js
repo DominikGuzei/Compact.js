@@ -209,7 +209,7 @@ function(Class, Accessible) {
         attributes: {}
       })
       .methods({
-        _accessibleCollection: function() {
+        _accessibleCollection: function() {
           return this.attributes;
         }
       })

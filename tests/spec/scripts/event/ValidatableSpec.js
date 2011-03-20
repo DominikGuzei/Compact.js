@@ -95,7 +95,7 @@ function(Class, Observable, Validatable) {
   				}
 			  });
 			  var subject = this.instance;
-			  expect( function() { subject.setName("Dominik") } ).toThrow( errorsToThrow );
+			  expect( function() { subject.setName("Dominik") } ).toThrow( errorsToThrow );
 			});
 		});
 		

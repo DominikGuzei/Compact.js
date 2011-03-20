@@ -148,7 +148,7 @@ function(Mixin, Observable, Validatable) {
      */
     _accessibleCollection: function() {
       return this;
-    },
+    }
 
   })
 

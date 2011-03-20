@@ -56,7 +56,7 @@ Before calling .end() on the "chainable class builder" you can also specify the 
     // Note that you can not assign new properties to the instance 
     // via the argument object. This would be useless:
     
-    var instance = new PropertyClass({ newProp: "test" });
+    var instance = new PropertyClass({ newProp: "test" });
 
 --------
 ###Constructor: **.initialize( constructor:Function )**

@@ -60,7 +60,7 @@ function(Store, Model, LocalStorage) {
 				};
 				var model = new Model({
 					id: "1",
-					attributes: modelAttrs
+					attributes: modelAttrs
 				});
 				localStore.put(model);
 				expect(localStore.data["1"]).toEqual(model);

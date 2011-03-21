@@ -1,19 +1,17 @@
 define([
   'compact/Class',
-  'compact/model/Model',
   'compact/collection/each',
   'compact/function/bind',
   'compact/lib/jquery'
 ], 
 
-function(Class, Model, each, bind, $) {
+function(Class, each, bind, $) {
 
   return Class("View")
   
   .properties({
     element: $("<div>"),
     parentElement: null,
-    model: null,
     events: null
   })
   
@@ -22,10 +20,6 @@ function(Class, Model, each, bind, $) {
   })
   
   .methods({
-    
-    setModel: function(newModel) {
-      this.model = newModel;
-    },
     
     appendTo: function(parent) {
       this.element.appendTo(parent);

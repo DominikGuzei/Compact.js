@@ -1,8 +1,7 @@
 define([
   'compact/Class',
   'compact/view/View',
-  'compact/lib/jquery',
-  'compact/model/Model'
+  'compact/lib/jquery'
 ], 
 
 function(Class, View, $, Model) {
@@ -11,16 +10,6 @@ function(Class, View, $, Model) {
 
     beforeEach(function() {
       this.view = new View();
-    });
-    
-    describe("setModel", function() {
-      
-      it("changes the model", function() {
-        var newModel = new Model();
-        this.view.setModel(newModel);
-        expect( this.view.model ).toBe(newModel);
-      });
-      
     });
     
     describe("appendTo", function() {

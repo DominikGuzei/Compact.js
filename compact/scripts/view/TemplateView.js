@@ -10,6 +10,7 @@ function(Class, View, $) {
   return Class("TemplateView") .extend(View)
   
   .properties({
+    model: null,
     template: "empty"
   })
   

@@ -24,11 +24,10 @@ function(Class, TemplateView, ContactModel, contactViewTemplate, contactEditTemp
     
     editButtonClicked: function() {
       this.setTemplate(contactEditTemplate);
-      this.render();
     },
     
     saveButtonClicked: function() {
-      this.setTemplate(contactViewTemplate);
+      this.setTemplate(contactViewTemplate, false);
       
       var name = this.element.find(".name").val();
       var description = this.element.find(".description").val();

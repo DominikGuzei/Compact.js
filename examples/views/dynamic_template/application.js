@@ -23,5 +23,4 @@ function(ContactView, $) {
   
   contactView.appendTo($("#application"));
   mirrorContact.appendTo($("#application"));
-  
 });

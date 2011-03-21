@@ -68,7 +68,6 @@ function(Class, TemplateView, Model, $) {
         this.view.model = new Model({
           data: { name: "Compact" }
         });
-        expect( this.view.element.children().size() ).toBe(0);
         this.view.render();
         expect( this.view.element.html() ).toEqual("<p>Compact</p>");
       });

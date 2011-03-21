@@ -21,13 +21,18 @@ function(Class, each, bind, $) {
   
   .methods({
     
-    appendTo: function(parent) {
+    appendTo: function(parent, render) {
       this.element.appendTo(parent);
       this.parentElement = parent;
+      if(render || render === undefined) { this.render(); }
     },
     
     remove: function() {
       this.element.remove();
+    },
+    
+    detach: function() {
+      this.element.detach();
     },
     
     delegateEvents: function(events) {
@@ -47,7 +52,9 @@ function(Class, each, bind, $) {
           this.element.delegate(selector, eventName, method);
         }
       }, this);
-    }
+    },
+    
+    render: function() {}
   })
   
   .end();

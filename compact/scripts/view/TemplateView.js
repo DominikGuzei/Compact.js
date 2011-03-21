@@ -16,21 +16,24 @@ function(Class, View, Model, $) {
   })
   
   .initialize(function() {
-    this.init = true;
-    this.setTemplate(this.template);
-    this._setupModelListeners(this.model);
-    delete this.init;
+    this.init();
   })
   
   .methods({
+    
+    init: function() {
+      this._setupModelListeners(this.model);
+      this.setTemplate(this.template, false);
+    },
     
     render: function() {
       this.element.empty();
       this.element.append( $.tmpl(this.template, this.model.data) );
     },
     
-    setTemplate: function(markup, name) {
+    setTemplate: function(markup, rerender, name) {
       this.template = $.template(name || "", markup);
+      if(rerender || rerender === undefined) { this.render(); }
     },
     
     setModel: function(newModel) {

@@ -25,12 +25,10 @@ function(Class, KnockoutTemplateView, ContactModel, contactViewTemplate, contact
     
     editButtonClicked: function() {
       this.setTemplate(contactEditTemplate);
-      this.render();
     },
     
     saveButtonClicked: function() {
       this.setTemplate(contactViewTemplate);
-      this.render();
     },
     
     onKeyUp: function() {

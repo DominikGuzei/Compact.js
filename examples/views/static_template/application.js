@@ -23,6 +23,7 @@ function(ContactView, Model, $) {
   });
   
   contactView.appendTo($("#application"));
+  contactView.render();
   mirrorContact.appendTo($("#application"));
-  
+  mirrorContact.render();
 });

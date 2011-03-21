@@ -23,8 +23,9 @@ function(KnockoutTemplateView, $, Model, Class) {
             name: "compact",
             age: "young"
           }
-        })
+        });
         this.view.setModel(this.testModel);
+        
       });
       
       it("Changes the model to new model", function() {

@@ -1,23 +1,24 @@
 define([
   'compact/Class',
   'compact/view/View',
+  'compact/model/Model',
   'compact/lib/jquery',
   'compact/lib/jquery-tmpl'
 ], 
 
-function(Class, View, $) {
+function(Class, View, Model, $) {
 
   return Class("TemplateView") .extend(View)
   
   .properties({
-    model: null,
+    model: new Model(),
     template: "empty"
   })
   
   .initialize(function() {
     this.init = true;
     this.setTemplate(this.template);
-    if(this.model) { this.setModel(this.model); }
+    this._setupModelListeners(this.model);
     delete this.init;
   })
   
@@ -25,9 +26,7 @@ function(Class, View, $) {
     
     render: function() {
       this.element.empty();
-      if(this.model) {
-        this.element.append( $.tmpl(this.template, this.model.data) );
-      }
+      this.element.append( $.tmpl(this.template, this.model.data) );
     },
     
     setTemplate: function(markup, name) {
@@ -35,12 +34,18 @@ function(Class, View, $) {
     },
     
     setModel: function(newModel) {
-      if(!this.init && this.model) {
-        this.model.removeEventListener(this.model.afterChange(), this.render);
-      }
+      this._removeModelListeners(this.model);
       this.model = newModel;
-      this.model.addEventListener(this.model.afterChange(), this.render, this);
+      this._setupModelListeners(this.model);
       this.render();
+    },
+    
+    _setupModelListeners: function(model) {
+      this.model.addEventListener(this.model.afterChange(), this.render, this);
+    },
+    
+    _removeModelListeners: function(model) {
+      this.model.removeEventListener(this.model.afterChange(), this.render);
     }
     
   })

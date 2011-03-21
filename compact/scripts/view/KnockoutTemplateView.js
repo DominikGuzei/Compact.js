@@ -1,15 +1,18 @@
 define([
   'compact/Class',
-  'compact/view/TemplateView',
+  'compact/view/View',
+  'compact/model/Model',
   'compact/collection/each',
   'compact/lib/knockout'
 ], 
 
-function(Class, TemplateView, each) {
+function(Class, View, Model, each) {
 
-  return Class("KnockoutTemplateView") .extend(TemplateView)
+  return Class("KnockoutTemplateView") .extend(View)
   
   .properties({
+    model: new Model(),
+    template: "empty",
     viewModel: {},
     _knockoutSubscriptions: [],
     _modelListeners: []
@@ -18,7 +21,8 @@ function(Class, TemplateView, each) {
   .methods({
     
     render: function() {
-      this.superMethod();
+      this.element.empty();
+      this.element.append( $.tmpl(this.template, this.model.data) );
       ko.applyBindings(this.viewModel, this.element[0]);
     },
     
@@ -31,6 +35,10 @@ function(Class, TemplateView, each) {
       this._setupModelBindings();
       
       this.render();
+    },
+    
+    setTemplate: function(markup, name) {
+      this.template = $.template(name || "", markup);
     },
     
     _setupModelBindings: function() {

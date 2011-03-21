@@ -69,4 +69,33 @@ function(Collection, Model) {
 
   });
 
+  describe("pop", function() {
+
+    beforeEach( function() {
+      this.model = new Model({ id: 2 });
+      var firstModel = new Model({ id: 1 });
+      this.collection.add( firstModel );
+      this.collection.add( this.model );
+    });
+
+    it("Removes the last model from the collection", function() {
+      this.collection.pop();
+      expect(this.collection.get(this.model.id)).toBe(undefined);
+    });
+
+    it("Returns the removed model", function() {
+      expect(this.collection.pop()).toBe( this.model );
+    });
+
+    it("Dispatches an remove event if a model was removed", function() {
+      var callback = jasmine.createSpy();
+      this.collection.addEventListener("remove", callback);
+      this.collection.addEventListener("pop", callback);
+      this.collection.pop();
+      expect(callback).toHaveBeenCalledWith( this.model );
+      expect(callback.callCount).toBe(2);
+    });
+
+  });
+
 });

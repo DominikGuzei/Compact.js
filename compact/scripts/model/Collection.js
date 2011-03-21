@@ -31,8 +31,19 @@ function(Class, Enumerable, Observable) {
         return model == currentModel ? this.models.splice(index, 1) : false;
       }, this);
 
-      if(removedModel)
+      if(removedModel) {
         this.dispatchEvent("remove", removedModel);
+      }
+      return removedModel;
+    },
+    
+    pop: function() {
+      var removedModel = this.models.pop();
+      
+      if(removedModel) {
+        this.dispatchEvent("pop", removedModel);
+        this.dispatchEvent("remove", removedModel);
+      }
       return removedModel;
     },
 

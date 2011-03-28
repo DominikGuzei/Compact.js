@@ -8,14 +8,14 @@ function(Module, Model) {
   
   return Module("Post") .extend(Model)
   
-  .initialize(function(params) {
+  .initialize(function(config) {
     
-    Module.assignProperties({
-      
-      title: "Default FAQ Post title",
-      text: "This is a default text for faq post body texts."
-      
-    }, params, this);
+    config = config || {};
+    
+    this.superMethod({
+      title: config.title || "Default FAQ Post title",
+      text: config.text || "This is a default text for faq post body texts."
+    });
     
   })
   

@@ -3,21 +3,33 @@ define([
   'compact/Module',
   'compact/view/TemplateView',
   'model/Topic',
-  'text!view/Topic.tmpl'
+  'text!view/Topic.tmpl',
+  'compact/lib/jquery',
+  'compact/event/Observable'
 ],
 
-function(Module, TemplateView, Topic, TopicTemplate) {
+function(Module, TemplateView, Topic, TopicTemplate, $, Observable) {
   
-  return Module("TopicViewController") .extend(TemplateView)
+  return Module("TopicViewController") .extend(TemplateView) .mixin( Observable )
   
-  .initialize(function(params) {
+  .initialize(function(model) {
     
-    Module.defaults({
-      
-      model: new Topic(),
-      template: TopicTemplate
-      
-    }, params, this);
+    this.superMethod({
+      element: $('<li class="topic">'),
+      model: model || new Topic(),
+      template: TopicTemplate,
+      events: {
+        'click .title' : 'onClick'
+      }
+    });
+    
+  })
+  
+  .methods({
+    
+    onClick: function() {
+      this.dispatchEvent("click", this);
+    }
     
   })
   

@@ -13,22 +13,42 @@ require(
   'compact/lib/jquery',
   'compact/model/Collection',
   'model/Topic',
-  'controller/TopicListViewController'
+  'model/Post',
+  'controller/TopicListViewController',
+  'controller/PostsListViewController'
 ], 
 
-function($, Collection, Topic, TopicListViewController) {
+function($, Collection, Topic, Post, TopicListViewController, PostsListViewController) {
   
   var topicCollection = new Collection([
-    new Topic({ title: "Topic 1" }),
-    new Topic(),
+    new Topic({ 
+      title: "Topic 1",
+      posts: new Collection([
+        new Post({
+          title: "der erste Post überhaupt"
+        }),
+        new Post()
+      ])
+    }),
+    new Topic({
+      title: "Ein cooles Topic!",
+      posts: new Collection([
+        new Post({
+          title: "ein einzigartiger Titel"
+        }),
+        new Post()
+      ])
+    }),
     new Topic()
   ]);
   
-  var listView = new TopicListViewController({
-    collection: topicCollection
+  var topicListView = new TopicListViewController(topicCollection);
+  var postsListView = new PostsListViewController(topicCollection.first().get("posts"));
+  
+  topicListView.addEventListener("topicSelected", function(topic) {
+    postsListView.setCollection(topic.model.get("posts"));
   });
   
-  listView.appendTo($("#application"));
-  listView.render();
-  console.log(listView);
+  topicListView.appendTo($("#application"));
+  postsListView.appendTo($("#application"));
 });

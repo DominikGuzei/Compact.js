@@ -10,14 +10,14 @@ function(Module, Model, Collection, Post) {
   
   return Module("Topic") .extend(Model)
   
-  .initialize(function(params) {
+  .initialize(function(config) {
     
-    Module.assignProperties({
-      
-      title: "Default title",
-      posts: new Collection()
-      
-    }, params, this);
+    config = config || {};
+    
+    this.superMethod({
+      title: config.title || "Default title",
+      posts: config.posts || new Collection()
+    });
     
   })
   

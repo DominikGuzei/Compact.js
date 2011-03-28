@@ -1,220 +1,250 @@
 define([
+  'compact/collection/each',
   'compact/object/copy',
   'compact/object/chain',
-  'compact/object/clone'
+  'compact/function/bind'
 ], 
 
-function(copy, chain, clone) {
+function(each, copy, chain, bind) {
 
-  /**
-   * Takes a fully qualified java-like class path and returns
-   * an anonymous specification builder object that is used to describe
-   * the parts that are used to build the javascript class.
-   *
-   * @param {String} classPathString The fully qualified class path
-   * @returns {Object} #anonymous The specification object used to
-   * specify and build the class in the given context.
-   */
-
-  var Class = function(classPathString) {
-
+  var Module = function(modulePackagePath) {
+    
+    var defaultInitializer = function() {
+      if(this.superMethod && this.superMethod !== defaultInitializer) {
+        this.superMethod.apply(this, arguments);
+      }
+    }
+    
     return {
-      /**
-       * The superclass of the class to create
-       * @type {Function}
-       */
-      superclass: null,
-
-      /**
-       * The initialize function that can be defined for
-       * custom setup. Is called automatically on instanciation.
-       * @type {Function}
-       */
-      initializer: function() {
-      },
-
-      /**
-       * The specification of class properties to add
-       * with their default values assigned.
-       * e.g.: { propertyName: "value", property2:... }
-       * @type {Object}
-       */
-      propertiesDefinition: {},
-
+      
       /**
        * The specification of methods to add
-       * e.g: { method1: function() { return this.value }, method2: ... }
        * @type {Object}
        */
-      methodsDefinition: {},
-
+      methodsDefinition: {
+        initializer: defaultInitializer
+      },
+      
       /**
-       * The specification of static properties and/or methods
-       * e.g: { staticMethod: function() {}, staticProp: "value", ... }
-       * @type {Object}
-       */
-      staticsDefinition: {},
-
-      /**
-       * Sets the superclass for the class to create on the
-       * specification builder
+       * Sets the methods for the module on the specification builder
        *
-       * @param {Function} superclass
-       * @returns {Object} #anonymous The specification-builder object
+       * @param {Object} methods
+       * @returns {Object} The module-builder object
        */
-      extend: function(superclass) {
-        this.superclass = superclass;
+       
+      methods: function(methodsDefinition) {
+        copy(methodsDefinition, this.methodsDefinition, true, true);
         return this;
       },
-
+      
       /**
-       * Sets the initializer function for the class
+       * Sets the initializer function for the module
        * on the specification builder
        *
        * @param {Function} initializer
-       * @returns {Object} #anonymous The specification-builder object
+       * @returns {Object} The module-builder object
        */
       initialize: function(initializer) {
-        this.initializer = initializer;
+        this.methodsDefinition.initializer = initializer;
         return this;
       },
-
+      
       /**
-       * Sets the properties for the class on the specification builder
-       *
-       * @param {Object} properties
-       * @returns {Object} #anonymous The specification-builder object
-       */
-      properties: function(propertiesDefinition) {
-        this.propertiesDefinition = propertiesDefinition;
-        return this;
-      },
-
-      /**
-       * Sets the methods for the class on the specification builder
-       *
-       * @param {Object} methods
-       * @returns {Object} #anonymous The specification-builder object
-       */
-      methods: function(methodsDefinition) {
-        this.methodsDefinition = methodsDefinition;
-        return this;
-      },
-
-      /**
-       * Sets the static methods/properties for the class
+       * Sets the static methods/properties for the module
        * on the specification builder
        *
        * @param {Object} statics The static methods/properties
-       * @returns {Object} #anonymous The specification-builder object
+       * @returns {Object} The module-builder object
        */
       statics: function(staticsDefinition) {
         this.staticsDefinition = staticsDefinition;
         return this;
       },
-
+      
       /**
-       * Takes an abitrary number of mixins which properties
-       * and methods are added to this class.
-       * @param {Object} arguments Arbitrary number of mixins
+       * Takes an abitrary number of modules which properties
+       * and methods are added to this module and whose initializer
+       * gets called when this module is initialized.
+       * 
+       * @param {Object} arguments Arbitrary number of modules
+       * @return {Object} The module-builder object
        */
       mixin: function() {
         this.mixins = arguments;
         return this;
       },
-
+      
       /**
-       * Constructs the class with all given information
-       * of the specification-builder object. The class path
-       * is appended to the context object.
+       * Sets the superModule for the module to create on the
+       * specification builder
        *
-       * @param {object} context The object the class path is appended to
+       * @param {Function} superModule
+       * @return {Object} The module-builder object
        */
-      end: function(context) {
-        var classSpecification = this;
-        var classInfo = constructClassPath(classPathString, context);
-        var classToCreate = buildClassConstructor(classInfo.namespace, classInfo.name, classSpecification);
-
-        // copy the superclass prototype to the class prototype
-        if(classSpecification.superclass) {
-          function temporarySuperclass() {
-          };
-
-          temporarySuperclass.prototype = classSpecification.superclass.prototype;
-          classToCreate.prototype = new temporarySuperclass();
-        }
-        classToCreate.prototype.constructor = classToCreate;
-
-        if(classSpecification.mixins) {
-          addMixinDefinitions(classSpecification);
-        }
-
-        addPrototypeMethods(classToCreate.prototype, classSpecification.methodsDefinition, classSpecification.superclass);
-        copy(classSpecification.staticsDefinition, classToCreate, true, true, classToCreate);
-
-        return classToCreate;
+      extend: function(superModule) {
+        this.superModule = superModule;
+        return this;
+      },
+      
+      /**
+       * Constructs the module with all given information
+       * of the specification-builder object. The module path
+       * is appended to the baseNamespace object.
+       *
+       * @param {object} baseNamespace The object the module path is appended to
+       */
+      end: function(baseNamespace) {
+        
+        var moduleSpecification = this;
+        var modulePackage = buildModulePackage(baseNamespace, modulePackagePath);
+        var moduleConstructor = buildModuleConstructor(moduleSpecification, modulePackage);
+        
+        this.superModule && extendSuperModule(moduleSpecification, moduleConstructor);
+        this.mixins && addMixinMethods(moduleSpecification);
+        this.staticsDefinition && copy(this.staticsDefinition, moduleConstructor, true, true, moduleConstructor);
+        
+        addPrototypeMethods(moduleConstructor.prototype, this.methodsDefinition, this.superModule);
+        
+        return moduleConstructor;
       }
-
-    }; // end return
+      
+    };    
   };
-
-  function constructClassPath(classPathString, context) {
-    // Construct the namespace for the class
-
-    var classPathArray = classPathString.split("."); // the full class path as array of strings
-    var classname = classPathArray[classPathArray.length - 1]; // name of the class as string
-    var namespace = chain(context || {}, classPathArray);
+  
+  /**
+   * Builds an object chain on top of the given base object
+   * that can be used to define the module constructor.
+   *
+   * @param {Object} baseNamespace The base object the chain should be built on
+   * @param {String} modulePathString A dot separated package path for the Module
+   * 
+   * @return {Object} The package information with namespace and name properties.
+   */
+  
+  function buildModulePackage(baseNamespace, modulePathString) {
+    
+    var modulePathArray = modulePathString.split("."); // the full module path as array of strings
+    var moduleName = modulePathArray[modulePathArray.length - 1]; // name of the module as string
+    var namespace = chain(baseNamespace || {}, modulePathArray);
 
     return {
       namespace: namespace,
-      name: classname
+      name: moduleName
     };
   }
-
-  function buildClassConstructor(namespace, classname, classSpecification) {
-    // define a class constructor that automatically calls
-    // all constructors in the class hierarchy with the argument object
-    var classConstructor = namespace[classname] = function() {
-      var userArgs = arguments[0] || {};
-      addInstanceProperties(this, userArgs, classSpecification.propertiesDefinition);
-      classSpecification.superclass && classSpecification.superclass.apply(this, arguments);
-      this.Class = namespace[classname];
-      classSpecification.initializer.call(this, userArgs);
-    };
-
-    return classConstructor;
-  }
-
-  function addMixinDefinitions(classSpecification) {
-    for(var i=0; i < classSpecification.mixins.length; i++) {
-      copy(classSpecification.mixins[i].__properties__, classSpecification.propertiesDefinition, false, true);
-      copy(classSpecification.mixins[i].__methods__, classSpecification.methodsDefinition, false, true);
+  
+  /**
+   * Adds all prototype methods of the given mixed in modules
+   * to the methodsDefinition of the module being constructed.
+   *
+   * @param {Object} moduleSpecification The specification of the module being constructed
+   */
+  
+  function addMixinMethods(moduleSpecification) {
+    if(moduleSpecification.mixins) {
+      
+      each(moduleSpecification.mixins, function(mixin) {
+        copy( mixin.prototype, 
+              moduleSpecification.methodsDefinition, 
+              false, true
+        );
+      });
+      
     }
   }
-
+  
+  /**
+   * Creates a constructor function for the module that first
+   * calls all initializers of its mixins and its super module,
+   * then its own to establish a well known state.
+   * 
+   * @param {Object} moduleSpecification All collected information about the module
+   * @param {Object} modulePackage The namespace and name of the module
+   * 
+   * @return {Function} The constructor
+   */
+  
+  function buildModuleConstructor(moduleSpecification, modulePackage) {
+    
+    var moduleConstructor = modulePackage.namespace[modulePackage.name] = function() {
+      var args = arguments;
+      if(this.__initialize__ === undefined) { this.__initialize__ = true; }
+      
+      each(moduleSpecification.mixins, function(mixin) {
+        var tempInitialize = this.__initialize__;
+        this.__initialize__ = true;
+         
+        var savedInitializer = this.initializer;
+        
+        this.initializer = mixin.prototype.initializer;
+        mixin.apply(this, args);
+        
+        this.initializer = savedInitializer;
+        this.__initialize__ = tempInitialize;
+        
+      }, this);
+      
+      if(moduleSpecification.superModule) {
+        this.__initialize__ = false;
+        //var tempInitializer = this.initializer;
+        //this.initializer = moduleSpecification.superModule.prototype.initializer;
+        moduleSpecification.superModule.apply(this, arguments);
+        //this.initializer = tempInitializer;
+        this.__initialize__ = true;
+      }
+      
+      this.Module = modulePackage.namespace[modulePackage.name];
+      
+      this.__initialize__ && this.initializer.apply(this, arguments);
+    };
+    
+    return moduleConstructor;
+  }
+  
+  /**
+   * Applies the correct prototype chain to implement
+   * prototypal inheritance in javascript
+   * 
+   * @param {Object} moduleSpecification All collected information about the module
+   * @param {Function} moduleConstructor
+   */
+  
+  function extendSuperModule(moduleSpecification, moduleConstructor) {
+    
+    // copy the superModule prototype to the module prototype
+    if(moduleSpecification.superModule) {
+      function temporarySupermodule() {};
+      temporarySupermodule.prototype = moduleSpecification.superModule.prototype;
+      moduleConstructor.prototype = new temporarySupermodule();
+    }
+    
+    // let the module prototype's constructor point to its true constructor
+    moduleConstructor.prototype.constructor = moduleConstructor;
+  }
+  
   /**
    * Assigns all methods declared in the methods definition object
-   * to the given obj. On sub classes it saves
+   * to the given obj. On sub modulees it saves
    * a reference to the overwritten super method in each method.
    *
    * @param {Object} destination The Object all methods are added to
-   * @param {function} superclass The base class to extend from
+   * @param {function} superModule The base module to extend from
    * @param {object} methods The method definition object
    */
 
-  function addPrototypeMethods(destination, methods, superclass) {
+  function addPrototypeMethods(destination, methods, superModule) {
 
     for (var methodName in methods) {
       if (methods.hasOwnProperty(methodName)) {
-        destination[methodName] = (superclass && superclass.prototype[methodName]) ?
+        destination[methodName] = (superModule && superModule.prototype[methodName]) ?
 
-        (function(methodName, methodOfThisClass) {
+        (function(methodName, methodOfThisModule) {
 
           return function() {
-            // add a reference to the same method on the super class
-            this.superMethod = superclass.prototype[methodName];
+            // add a reference to the same method on the super module
+            this.superMethod = superModule.prototype[methodName];
             // apply the current context with arguments and superMethod reference
-            var returnValue = methodOfThisClass.apply(this, arguments);
+            var returnValue = methodOfThisModule.apply(this, arguments);
             // we dont need the reference anymore, so delete it.
             delete this.superMethod;
             // return the result of the applied method
@@ -228,32 +258,7 @@ function(copy, chain, clone) {
     }
   }
 
-  /**
-   * Takes two property definition objects and adds them merged
-   * to the given host object, overwriting the defaults where possible
-   *
-   * @param {object} obj The host object the properties are added to
-   * @param {object} userArgs User arguments passed as object literal
-   * @param {object} properties The property definition object
-   */
-
-  function addInstanceProperties(destination, preferred, defaults) {
-    for (var prop in defaults) {
-      if (defaults.hasOwnProperty(prop)) {
-   
-        var instancePropString = prop;
-        
-        if(!destination[instancePropString]) {
-          var defaultProp = clone(defaults[prop]);
-          var preferredProp = preferred[prop];
-
-          destination[instancePropString] = preferredProp != undefined ? preferredProp : defaultProp;addInstanceProperties
-        }
-      }
-    }
-  }
-
-  return Class;
+  return Module;
 
 });
 

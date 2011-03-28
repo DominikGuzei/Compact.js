@@ -179,7 +179,7 @@ jasmine.isDomNode = function(obj) {
  * // don't care about which function is passed in, as long as it's a function
  * expect(mySpy).toHaveBeenCalledWith(jasmine.any(Function));
  *
- * @param {Class} clazz
+ * @param {Module} clazz
  * @returns matchable object of the type clazz
  */
 jasmine.any = function(clazz) {
@@ -596,17 +596,17 @@ jasmine.util = {};
  * Declare that a child class inherit it's prototype from the parent class.
  *
  * @private
- * @param {Function} childClass
- * @param {Function} parentClass
+ * @param {Function} childModule
+ * @param {Function} parentModule
  */
-jasmine.util.inherit = function(childClass, parentClass) {
+jasmine.util.inherit = function(childModule, parentModule) {
   /**
    * @private
    */
   var subclass = function() {
   };
-  subclass.prototype = parentClass.prototype;
-  childClass.prototype = new subclass;
+  subclass.prototype = parentModule.prototype;
+  childModule.prototype = new subclass;
 };
 
 jasmine.util.formatException = function(e) {
@@ -678,12 +678,12 @@ jasmine.Env = function() {
   this.equalityTesters_ = [];
 
   // wrap matchers
-  this.matchersClass = function() {
+  this.matchersModule = function() {
     jasmine.Matchers.apply(this, arguments);
   };
-  jasmine.util.inherit(this.matchersClass, jasmine.Matchers);
+  jasmine.util.inherit(this.matchersModule, jasmine.Matchers);
 
-  jasmine.Matchers.wrapInto_(jasmine.Matchers.prototype, this.matchersClass);
+  jasmine.Matchers.wrapInto_(jasmine.Matchers.prototype, this.matchersModule);
 };
 
 
@@ -1097,11 +1097,11 @@ jasmine.Matchers.prototype.report = function(result, failing_message, details) {
   throw new Error("As of jasmine 0.11, custom matchers must be implemented differently -- please see jasmine docs");
 };
 
-jasmine.Matchers.wrapInto_ = function(prototype, matchersClass) {
+jasmine.Matchers.wrapInto_ = function(prototype, matchersModule) {
   for (var methodName in prototype) {
     if (methodName == 'report') continue;
     var orig = prototype[methodName];
-    matchersClass.prototype[methodName] = jasmine.Matchers.matcherFn_(methodName, orig);
+    matchersModule.prototype[methodName] = jasmine.Matchers.matcherFn_(methodName, orig);
   }
 };
 
@@ -1399,32 +1399,32 @@ jasmine.Matchers.prototype.toThrow = function(expected) {
   return result;
 };
 
-jasmine.Matchers.Any = function(expectedClass) {
-  this.expectedClass = expectedClass;
+jasmine.Matchers.Any = function(expectedModule) {
+  this.expectedModule = expectedModule;
 };
 
 jasmine.Matchers.Any.prototype.matches = function(other) {
-  if (this.expectedClass == String) {
+  if (this.expectedModule == String) {
     return typeof other == 'string' || other instanceof String;
   }
 
-  if (this.expectedClass == Number) {
+  if (this.expectedModule == Number) {
     return typeof other == 'number' || other instanceof Number;
   }
 
-  if (this.expectedClass == Function) {
+  if (this.expectedModule == Function) {
     return typeof other == 'function' || other instanceof Function;
   }
 
-  if (this.expectedClass == Object) {
+  if (this.expectedModule == Object) {
     return typeof other == 'object';
   }
 
-  return other instanceof this.expectedClass;
+  return other instanceof this.expectedModule;
 };
 
 jasmine.Matchers.Any.prototype.toString = function() {
-  return '<jasmine.any(' + this.expectedClass + ')>';
+  return '<jasmine.any(' + this.expectedModule + ')>';
 };
 
 /**
@@ -1867,7 +1867,7 @@ jasmine.Spec = function(env, suite, description) {
 
   spec.results_ = new jasmine.NestedResults();
   spec.results_.description = description;
-  spec.matchersClass = null;
+  spec.matchersModule = null;
 };
 
 jasmine.Spec.prototype.getFullName = function() {
@@ -1910,8 +1910,8 @@ jasmine.Spec.prototype.addMatcherResult = function(result) {
 };
 
 jasmine.Spec.prototype.expect = function(actual) {
-  var positive = new (this.getMatchersClass_())(this.env, actual, this);
-  positive.not = new (this.getMatchersClass_())(this.env, actual, this, true);
+  var positive = new (this.getMatchersModule_())(this.env, actual, this);
+  positive.not = new (this.getMatchersModule_())(this.env, actual, this, true);
   return positive;
 };
 
@@ -1967,18 +1967,18 @@ jasmine.Spec.prototype.fail = function (e) {
   this.results_.addResult(expectationResult);
 };
 
-jasmine.Spec.prototype.getMatchersClass_ = function() {
-  return this.matchersClass || this.env.matchersClass;
+jasmine.Spec.prototype.getMatchersModule_ = function() {
+  return this.matchersModule || this.env.matchersModule;
 };
 
 jasmine.Spec.prototype.addMatchers = function(matchersPrototype) {
-  var parent = this.getMatchersClass_();
-  var newMatchersClass = function() {
+  var parent = this.getMatchersModule_();
+  var newMatchersModule = function() {
     parent.apply(this, arguments);
   };
-  jasmine.util.inherit(newMatchersClass, parent);
-  jasmine.Matchers.wrapInto_(matchersPrototype, newMatchersClass);
-  this.matchersClass = newMatchersClass;
+  jasmine.util.inherit(newMatchersModule, parent);
+  jasmine.Matchers.wrapInto_(matchersPrototype, newMatchersModule);
+  this.matchersModule = newMatchersModule;
 };
 
 jasmine.Spec.prototype.finishCallback = function() {

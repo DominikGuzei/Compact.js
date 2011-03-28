@@ -1,8 +1,8 @@
 define([
-  'compact/Mixin'
+  'compact/Module'
 ], 
 
-function(Mixin) {
+function(Module) {
 
   /**
    * Validatable
@@ -14,15 +14,14 @@ function(Mixin) {
    * callbacks to its validators collection.
    */
 
-  return Mixin("Validatable")
+  return Module("Validatable")
 
-  .properties ({
-
+  .initialize (function(){
     /**
      * The collection of validators
      * @type: {Object}
      */
-    eventValidators: {}
+    this.eventValidators = {};
 
   })
 

@@ -1,15 +1,15 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/collection/Enumerable',
   'compact/event/Observable'
 ], 
 
-function(Class, Enumerable, Observable) {
+function(Module, Enumerable, Observable) {
 
-  return Class("Collection") .mixin( Enumerable, Observable )
+  return Module("Collection") .mixin( Enumerable, Observable )
 
-  .properties({
-    models: []
+  .initialize(function(models) {
+    this.models = models || [];
   })
 
   .methods({

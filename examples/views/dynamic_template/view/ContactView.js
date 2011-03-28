@@ -1,15 +1,15 @@
 
 define([
- 'compact/Class',
+ 'compact/Module',
  'compact/view/KnockoutTemplateView',
  'model/ContactModel',
  'text!view/templates/ContactView.tmpl',
  'text!view/templates/ContactEdit.tmpl' 
 ],
 
-function(Class, KnockoutTemplateView, ContactModel, contactViewTemplate, contactEditTemplate) {
+function(Module, KnockoutTemplateView, ContactModel, contactViewTemplate, contactEditTemplate) {
   
-  return Class("ContactView") .extend(KnockoutTemplateView)
+  return Module("ContactView") .extend(KnockoutTemplateView)
   
   .properties({
     model: new ContactModel(),

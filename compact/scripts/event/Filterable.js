@@ -1,8 +1,8 @@
 define([
-  'compact/Mixin'
+  'compact/Module'
 ], 
 
-function(Mixin) {
+function(Module) {
 
   /**
    * Filterable
@@ -12,15 +12,15 @@ function(Mixin) {
    * to add callbacks to its collection.
    */
 
-  return Mixin("Filterable")
+  return Module("Filterable")
 
-  .properties ({
+  .initialize (function(){
 
     /**
      * Collection of registered event filters
      * @type: {Object}
      */
-    eventFilters: {}
+    this.eventFilters = {};
   })
 
   .methods ({

@@ -1,5 +1,5 @@
 define([
-  'compact/Mixin',
+  'compact/Module',
   'compact/collection/find',
   'compact/collection/map',
   'compact/collection/reduce',
@@ -12,7 +12,7 @@ define([
   'compact/collection/invoke'
 ], 
 
-function(Mixin, find, map, reduce, select, 
+function(Module, find, map, reduce, select, 
          each, some, reject, every, contains,
          invoke) {
 	
@@ -22,7 +22,7 @@ function(Mixin, find, map, reduce, select,
 	 * Provides a set of useful methods to work with
 	 * collections of values (like Arrays, Models). 
 	 * 
-	 * To use it with your own Class you have to add
+	 * To use it with your own Module you have to add
 	 * it as mixin and define a '_enumerableCollection' method
 	 * that returns the object or array of your class
 	 * that represents your enumerable data. All other
@@ -30,12 +30,12 @@ function(Mixin, find, map, reduce, select,
 	 * this method and require no further customization.
 	 */
 	
-	return Mixin("Enumerable")	
+	return Module("Enumerable")	
 
 	.methods ({
 		
     /**
-    * Override this method in your mixed Class
+    * Override this method in your mixed Module
     * to return your custom collection.
     * 
     * @return the enumerable object

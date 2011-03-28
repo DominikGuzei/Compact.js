@@ -1,21 +1,21 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/collection/each',
   'compact/function/bind',
   'compact/lib/jquery'
 ], 
 
-function(Class, each, bind, $) {
+function(Module, each, bind, $) {
 
-  return Class("View")
+  return Module("View")
   
-  .properties({
-    element: $("<div>"),
-    parentElement: null,
-    events: null
-  })
-  
-  .initialize(function() {
+  .initialize(function(config){
+    config = config || {};
+    
+    this.element = config.element || $("<div>");
+    this.events = config.events || null;
+    this.parentElement = config.parentElement || null;
+    
     this.delegateEvents(this.events);
   })
   

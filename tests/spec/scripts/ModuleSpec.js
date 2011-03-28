@@ -1,178 +1,79 @@
 define([
-  'compact/Class', 
-  'compact/Mixin'
+  'compact/Module', 
 ], 
 
-function(Class, Mixin) {
+function(Module) {
 
-  var complexProp = {
-    object: {},
-    array: [],
-    date: new Date()
-  };
+  describe("compact/Module", function() {
 
-  Class("com.example.Person")
-  .properties({
-    name: "unknown",
-    custom: "some",
-    watched: "watch",
-    strange: undefined,
-    complex: complexProp
-  })
-  .end(window);
-
-  describe("compact/utility/class/Class", function() {
-
-    describe("Class()", function() {
-      it("should provide a namespace", function() {
-        Class("com.example.Test").end(window);
+    describe("Module().end()", function() {
+      
+      it("builds a namespace chain", function() {
+        Module("com.example.Test").end(window);
         expect(com.example.Test).toBeTypeOf('function');
       });
 
-      it("returns the created class when .end() is called", function() {
-        expect( Class("example").end() ).toBeTypeOf('function');
+      it("does not polute the global namespace when no baseNamespace is given to .end()", function(){
+        Module("example").end();
         expect( window.example ).not.toBeDefined();
       });
+
+      it("returns the created class when .end() is called", function() {
+        expect( Module("example").end() ).toBeTypeOf('function');
+      });
       
-      it("adds this.Class to every instance which points to its class", function() {
-        var person = new com.example.Person();
-        expect(person.Class).toBe(com.example.Person);
+      it("adds this.Module to every instance which points to its Module constructor", function() {
+        var Person = Module("Person").end();
+        var person = new Person();
+        expect(person.Module).toBe(Person);
       });
+      
     });
-
-    describe(".extend()", function() {
-      Class("test.extend.Super")
-      .end(window);
-
-      Class("test.extend.Sub").extend(test.extend.Super)
-      .end(window);
-
-      it("should be instance of both classes", function() {
-        var sub = new test.extend.Sub();
-
-        expect(sub instanceof test.extend.Super && sub instanceof test.extend.Sub).toBeTruthy();
-      });
-
-    });
-
-    describe(".methods()", function() {
-      Class("test.methods.Super")
-      .methods({
-        sayHello: function() {
-          return "hello";
-        }
-
-      })
-      .end(window);
-
-      Class("test.methods.Sub").extend(test.methods.Super)
-      .methods({
-        sayHello: function() {
-          return this.superMethod() + " world";
-        }
-
-      })
-      .end(window);
-
-      it("should add methods to the prototype of the class", function() {
-        expect(test.methods.Super.prototype.sayHello).toBeTypeOf('function');
-        expect(test.methods.Sub.prototype.sayHello).toBeTypeOf('function');
-      });
-
-      it("should reference the super class method in the sub class", function() {
-        var sub = new test.methods.Sub();
-        expect(sub.sayHello()).toEqual("hello world");
-      });
-
-    });
-
+    
     describe(".initialize()", function() {
-      var init = jasmine.createSpy();
-      Class("test.initialize.Super")
-      .initialize(init)
-      .end(window);
-
-      var initSub = jasmine.createSpy();
-      Class("test.initialize.Sub").extend(test.initialize.Super)
-      .initialize(initSub)
-      .end(window);
-
-      it("should call the initialize function on instanciation", function() {
+      
+      it("has a default initializer applied", function() {
+        var WithoutInit = Module("WithoutInit").end();
+        expect(function() { new WithoutInit(); }).not.toThrow();
+      });
+      
+      it("calls the initialize function on instanciation", function() {
+        var init = jasmine.createSpy();
+      
+        var WithInit = Module("WithInit")
+        .initialize(init)
+        .end();
+        
         expect(init).not.toHaveBeenCalled();
-        var initTest = new test.initialize.Super();
+        new WithInit();
         expect(init).toHaveBeenCalled();
       });
 
-      it("should call the initialize function on the super class automatically", function() {
-        expect(initSub).not.toHaveBeenCalled();
-        var initTest = new test.initialize.Sub();
-        expect(initSub).toHaveBeenCalled();
-      });
+    });
+    
+    describe(".methods()", function() {
 
-      it("should have default and user arguments applied on initialize", function() {
-
-        Class("test.initialize.Properties")
-        .properties({
-          defaultVar: "somevalue",
-          userChanged: "defaultvalue"
-        })
-        .initialize( function() {
-          expect(this.defaultVar).toEqual("somevalue");
-          expect(this.userChanged).toEqual("uservalue");
-        })
-        .end(window);
+      it("adds methods to the prototype of the module", function() {
         
-        var property = new test.initialize.Properties({
-          userChanged: "uservalue"
-        });
-      });
-      
-      it("hands the complete user argument object to the initializer", function() {
-        var MyClass = Class("TestClass")
-        .properties({
-          defaultVar: "somevalue",
-        })
-        .initialize( function(userArguments) {
-          expect(userArguments.defaultVar).toEqual("changed");
-          expect(userArguments.extraValue).toEqual("extraValue");
+        var hello = function() {};
+        var world = function() {};
+        
+        var Test = Module("Test")
+        .methods({
+          hello: hello,
+          world: world
         })
         .end();
         
-        new MyClass({
-          defaultVar: "changed",
-          extraValue: "extraValue"
-        });
+        expect(Test.prototype.hello).toBe(hello);
+        expect(Test.prototype.world).toBe(world);
       });
 
     });
-
-    describe(".properties()", function() {
-
-      var person;
-      beforeEach( function() {
-        person = new com.example.Person({
-          name: "Dominik"
-        });
-      });
-
-      it("should apply user arguments / leave the default / set to undefined", function() {
-        expect(person.name).toEqual("Dominik");
-        expect(person.custom).toEqual("some");
-        expect(person.strange).toEqual(undefined);
-      });
-
-      it("should make a deep copy of complex properties (objects, arrays)", function() {
-        expect(person.complex).not.toBe(complexProp);
-        expect(person.complex.object).not.toBe(complexProp.object);
-        expect(person.complex.array).not.toBe(complexProp.array);
-        expect(person.complex.date).not.toBe(complexProp.date);
-      });
-
-    });
-
+    
     describe(".statics()", function() {
-      var test = {};
-      Class("Statics")
+      
+      var Static = Module("Static")
       .statics({
         instance: null,
         getInstance: function() {
@@ -180,20 +81,84 @@ function(Class, Mixin) {
             this.instance = new this();
           return this.instance;
         }
-
       })
-      .end(test);
+      .end();
 
-      it("Adds static properties and methods to the class", function() {
-        expect(test.Statics.instance).toEqual(null);
-        var instance = test.Statics.getInstance();
-        expect(test.Statics.getInstance()).toBe(instance);
+      it("Adds static properties and methods to the module constructor", function() {
+        expect(Static.instance).toEqual(null);
+        var instance = Static.getInstance();
+        expect(Static.instance).toBe(instance);
       });
 
     });
+    
+    describe(".extend()", function() {
+      
+      it("defines the module as instance of both modules", function() {
+        var Super = Module("Super").end();
+        var Sub = Module("Sub").extend(Super).end();
+        
+        var sub = new Sub();
+        
+        expect(sub instanceof Super && sub instanceof Sub).toBeTruthy();
+      });
 
+      it("calls the initializer of the super class by default", function() {
+        var superInit = jasmine.createSpy();
+      
+        var Super = Module("Super")
+        .initialize(superInit)
+        .end();
+
+        var Sub = Module("Sub").extend(Super).end();
+        
+        new Sub("hallo");
+        expect(superInit).toHaveBeenCalledWith("hallo");
+      });
+      
+      it("can call the super initializer manually through this.superMethod", function() {
+        var superInit = jasmine.createSpy();
+      
+        var Super = Module("Super")
+        .initialize(superInit)
+        .end();
+
+        var Sub = Module("Sub").extend(Super)
+        .initialize(function() {
+          this.superMethod.apply(this,arguments);
+        })
+        .end();
+        
+        var test = new Sub("hallo");
+        expect(superInit).toHaveBeenCalledWith("hallo");
+      });
+      
+      it("does not call the super initializer if not done manually", function() {
+        var superInit = jasmine.createSpy();
+      
+        var Super = Module("Super")
+        .initialize(superInit)
+        .end();
+
+        var Sub = Module("Sub").extend(Super)
+        .initialize(function() {
+          // not calling super initializer
+        })
+        .end();
+        
+        var test = new Sub("hallo");
+        expect(superInit).not.toHaveBeenCalled();
+      });
+      
+    });
+    
     describe(".mixin()", function() {
-      Mixin("test.mixin.Mixin")
+      
+      var First = Module("First")
+      .initialize(function() {
+        this.first = "first";
+        this.main = "first";
+      })
       .methods({
         sayHello: function() {
           return "hello"
@@ -204,9 +169,12 @@ function(Class, Mixin) {
         }
 
       })
-      .end(window);
+      .end();
 
-      Mixin("test.mixin.Test")
+      var Second = Module("Second")
+      .initialize(function() {
+        this.second = "second";
+      })
       .methods({
         sayHello: function() {
           return "hello world"
@@ -215,21 +183,51 @@ function(Class, Mixin) {
         sayGoodbye: function() {
           return "goodbye"
         }
-
       })
-      .end(window);
+      .end();
 
-      Class("test.mixin.Mixed")
-      .mixin(test.mixin.Mixin, test.mixin.Test)
-      .end(window);
+      var Third = Module("Third")
+      .mixin(Second)
+      .initialize(function() {
+        this.third = "third";
+      })
+      .end();
 
-      it("should add mixin methods to prototype of class", function() {
-        expect(test.mixin.Mixed.prototype.saySomethingElse).toBeTypeOf('function');
-        expect(test.mixin.Mixed.prototype.sayHello).toBeTypeOf('function');
+      var Mixed = Module("Mixed").mixin(First, Third) 
+      .initialize(function() {
+        this.main = "main";
+      })
+      .end();
+
+      it("adds mixin methods to prototype of the module", function() {
+        expect(Mixed.prototype.saySomethingElse).toBeTypeOf('function');
+        expect(Mixed.prototype.sayHello).toBeTypeOf('function');
+      });
+      
+      it("calls the initializer for each mixin on construction", function() {
+        var instance = new Mixed();
+        expect(instance.first).toEqual("first");
+        expect(instance.second).toEqual("second");
+        expect(instance.third).toEqual("third");
+        expect(instance.main).toEqual("main");
+      });
+      
+      it("adds all mixins of extended class", function() {
+        
+        var Sub = Module("Sub").extend(Mixed)
+        .initialize(function() {
+          this.superMethod.call(this);
+          this.main = "sub";
+        })
+        .end();
+        var instance = new Sub();
+        expect(instance.first).toEqual("first");
+        expect(instance.second).toEqual("second");
+        expect(instance.third).toEqual("third");
+        expect(instance.main).toEqual("sub");
       });
 
     });
-
-  }); // end Class
-
+    
+  });
 });

@@ -1,18 +1,18 @@
 
 define([
-  'compact/Class', 
+  'compact/Module', 
   'compact/collection/Accessible'
 ], 
 
-function(Class, Accessible) {
+function(Module, Accessible) {
 	
 	describe("compact/model/Accessible", function() {
 	  
 		var accessibleNamespace = {};
 		
-		Class("Test") .mixin(Accessible)
-		.properties({
-			test: "test"
+		Module("Test") .mixin(Accessible)
+		.initialize(function(){
+			this.test = "test";
 		})
 		.end(accessibleNamespace);
 		
@@ -204,9 +204,9 @@ function(Class, Accessible) {
 		describe("_accessibleCollection", function() {
 		  
 		  var local = {};
-		  Class("Test") .mixin(Accessible)
-      .properties({
-        attributes: {}
+		  Module("Test") .mixin(Accessible)
+      .initialize(function(){
+        this.attributes = {};
       })
       .methods({
         _accessibleCollection: function() {
@@ -223,6 +223,7 @@ function(Class, Accessible) {
 		  });
 		  
 		});
-		
+	
 	});
+	
 });

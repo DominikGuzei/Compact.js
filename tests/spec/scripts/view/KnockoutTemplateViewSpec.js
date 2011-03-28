@@ -2,10 +2,10 @@ define([
   'compact/view/KnockoutTemplateView',
   'compact/lib/jquery',
   'compact/model/Model',
-  'compact/Class'
+  'compact/Module'
 ], 
 
-function(KnockoutTemplateView, $, Model, Class) {
+function(KnockoutTemplateView, $, Model, Module) {
 
   describe("compact/view/KnockoutTemplateView", function() {
 
@@ -19,11 +19,9 @@ function(KnockoutTemplateView, $, Model, Class) {
       
       beforeEach(function() {
         this.testModel = new Model({
-          data: {
             name: "compact",
             age: "young"
-          }
-        });
+          });
         this.view.setModel(this.testModel);
         
       });

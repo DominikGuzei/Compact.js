@@ -1,10 +1,10 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/view/View',
   'compact/lib/jquery'
 ], 
 
-function(Class, View, $, Model) {
+function(Module, View, $, Model) {
 
   describe("compact/view/View", function() {
 
@@ -40,11 +40,13 @@ function(Class, View, $, Model) {
       
       it("binds the event to the view element and calls given function", function() {
 
-        var ViewEvents = Class("ViewEvents").extend(View)
-        .properties({
-          events: {
-            "click" : "test"
-          }
+        var ViewEvents = Module("ViewEvents").extend(View)
+        .initialize(function(){
+          this.superMethod({ 
+            events: {
+              "click" : "test"
+            }
+          });
         })
         .methods({
           test: jasmine.createSpy()
@@ -58,13 +60,15 @@ function(Class, View, $, Model) {
       });
       
       it("delegates the event for specific selectors", function() {
-        var ViewDelegates = Class("ViewDelegates").extend(View)
-        .properties({
-          element: $("<div><p class='test'></p><div class='second'></div></div>"),
-          events: {
-            "click .test" : "test",
-            "click .second" : "test"
-          }
+        var ViewDelegates = Module("ViewDelegates").extend(View)
+        .initialize(function(){
+          this.superMethod({
+            element: $("<div><p class='test'></p><div class='second'></div></div>"),
+            events: {
+              "click .test" : "test",
+              "click .second" : "test"
+            }
+          })
         })
         .methods({
           test: jasmine.createSpy()

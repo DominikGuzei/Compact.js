@@ -12,21 +12,21 @@ The Core
 -----------
 The whole framework is built around a lightweight (1k) core that enables you to write classes and mixins in an clean and lean way. It borrows the idea of function chaining to construct your own awesome modules, see yourself:
 
-Class:
+Module:
 ----------------
-**Syntax: Class( namespace:String ).end( optionalContext:Object )**
+**Syntax: Module( namespace:String ).end( optionalContext:Object )**
 
-Class is a function that returns an "chainable class builder" that collects the information of your class and returns it when .end() is called.
+Module is a function that returns an "chainable class builder" that collects the information of your class and returns it when .end() is called.
 
 **Create a basic (useless) class and append it to the global window:**
 
-    Class("my.awesome.TestClass").end(window);
-    var instance = new my.awesome.TestClass(); // instanciable via the complete namespace
+    Module("my.awesome.TestModule").end(window);
+    var instance = new my.awesome.TestModule(); // instanciable via the complete namespace
 
 **You can always refuse to build global namespaces if you omit the context in .end():**
 
-    var TestClass = Class("TestClass").end();
-    var instance = new TestClass(); // instanciable like this
+    var TestModule = Module("TestModule").end();
+    var instance = new TestModule(); // instanciable like this
 
 -------
 ###Properties: **.properties( propertiesDefinition:Object )**
@@ -34,7 +34,7 @@ Before calling .end() on the "chainable class builder" you can also specify the 
 
 **Build a class that has two properties and their default values defined**
   
-    Class("PropertyClass")
+    Module("PropertyModule")
     
     .properties({
       name: "Compact",
@@ -47,16 +47,16 @@ Before calling .end() on the "chainable class builder" you can also specify the 
     // name property of the instance and take the default value
     // for the collection (empty array);
     
-    var instance = new PropertyClass({ name: "Changed" }); 
+    var instance = new PropertyModule({ name: "Changed" }); 
     
     // You can also omit the argument object and leave all the defaults:
     
-    var instance = new PropertyClass();
+    var instance = new PropertyModule();
     
     // Note that you can not assign new properties to the instance 
     // via the argument object. This would be useless:
     
-    var instance = new PropertyClass({ newProp: "test" });
+    var instance = new PropertyModule({ newProp: "test" });
 
 --------
 ###Constructor: **.initialize( constructor:Function )**
@@ -66,7 +66,7 @@ class constructor by the user.
 
 **Building a class with a custom initializer**
 
-    Class("InitializerClass") 
+    Module("InitializerModule") 
     
     .properties ({
       name: "default"
@@ -81,7 +81,7 @@ class constructor by the user.
     .end(window);
     
     // Pass a special initialization property that is not defined as default
-    var instance = new InitializerClass({ specialProp: "value" });
+    var instance = new InitializerModule({ specialProp: "value" });
 
 --------    
 ###Methods: **.methods( methodsDefinition:Object )**
@@ -89,7 +89,7 @@ Like properties it is possible to define methods for your classes.
 
 **Building a class that defines a method**
 
-    Class("ClassWithMethod")
+    Module("ModuleWithMethod")
     
     .properties({
       name: "Compact"
@@ -102,7 +102,7 @@ Like properties it is possible to define methods for your classes.
     .end(window);
 
     // retrieve the name via the method
-    var instance = new ClassWithMethod();
+    var instance = new ModuleWithMethod();
     instance.getName(); // "Compact"
 
 
@@ -113,7 +113,7 @@ accessed via this.property / this.method().
 
 **Building a singleton with a statics**
 
-    Class("Singleton")
+    Module("Singleton")
     
     .properties({
       name: "Compact"
@@ -138,10 +138,10 @@ Inheritance
 -----------------
 The class builder also enables you to build class hierarchies extremely comfortable:
 
-    Class("SuperClass")
+    Module("SuperModule")
     
     .properties({
-      name: "SuperClass"
+      name: "SuperModule"
     })
     
     .methods({
@@ -151,7 +151,7 @@ The class builder also enables you to build class hierarchies extremely comforta
     .end(window);
 
 
-    Class("SubClass") .extend( SuperClass )
+    Module("SubModule") .extend( SuperModule )
     
     .properties({
       greeting: "hello"
@@ -167,8 +167,8 @@ The class builder also enables you to build class hierarchies extremely comforta
     .end(window);
     
     // say hello from both classes:
-    var instance = new SubClass();
-    instance.sayHello(); // "hello from SuperClass"
+    var instance = new SubModule();
+    instance.sayHello(); // "hello from SuperModule"
 
 ###Rules:
 - Properties from sub class overwrite those from its super class
@@ -193,7 +193,7 @@ Add modular behaviour that should be separated from the class hierarchy:
   
   
   
-    Class("ClassWithAddedBehaviour") .mixin(Module)
+    Module("ModuleWithAddedBehaviour") .mixin(Module)
     
     .methods({
       sayHello: function() { return "hello world" },
@@ -207,7 +207,7 @@ In this example the class would be augmented with the "saySomethingElse" method 
 because it defines it itself.
 
 ###How to use mixins:
-Mixin has exactly the same syntax like Class but does not offer .statics, .initialize or .extend
+Mixin has exactly the same syntax like Module but does not offer .statics, .initialize or .extend
 You can also augment mixins with other mixins through the .mixin method.
 
 Further Documentation

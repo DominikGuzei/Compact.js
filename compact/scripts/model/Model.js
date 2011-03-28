@@ -1,20 +1,20 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/format/json',
   'compact/collection/Accessible',
   'compact/model/Store',
   'compact/object/clone'
 ], 
 
-function(Class, JSON, Accessible, Store, clone) {
+function(Module, JSON, Accessible, Store, clone) {
 
-  return Class("Model") .mixin(Accessible)
+  return Module("Model") .mixin(Accessible)
 
-  .properties ({
-    id: null,
-    data: {}
+  .initialize (function(data, id){
+    this.id = id || null;
+    this.data = data || {};
   })
-
+  
   .methods ({
 
     _accessibleCollection: function() {
@@ -39,11 +39,10 @@ function(Class, JSON, Accessible, Store, clone) {
     },
     
     clone: function() {
-      return new this.Class({
-        data: clone(this.data),
-        eventListeners: clone(this.eventListeners),
-        eventValidators: clone(this.eventValidators)
-      });
+      var cloned = new this.Module( clone(this.data) );
+      cloned.eventListeners = clone(this.eventListeners);
+      cloned.eventValidators = clone(this.eventValidators);
+      return cloned;
     }
 
   })

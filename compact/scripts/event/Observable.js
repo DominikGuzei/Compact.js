@@ -1,9 +1,9 @@
 define([
-  'compact/Mixin',
+  'compact/Module',
   'compact/collection/each'
 ], 
 
-function(Mixin, each) {
+function(Module, each) {
 	
 	/**
 	 * Observable 
@@ -14,16 +14,16 @@ function(Mixin, each) {
 	 * get notified of specific events dispatched by it.
 	 */
 	
-	return Mixin("Observable") 
+	return Module("Observable") 
 
-	.properties ({
+	.initialize (function(){
 	  
 	  /**
 	   * The associative collection holding
 	   * the callback functions for named events.
 	   * @type: {Object} 
 	   */
-	  eventListeners: {}
+	  this.eventListeners = {};
 	  
 	})	
 

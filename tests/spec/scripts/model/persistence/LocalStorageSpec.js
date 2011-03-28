@@ -26,9 +26,7 @@ function(Store, Model, LocalStorage) {
 			});
 		
 			it("Has a name applied", function() {
-			  localStore = new LocalStorage({
-					name: "mystore"
-				});
+			  localStore = new LocalStorage("mystore");
 				expect(localStore.name).toEqual("mystore");
 			});
 			
@@ -58,10 +56,7 @@ function(Store, Model, LocalStorage) {
 			  var modelAttrs = {
 					name: "Dominik"
 				};
-				var model = new Model({
-					id: "1",
-					data: modelAttrs
-				});
+				var model = new Model(modelAttrs, 1);
 				localStore.put(model);
 				expect(localStore.data["1"]).toEqual(model);
 				
@@ -121,21 +116,15 @@ function(Store, Model, LocalStorage) {
 		describe("saving", function() {
 		  
 			it("Saves the whole data JSONified to the LocalStorage", function() {
-			  localStore = new LocalStorage({
-					name: "saveTestStore"
-				});
+			  localStore = new LocalStorage("saveTestStore");
 				var model = new Model({
-					data: {
-						name: "Dominik"
-					}
-				});
+            name: "Dominik"
+        });
 				model.localStorageId = "1";
 				
 				var model2 = new Model({
-					data: {
-						name: "Dave"
-					}
-				});
+            name: "Dave"
+        });
 				model2.localStorageId = "#1";
 				
 				localStore.put(model);
@@ -159,36 +148,23 @@ function(Store, Model, LocalStorage) {
 		  
 			it("reads all model records from localStorage into data property and returns it", function() {
 			  
-				var localStore = new LocalStorage({
-					name: "testReadFromLocalStorage"
-				});
+				var localStore = new LocalStorage("testReadFromLocalStorage");
 				
-				var model = new Model({
-					id: "1",
-					data: {
-						name: "Dominik"
-					}
-				});
+				var model = new Model({ name: "Dominik"}, 1);
+				var model2 = new Model({name: "Dave"});
 				
-				var model2 = new Model({
-					data: {
-						name: "Dave"
-					}
-				});
 				model2.localStorageId = "#1";
 				localStore.put(model);
 				localStore.put(model2);
 				localStore.save();
 				
-				var localStore2 = new LocalStorage({
-					name: "testReadFromLocalStorage"
-				});
+				var localStore2 = new LocalStorage("testReadFromLocalStorage");
 				
 				localStore2.load();
 
-				expect(localStore2.data["1"].id).toEqual(model.id);
-				expect(localStore2.data["1"].localStorageId).toEqual(model.localStorageId);
-				expect(localStore2.data["1"].data).toEqual(model.data);
+				expect(localStore2.data[1].id).toEqual(model.id);
+				expect(localStore2.data[1].localStorageId).toEqual(model.localStorageId);
+				expect(localStore2.data[1].data).toEqual(model.data);
 				
 				expect(localStore2.data["#1"].id).toEqual(model2.id);
 				expect(localStore2.data["#1"].localStorageId).toEqual(model2.localStorageId);
@@ -197,9 +173,7 @@ function(Store, Model, LocalStorage) {
 			
 			it("Returns false if there is no data saved at the localStorage", function() {
 			  
-				var localStore = new LocalStorage({
-					name: "balubadsfaldkfb"
-				});
+				var localStore = new LocalStorage("balubadsfaldkfb");
 				expect(localStore.load()).not.toBeTruthy();
 			
 			});

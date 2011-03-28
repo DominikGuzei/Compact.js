@@ -1,19 +1,17 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/view/TemplateView',
   'compact/model/Model',
   'compact/lib/jquery',
   'compact/lib/jquery-tmpl'
 ], 
 
-function(Class, TemplateView, Model, $) {
+function(Module, TemplateView, Model, $) {
 
   describe("compact/view/TemplateView", function() {
 
     beforeEach(function() {
-      this.view = new TemplateView({
-        model: new Model()
-      });
+      this.view = new TemplateView(new Model());
     });
     
     describe("setTemplate", function() {
@@ -44,7 +42,7 @@ function(Class, TemplateView, Model, $) {
       beforeEach(function() {
         this.view.setTemplate("<p>${name}</p>")
         this.oldModel = this.view.model;
-        this.newModel = new Model({ data: { name: "new" } });
+        this.newModel = new Model({ name: "new" });
         this.view.setModel(this.newModel);
       });
       
@@ -65,9 +63,7 @@ function(Class, TemplateView, Model, $) {
       
       it("renders the template with the current model", function() {
         this.view.setTemplate("<p>${name}</p>");
-        this.view.model = new Model({
-          data: { name: "Compact" }
-        });
+        this.view.model = new Model({ name: "Compact"});
         this.view.render();
         expect( this.view.element.html() ).toEqual("<p>Compact</p>");
       });

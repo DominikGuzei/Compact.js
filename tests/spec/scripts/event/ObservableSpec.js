@@ -1,9 +1,9 @@
 define([
-  'compact/Class', 
+  'compact/Module', 
   'compact/event/Observable'
 ], 
 
-function(Class, Observable) {
+function(Module, Observable) {
 
   describe("compact/event/Observable", function() {
 
@@ -13,7 +13,7 @@ function(Class, Observable) {
     // namespace to append the test class to
     var observableNamespace = this;
 
-    Class("Test") .mixin(Observable)
+    Module("Test") .mixin(Observable)
     .methods({
       change: function(name) {
         dispatchedEvent.value = name;

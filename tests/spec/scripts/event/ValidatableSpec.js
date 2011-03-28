@@ -1,11 +1,11 @@
 
 define([
-  'compact/Class', 
+  'compact/Module', 
   'compact/event/Observable', 
   'compact/event/Validatable'
 ], 
 
-function(Class, Observable, Validatable) {
+function(Module, Observable, Validatable) {
 	
 	describe("compact/event/Validatable", function() {
 		
@@ -15,9 +15,9 @@ function(Class, Observable, Validatable) {
 		// namespace to append the test class to
 		var validatableNamespace = this;
 		
-		Class("Test") .mixin(Observable, Validatable)
-		.properties({
-		  name: "default"
+		Module("Test") .mixin(Observable, Validatable)
+		.initialize(function(){
+		  this.name = "default"
 		})
 		.methods({
 			setName: function(name) {

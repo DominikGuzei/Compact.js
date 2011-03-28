@@ -220,22 +220,22 @@ ko.utils = new (function () {
             return ko.isObservable(value) ? value() : value;
         },
 
-        domNodeHasCssClass: function (node, className) {
-            var currentClassNames = (node.className || "").split(/\s+/);
-            return ko.utils.arrayIndexOf(currentClassNames, className) >= 0;
+        domNodeHasCssModule: function (node, className) {
+            var currentModuleNames = (node.className || "").split(/\s+/);
+            return ko.utils.arrayIndexOf(currentModuleNames, className) >= 0;
         },
 
-        toggleDomNodeCssClass: function (node, className, shouldHaveClass) {
-            var hasClass = ko.utils.domNodeHasCssClass(node, className);
-            if (shouldHaveClass && !hasClass) {
+        toggleDomNodeCssModule: function (node, className, shouldHaveModule) {
+            var hasModule = ko.utils.domNodeHasCssModule(node, className);
+            if (shouldHaveModule && !hasModule) {
                 node.className = (node.className || "") + " " + className;
-            } else if (hasClass && !shouldHaveClass) {
-                var currentClassNames = (node.className || "").split(/\s+/);
-                var newClassName = "";
-                for (var i = 0; i < currentClassNames.length; i++)
-                    if (currentClassNames[i] != className)
-                        newClassName += currentClassNames[i] + " ";
-                node.className = ko.utils.stringTrim(newClassName);
+            } else if (hasModule && !shouldHaveModule) {
+                var currentModuleNames = (node.className || "").split(/\s+/);
+                var newModuleName = "";
+                for (var i = 0; i < currentModuleNames.length; i++)
+                    if (currentModuleNames[i] != className)
+                        newModuleName += currentModuleNames[i] + " ";
+                node.className = ko.utils.stringTrim(newModuleName);
             }
         },
 
@@ -1304,8 +1304,8 @@ ko.bindingHandlers['css'] = {
         var value = ko.utils.unwrapObservable(valueAccessor() || {});
         for (var className in value) {
             if (typeof className == "string") {
-                var shouldHaveClass = ko.utils.unwrapObservable(value[className]);
-                ko.utils.toggleDomNodeCssClass(element, className, shouldHaveClass);
+                var shouldHaveModule = ko.utils.unwrapObservable(value[className]);
+                ko.utils.toggleDomNodeCssModule(element, className, shouldHaveModule);
             }
         }
     }

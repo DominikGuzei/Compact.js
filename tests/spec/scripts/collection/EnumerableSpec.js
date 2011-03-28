@@ -1,10 +1,9 @@
 define([
-  'compact/Mixin',
-  'compact/Class',
+  'compact/Module',
   'compact/collection/Enumerable'
 ], 
 
-function(Mixin, Class, Enumerable) {
+function(Module, Enumerable) {
 
   describe("compact/collection/Enumerable", function() {
 
@@ -14,15 +13,15 @@ function(Mixin, Class, Enumerable) {
      */
     var namespace = this;
 
-    Class("Enumerable") .mixin( Enumerable )
-    .properties({
-      collection: {
+    Module("Enumerable") .mixin( Enumerable )
+    .initialize(function(){
+      this.collection = {
         num: 1,
         obj: {
           test: "test"
         },
         arr: [1,2]
-      }
+      };
     })
     .methods({
       _enumerableCollection: function() {
@@ -188,12 +187,12 @@ function(Mixin, Class, Enumerable) {
     
     describe("invoke", function() {
       
-      var Invoker = Class("Enumerable") .mixin( Enumerable )
-      .properties({
-        collection: {
+      var Invoker = Module("Enumerable") .mixin( Enumerable )
+      .initialize(function(){
+        this.collection = {
           arr: [1,2,3],
           arr2: [1,2,3]
-        }
+        };
       })
       .methods({
         _enumerableCollection: function() {

@@ -1,11 +1,11 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/event/Observable'
 ], 
 
-function(Class, Observable) {
+function(Module, Observable) {
 
-  return Class("Store") .mixin(Observable)
+  return Module("Store") .mixin(Observable)
 
   .methods({
 

@@ -1,12 +1,12 @@
 
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/model/Model'
 ],
 
-function(Class, Model) {
+function(Module, Model) {
   
-  return Class("ContactModel") .extend(Model)
+  return Module("ContactModel") .extend(Model)
   
   .properties({
     data: {

@@ -1,10 +1,10 @@
 define([
-  'compact/Mixin',
+  'compact/Module',
   'compact/event/Observable',
   'compact/event/Validatable'
 ], 
 
-function(Mixin, Observable, Validatable) {
+function(Module, Observable, Validatable) {
 
   /**
    * Accessible
@@ -15,7 +15,7 @@ function(Mixin, Observable, Validatable) {
    * and to (in)validate those changes externally
    */
 
-  return Mixin("Accessible") .mixin( Observable, Validatable )
+  return Module("Accessible") .mixin( Observable, Validatable )
 
   .methods({
 

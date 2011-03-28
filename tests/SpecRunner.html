@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>Class.js Tests</title>
+    <title>Module.js Tests</title>
     <link rel="stylesheet" type="text/css" href="lib/jasmine-1.0.1/jasmine.css">
     <script type="text/javascript" src="lib/jasmine-1.0.1/jasmine.js">
     </script>
@@ -46,16 +46,15 @@
       'tests/collection/containsSpec',
       'tests/collection/invokeSpec',
 
-      'tests/collection/EnumerableSpec',
-      'tests/collection/AccessibleSpec',
-
-      'tests/ClassSpec',
-      'tests/MixinSpec',
-
+      'tests/ModuleSpec',
+      
       'tests/event/ObservableSpec',
       'tests/event/FilterableSpec',
       'tests/event/ValidatableSpec',
-
+      
+      'tests/collection/EnumerableSpec',
+      'tests/collection/AccessibleSpec',
+      
       'tests/model/ModelSpec',
       'tests/model/CollectionSpec',
       'tests/model/StoreSpec',
@@ -63,9 +62,10 @@
       
       'tests/view/ViewSpec',
       'tests/view/TemplateViewSpec',
-      'tests/view/KnockoutTemplateViewSpec'
+      'tests/view/KnockoutTemplateViewSpec',
+      'tests/view/ListViewSpec'
       
-      ], function(ClassSpec) {
+      ], function(ModuleSpec) {
         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
         jasmine.getEnv().execute();
       });

@@ -8,10 +8,10 @@ function(invoke) {
 
     it("executes a method on every element in the collection", function() {
       
-      var TestClass = function(){};
-      TestClass.prototype.methodToCall = function() {};
-      var instance = new TestClass();
-      var instance2 = new TestClass();
+      var TestModule = function(){};
+      TestModule.prototype.methodToCall = function() {};
+      var instance = new TestModule();
+      var instance2 = new TestModule();
       spyOn(instance, 'methodToCall');
       spyOn(instance2, 'methodToCall');
       

@@ -1,30 +1,27 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/view/View',
   'compact/model/Model',
   'compact/lib/jquery',
   'compact/lib/jquery-tmpl'
 ], 
 
-function(Class, View, Model, $) {
+function(Module, View, Model, $) {
 
-  return Class("TemplateView") .extend(View)
+  return Module("TemplateView") .extend(View)
   
-  .properties({
-    model: new Model(),
-    template: "empty"
-  })
-  
-  .initialize(function() {
-    this.init();
+  .initialize(function(config) {
+    config = config || {};
+    this.superMethod(config);
+    
+    this.model = config.model || new Model();
+    this.template = config.template || "empty";
+    
+    this._setupModelListeners(this.model);
+    this.setTemplate(this.template, false);
   })
   
   .methods({
-    
-    init: function() {
-      this._setupModelListeners(this.model);
-      this.setTemplate(this.template, false);
-    },
     
     render: function() {
       this.element.empty();

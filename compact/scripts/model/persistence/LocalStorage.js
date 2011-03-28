@@ -1,5 +1,5 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/model/Store',
   'compact/model/Model',
   'compact/collection/Enumerable',
@@ -7,16 +7,15 @@ define([
   'compact/collection/each'
 ], 
   
-function(Class, Store, Model, Enumerable, values, each) {
+function(Module, Store, Model, Enumerable, values, each) {
 
-  return Class("LocalStorage") .mixin( Enumerable )
+  return Module("LocalStorage") .mixin( Enumerable )
 
-  .properties ({
-    data: {},
-    name: "defaultStore",
-    highestLocalModelId: 1
+  .initialize (function(name, data){
+    this.data = data || {};
+    this.name = name || "defaultStore";
+    this.highestLocalModelId = 1;
   })
-
   .methods ({
 
     /**
@@ -80,14 +79,10 @@ function(Class, Store, Model, Enumerable, values, each) {
         var modelAttributes = JSON.parse(localStorage[this.name]);
 
         each(modelAttributes, function(savedAttributes, key) {
-          var id = (key[0] == "#") ? undefined : key;
+          var id = (key[0] == "#") ? undefined : parseInt(key);
 
-          this.data[key] = new Model({
-            id: id,
-            data: savedAttributes
-          });
-
-          this.data[key].localStorageId = key;
+          this.data[key] = new Model(savedAttributes, id);
+          this.data[key].localStorageId = (key[0] == "#") ? key : parseInt(key);;
 
         }, this);
 

@@ -1,10 +1,10 @@
 define([
-  'compact/Class',
+  'compact/Module',
   'compact/event/Observable',
   'compact/event/Filterable'
 ], 
 
-function(Class, Observable, Filterable) {
+function(Module, Observable, Filterable) {
 
   describe("compact/event/Filterable", function() {
 
@@ -14,7 +14,7 @@ function(Class, Observable, Filterable) {
     // namespace to append the test class to
     var filterNamespace = this;
 
-    Class("Test") .mixin(Observable, Filterable)
+    Module("Test") .mixin(Observable, Filterable)
     .methods({
       change: function(name) {
         filteredEvent.value = name;

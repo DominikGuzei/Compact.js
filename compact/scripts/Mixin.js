@@ -10,7 +10,7 @@ function(copy, chain) {
    * specification builder that is used to add properties and methods
    * as well as those of other mixins created the same way.
    *
-   * @param {String} mixinClassPathString The fully qualified class path
+   * @param {String} mixinModulePathString The fully qualified class path
    * @returns {Object} The specification-builder
    */
 

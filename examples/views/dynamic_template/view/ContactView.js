@@ -11,14 +11,18 @@ function(Module, KnockoutTemplateView, ContactModel, contactViewTemplate, contac
   
   return Module("ContactView") .extend(KnockoutTemplateView)
   
-  .properties({
-    model: new ContactModel(),
-    template: contactViewTemplate,
-    events: {
-      "click .editButton"          : "editButtonClicked",
-      "click .saveButton"          : "saveButtonClicked",
-      "keyup .name, .description"  : "onKeyUp"
-    }
+  .initialize(function(model) {
+    
+    this.superMethod({
+      model: model || new ContactModel(),
+      template: contactViewTemplate,
+      events: {
+        "click .editButton"          : "editButtonClicked",
+        "click .saveButton"          : "saveButtonClicked",
+        "keyup .name, .description"  : "onKeyUp"
+      }
+    });
+    
   })
   
   .methods({

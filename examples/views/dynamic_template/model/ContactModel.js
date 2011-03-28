@@ -8,11 +8,11 @@ function(Module, Model) {
   
   return Module("ContactModel") .extend(Model)
   
-  .properties({
-    data: {
+  .initialize(function() {
+    this.superMethod({
       name: "Name...",
       description: "A short description about the person..."
-    }
+    });
   })
   
   .end();

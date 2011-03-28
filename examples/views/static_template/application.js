@@ -18,12 +18,8 @@ require(
 function(ContactView, Model, $) {
 
   var contactView = new ContactView();
-  var mirrorContact = new ContactView({
-    model: contactView.model
-  });
+  var mirrorContact = new ContactView(contactView.model);
   
   contactView.appendTo($("#application"));
-  contactView.render();
   mirrorContact.appendTo($("#application"));
-  mirrorContact.render();
 });

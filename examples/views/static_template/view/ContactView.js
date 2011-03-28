@@ -11,13 +11,16 @@ function(Module, TemplateView, ContactModel, contactViewTemplate, contactEditTem
   
   return Module("ContactView") .extend(TemplateView)
   
-  .properties({
-    model: new ContactModel(),
-    template: contactViewTemplate,
-    events: {
-      "click .editButton"          : "editButtonClicked",
-      "click .saveButton"          : "saveButtonClicked"
-    }
+  .initialize(function(model){
+    
+    this.superMethod({
+      model: model || new ContactModel(),
+      template: contactViewTemplate,
+      events: {
+        "click .editButton"          : "editButtonClicked",
+        "click .saveButton"          : "saveButtonClicked"
+      }
+    });
   })
   
   .methods({

@@ -186,10 +186,7 @@ function(each, copy, chain, bind) {
       
       if(moduleSpecification.superModule) {
         this.__initialize__ = false;
-        //var tempInitializer = this.initializer;
-        //this.initializer = moduleSpecification.superModule.prototype.initializer;
         moduleSpecification.superModule.apply(this, arguments);
-        //this.initializer = tempInitializer;
         this.__initialize__ = true;
       }
       

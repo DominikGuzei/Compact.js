@@ -27,14 +27,13 @@ function(Module, View, Collection, Enumerable) {
     setCollection: function(newCollection) {
       this.collection = newCollection;
       this._createItemsFromCollection();
+      this.rendered && this.render();
     },
     
     _createItemsFromCollection: function() {
       this.viewItems = [];
       this.collection.each(function(model) {
-        this.viewItems.push( new this.viewItemType({
-          model: model
-        }) );
+        this.viewItems.push( new this.viewItemType(model) );
       },this);
     },
     

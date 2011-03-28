@@ -99,6 +99,37 @@ function(Collection, Model) {
       });
 
     });
+    
+    describe("all", function() {
+      
+      it("returns the models array of this collection", function() {
+        var models = [
+          new Model(),
+          new Model()
+        ];
+        
+        this.collection = new Collection(models);
+        
+        expect(this.collection.all()).toBe(models);
+      });
+      
+    });
+    
+    describe("first", function() {
+      
+      it("returns the first element of the collection", function() {
+        var models = [
+          new Model(),
+          new Model(),
+          new Model()
+        ];
+        
+        this.collection = new Collection(models);
+        
+        expect(this.collection.first()).toBe(models[0]);
+      });
+      
+    });
 
   });
 

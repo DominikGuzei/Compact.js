@@ -46,6 +46,14 @@ function(Module, Enumerable, Observable) {
       }
       return removedModel;
     },
+    
+    all: function() {
+      return this.models;
+    },
+    
+    first: function() {
+      return this.models[0];
+    },
 
     _enumerableCollection: function() {
       return this.models;

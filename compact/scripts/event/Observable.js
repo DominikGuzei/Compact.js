@@ -16,18 +16,17 @@ function(Module, each) {
 	
 	return Module("Observable") 
 
-	.initialize (function(){
-	  
-	  /**
-	   * The associative collection holding
-	   * the callback functions for named events.
-	   * @type: {Object} 
-	   */
-	  this.eventListeners = {};
-	  
-	})	
-
 	.methods ({
+		
+		/**
+     * Returns the associative collection holding
+     * the callback functions for named events.
+     * @returns {Object} The event listeners
+     */
+		eventListeners: function() {
+		  if(!this._eventListeners) { this._eventListeners = {}; }
+		  return this._eventListeners;
+		},
 		
 		/**
 		 * Registers a callback function for a specific event
@@ -55,6 +54,16 @@ function(Module, each) {
       args.unshift("eventListeners");
 			this._removeCallbackFromCollection.apply(this, args);
 		},
+		
+		/**
+		 * Unregisters all listeners that were registered
+		 * with a specific context
+		 * 
+		 * @param {Object} context
+		 */
+		 removeEventListenersWithContext: function(context) {
+		   this._removeCallbacksFromCollectionWithContext("eventListeners", context);
+		 },
 	  
 	  /**
 	   * Dispatch an event and automatically notify
@@ -63,11 +72,14 @@ function(Module, each) {
 	   * @param {String} eventName
 	   * @param {Object} eventData
 	   */
-		dispatchEvent: function(eventName, eventData) {
-			var listeners = this.eventListeners[eventName];
+		dispatchEvent: function() {
+		  var args = Array.prototype.slice.call(arguments);
+		  var eventName = args[0];
+			var listeners = this.eventListeners()[eventName];
+			
 			if(listeners) {
 				for(var i=0; i<listeners.length; i++) {
-					listeners[i].callback.call(listeners[i].context, eventData);
+					listeners[i].callback.apply(listeners[i].context, args.slice(1));
 				}
 			}
 		},
@@ -83,20 +95,32 @@ function(Module, each) {
 		 * @returns {Object} Holds the information
  		 * of the registered callback/event.
 		 */
-		_addCallbackToCollection: function(collection, eventName, callback, context) {
+		_addCallbackToCollection: function(collectionName, eventName, callback, context) {
+			var collection = this[collectionName]();
 			
-			if(!this[collection][eventName]) {
-				this[collection][eventName] = [];
+			if(!collection[eventName]) {
+				collection[eventName] = [];
 			}
-			this[collection][eventName].push({
+			
+			collection[eventName].push({
 			  callback: callback,
 			  context: context || this
 			});
-			return {
-				collection: collection,
-				eventName: eventName,
-				index: this[collection][eventName].length -1
-			};
+			
+			var callbackInfo = {
+        collection: collectionName,
+        eventName: eventName,
+        index: collection[eventName].length -1
+      };
+			
+			if(context) {
+        var contexts = collection.__contexts__ || {};
+        contexts[context] = contexts[context] || [];
+        contexts[context].push(callbackInfo);
+        collection.__contexts__ = contexts;
+      }
+      
+			return callbackInfo;
 		},
 		
 		/**
@@ -108,7 +132,7 @@ function(Module, each) {
 		 * @param {Integer} index The index of the callback in the event array
 		 */
 		_removeCallbackFromCollection: function() {
-		  var collection = arguments[0];
+		  var collection = this[arguments[0]]();
 		  var index = null;
 		  var eventName = "";
 		  
@@ -116,7 +140,7 @@ function(Module, each) {
 		    eventName = arguments[1];
 		    var fn = arguments[2];
 		    
-		    each(this[collection][eventName], function(value, i) {
+		    each(collection[eventName], function(value, i) {
 		      if(fn == value) index = i;
 		    });
 		  } else {
@@ -124,9 +148,25 @@ function(Module, each) {
 		    eventName = arguments[1].eventName;
 		  }
 		  
-		  if(this[collection][eventName]) this[collection][eventName].splice(index, 1);
-		}
+		  if(collection[eventName]) collection[eventName].splice(index, 1);
+		},
 		
+		/**
+		 * A generic way to remove all listeners from a collection
+		 * that were registered with a specific context
+		 * 
+		 * @param {String} collectionName,
+		 * @param {Object} context
+		 */
+		_removeCallbacksFromCollectionWithContext: function(collectionName, context) {
+		  var collection = this[collectionName]();
+		  var contexts = collection.__contexts__;
+		  if(contexts && contexts[context]) {
+		    each(contexts[context], function(callbackInfo) {
+		      this._removeCallbackFromCollection(collectionName, callbackInfo);
+		    }, this);
+		  }
+		}
 	})
 
 	.end();

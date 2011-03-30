@@ -16,16 +16,17 @@ function(Module) {
 
   return Module("Validatable")
 
-  .initialize (function(){
-    /**
-     * The collection of validators
-     * @type: {Object}
-     */
-    this.eventValidators = {};
-
-  })
-
   .methods ({
+
+    /**
+     * Returns the associative collection holding
+     * the callback functions for named events.
+     * @returns {Object} The event listeners
+     */
+    eventValidators: function() {
+      if(!this._eventValidators) { this._eventValidators = {}; }
+      return this._eventValidators;
+    },
 
     /**
      * Register a callback function to validate
@@ -63,7 +64,7 @@ function(Module) {
      * information: { isValid: bool, errors: ['..','..'] }
      */
     validateEvent: function(eventName, eventData) {
-      var validators = this.eventValidators[eventName];
+      var validators = this.eventValidators()[eventName];
       var errors = [];
 
       if(validators) {

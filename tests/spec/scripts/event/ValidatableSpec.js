@@ -40,18 +40,10 @@ function(Module, Observable, Validatable) {
 		  this.validatorInfo = this.instance.addEventValidator("change:name", this.validator);
 		});
 		
-		describe("eventValidators", function() {
-		  
-		  it("has an eventValidators collection for validator callbacks", function() {
-		    expect(this.instance.eventValidators).toBeDefined();
-		  });
-		  
-		});
-		
 		describe("addEventValidator", function() {
 		  
 		  it("adds the given function as validator for the event", function() {
-		    expect(this.instance.eventValidators["change:name"][0].callback).toBe(this.validator);
+		    expect(this.instance.eventValidators()["change:name"][0].callback).toBe(this.validator);
 		  });
 		  
 		  it("returns a filter information object", function() {
@@ -68,7 +60,7 @@ function(Module, Observable, Validatable) {
 		  
 		  it("removes the registered callback from the eventFilters collection", function() {
 		    this.instance.removeEventValidator(this.validatorInfo);
-		    expect(this.instance.eventValidators["change:name"].length).toEqual( 0 );
+		    expect(this.instance.eventValidators()["change:name"].length).toEqual( 0 );
 		  });
 		  
 		});

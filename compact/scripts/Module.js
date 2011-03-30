@@ -167,32 +167,8 @@ function(each, copy, chain, bind) {
   function buildModuleConstructor(moduleSpecification, modulePackage) {
     
     var moduleConstructor = modulePackage.namespace[modulePackage.name] = function() {
-      var args = arguments;
-      if(this.__initialize__ === undefined) { this.__initialize__ = true; }
-      
-      each(moduleSpecification.mixins, function(mixin) {
-        var tempInitialize = this.__initialize__;
-        this.__initialize__ = true;
-         
-        var savedInitializer = this.initializer;
-        
-        this.initializer = mixin.prototype.initializer;
-        mixin.apply(this, args);
-        
-        this.initializer = savedInitializer;
-        this.__initialize__ = tempInitialize;
-        
-      }, this);
-      
-      if(moduleSpecification.superModule) {
-        this.__initialize__ = false;
-        moduleSpecification.superModule.apply(this, arguments);
-        this.__initialize__ = true;
-      }
-      
       this.Module = modulePackage.namespace[modulePackage.name];
-      
-      this.__initialize__ && this.initializer.apply(this, arguments);
+      this.initializer.apply(this, arguments);
     };
     
     return moduleConstructor;
@@ -221,7 +197,7 @@ function(each, copy, chain, bind) {
   
   /**
    * Assigns all methods declared in the methods definition object
-   * to the given obj. On sub modulees it saves
+   * to the given obj. On sub modules it saves
    * a reference to the overwritten super method in each method.
    *
    * @param {Object} destination The Object all methods are added to
@@ -238,12 +214,17 @@ function(each, copy, chain, bind) {
         (function(methodName, methodOfThisModule) {
 
           return function() {
+            var tempSuper = this.superMethod;
+            
             // add a reference to the same method on the super module
             this.superMethod = superModule.prototype[methodName];
+            
             // apply the current context with arguments and superMethod reference
             var returnValue = methodOfThisModule.apply(this, arguments);
+            
             // we dont need the reference anymore, so delete it.
-            delete this.superMethod;
+            tempSuper ? this.superMethod = tempSuper : delete this["superMethod"];
+            
             // return the result of the applied method
             return returnValue;
           };

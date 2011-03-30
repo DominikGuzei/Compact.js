@@ -10,10 +10,7 @@ function(Module, Observable) {
     // used to test if the listeners are called with the right event
     var dispatchedEvent = { value: "default" };
 
-    // namespace to append the test class to
-    var observableNamespace = this;
-
-    Module("Test") .mixin(Observable)
+    var ObservableModule = Module("Test") .mixin(Observable)
     .methods({
       change: function(name) {
         dispatchedEvent.value = name;
@@ -22,11 +19,11 @@ function(Module, Observable) {
       }
 
     })
-    .end(observableNamespace)
+    .end()
 
     // we need an instance of the test class for each spec and add a listener to it
     beforeEach( function() {
-      this.instance = new observableNamespace.Test();
+      this.instance = new ObservableModule();
       this.listener = jasmine.createSpy();
       this.listenerInfo = this.instance.addEventListener("change", this.listener);
     });
@@ -34,7 +31,7 @@ function(Module, Observable) {
     describe("eventListeners", function() {
 
       it("has an eventListeners collection for event callbacks", function() {
-        expect(this.instance.eventListeners).toBeDefined();
+        expect(this.instance.eventListeners).toBeTypeOf('function');
       });
 
     });
@@ -42,7 +39,7 @@ function(Module, Observable) {
     describe("addEventListener", function() {
 
       it("adds the given function as callback for the event", function() {
-        expect(this.instance.eventListeners["change"][0].callback).toBe(this.listener);
+        expect(this.instance.eventListeners()["change"][0].callback).toBe(this.listener);
       });
 
       it("returns a listener information object", function() {
@@ -52,6 +49,23 @@ function(Module, Observable) {
           index: 0
         });
       });
+      
+      it("adds a context object which the listener should be applied to", function() {
+        var instance = this.instance;
+        
+        var Test = function() {
+          this.spy = jasmine.createSpy();
+          this.test = function(value) {
+            this.spy(value);
+          };
+          instance.addEventListener("test", this.test, this);
+        }
+        
+        var test = new Test();
+        instance.dispatchEvent("test", "value");
+        
+        expect(test.spy).toHaveBeenCalledWith("value");
+      });
 
     });
 
@@ -59,14 +73,34 @@ function(Module, Observable) {
 
       it("removes the registered callback from the observable event", function() {
         this.instance.removeEventListener(this.listenerInfo);
-        expect(this.instance.eventListeners["change"].length).toEqual( 0 );
+        expect(this.instance.eventListeners()["change"].length).toEqual( 0 );
       });
       
       it("can also be removed without the event name and function", function() {
         this.instance.removeEventListener(this.listenerInfo.eventName, this.listener);
-        expect(this.instance.eventListeners["change"].length).toEqual( 0 );
+        expect(this.instance.eventListeners()["change"].length).toEqual( 0 );
       });
 
+    });
+    
+    describe("removeEventListenersWithContext", function() {
+      
+      it("removes all event listeners that were registered with a specific context", function() {
+        var instance = this.instance;
+        
+        var Test = function() {
+          this.test = function() {}
+          this.remove = function() {
+            instance.removeEventListenersWithContext(this);
+          }
+          instance.addEventListener("test", this.test, this);
+        }
+        
+        var test = new Test();
+        test.remove();
+        expect(this.instance.eventListeners()["test"].length).toBe(0);
+      });
+      
     });
 
     describe("dispatchEvent", function() {

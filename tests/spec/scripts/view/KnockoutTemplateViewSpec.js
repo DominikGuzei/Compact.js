@@ -66,8 +66,8 @@ function(KnockoutTemplateView, $, Model, Module) {
         expect(this.view._knockoutSubscriptions.length).toEqual(0);
         expect(this.view._modelListeners.length).toEqual(0);
         
-        expect(oldModel.eventListeners["accessible:changed:name"].length).toEqual(0);
-        expect(oldModel.eventListeners["accessible:changed:age"].length).toEqual(0);
+        expect(oldModel.eventListeners()["accessible:changed:name"].length).toEqual(0);
+        expect(oldModel.eventListeners()["accessible:changed:age"].length).toEqual(0);
       });
       
     });

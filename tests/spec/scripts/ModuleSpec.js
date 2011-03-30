@@ -37,7 +37,7 @@ function(Module) {
         expect(function() { new WithoutInit(); }).not.toThrow();
       });
       
-      it("calls the initialize function on instanciation", function() {
+      it("calls the initialize function on instanciation once", function() {
         var init = jasmine.createSpy();
       
         var WithInit = Module("WithInit")
@@ -47,6 +47,7 @@ function(Module) {
         expect(init).not.toHaveBeenCalled();
         new WithInit();
         expect(init).toHaveBeenCalled();
+        expect(init.callCount).toBe(1);
       });
 
     });
@@ -114,6 +115,7 @@ function(Module) {
         
         new Sub("hallo");
         expect(superInit).toHaveBeenCalledWith("hallo");
+        expect(superInit.callCount).toBe(1);
       });
       
       it("can call the super initializer manually through this.superMethod", function() {
@@ -123,14 +125,19 @@ function(Module) {
         .initialize(superInit)
         .end();
 
+        var subInit = jasmine.createSpy();
+      
         var Sub = Module("Sub").extend(Super)
         .initialize(function() {
           this.superMethod.apply(this,arguments);
+          subInit();
         })
         .end();
         
         var test = new Sub("hallo");
         expect(superInit).toHaveBeenCalledWith("hallo");
+        expect(superInit.callCount).toBe(1);
+        expect(subInit.callCount).toBe(1);
       });
       
       it("does not call the super initializer if not done manually", function() {
@@ -150,15 +157,39 @@ function(Module) {
         expect(superInit).not.toHaveBeenCalled();
       });
       
+      it("Has no circular calls of initializers", function() {
+        
+        var superInit = jasmine.createSpy();
+        var Super = Module("Super").initialize(superInit).end();
+
+        var subInit = jasmine.createSpy();
+        var Sub = Module("Sub").extend(Super).initialize(function() {
+          this.superMethod.apply(this,arguments);
+          subInit();
+        })
+        .end();
+        
+        var subSubInit = jasmine.createSpy();
+        var SubSub = Module("Sub").extend(Sub).initialize(function() {
+          this.superMethod.apply(this,arguments);
+          subSubInit();
+        })
+        .end();
+        
+        var test = new SubSub("hallo");
+        
+        expect(superInit).toHaveBeenCalledWith("hallo");
+        expect(superInit.callCount).toBe(1);
+        expect(subInit.callCount).toBe(1);
+        expect(subSubInit.callCount).toBe(1);
+        
+      });
+      
     });
     
     describe(".mixin()", function() {
       
       var First = Module("First")
-      .initialize(function() {
-        this.first = "first";
-        this.main = "first";
-      })
       .methods({
         sayHello: function() {
           return "hello"
@@ -172,9 +203,6 @@ function(Module) {
       .end();
 
       var Second = Module("Second")
-      .initialize(function() {
-        this.second = "second";
-      })
       .methods({
         sayHello: function() {
           return "hello world"
@@ -188,9 +216,6 @@ function(Module) {
 
       var Third = Module("Third")
       .mixin(Second)
-      .initialize(function() {
-        this.third = "third";
-      })
       .end();
 
       var Mixed = Module("Mixed").mixin(First, Third) 
@@ -204,27 +229,16 @@ function(Module) {
         expect(Mixed.prototype.sayHello).toBeTypeOf('function');
       });
       
-      it("calls the initializer for each mixin on construction", function() {
-        var instance = new Mixed();
-        expect(instance.first).toEqual("first");
-        expect(instance.second).toEqual("second");
-        expect(instance.third).toEqual("third");
-        expect(instance.main).toEqual("main");
-      });
-      
       it("adds all mixins of extended class", function() {
         
         var Sub = Module("Sub").extend(Mixed)
         .initialize(function() {
           this.superMethod.call(this);
-          this.main = "sub";
         })
         .end();
         var instance = new Sub();
-        expect(instance.first).toEqual("first");
-        expect(instance.second).toEqual("second");
-        expect(instance.third).toEqual("third");
-        expect(instance.main).toEqual("sub");
+        expect(instance.saySomethingElse).toBeTypeOf('function');
+        expect(instance.sayHello).toBeTypeOf('function');
       });
 
     });

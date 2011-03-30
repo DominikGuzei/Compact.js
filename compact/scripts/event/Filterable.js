@@ -14,17 +14,18 @@ function(Module) {
 
   return Module("Filterable")
 
-  .initialize (function(){
-
-    /**
-     * Collection of registered event filters
-     * @type: {Object}
-     */
-    this.eventFilters = {};
-  })
-
   .methods ({
 
+    /**
+     * Returns the associative collection holding
+     * the callback functions for named filters.
+     * @returns {Object} The event filters
+     */
+    eventFilters: function() {
+      if(!this._eventFilters) { this._eventFilters = {}; }
+      return this._eventFilters;
+    },
+    
     /**
      * Register a callback function to filter
      * a specific event.
@@ -51,6 +52,16 @@ function(Module) {
       args.unshift("eventFilters");
       this._removeCallbackFromCollection.apply(this, args);
     },
+    
+    /**
+     * Unregisters all listeners that were registered
+     * with a specific context
+     * 
+     * @param {Object} context
+     */
+     removeEventFiltersWithContext: function(context) {
+       this._removeCallbacksFromCollectionWithContext("eventFilters", context);
+     },
 
     /**
      * Calls all registered filter callbacks
@@ -63,7 +74,7 @@ function(Module) {
      * @returns {Object} The modified eventData object
      */
     filterEvent: function(eventName, eventData) {
-      var filters = this.eventFilters[eventName];
+      var filters = this.eventFilters()[eventName];
       if(filters) {
         for(var i=0; i<filters.length; i++) {
           filters[i].callback.call(filters[i].context, eventData);

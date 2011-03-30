@@ -43,7 +43,7 @@ function(Module, Observable, Filterable) {
     describe("addEventFilter", function() {
 
       it("adds the given function as filter for the event", function() {
-        expect(this.instance.eventFilters["change"][0].callback).toBe(this.filter);
+        expect(this.instance.eventFilters()["change"][0].callback).toBe(this.filter);
       });
 
       it("returns a filter information object", function() {
@@ -60,7 +60,7 @@ function(Module, Observable, Filterable) {
 
       it("removes the registered callback from the eventFilters collection", function() {
         this.instance.removeEventFilter(this.filterInfo);
-        expect(this.instance.eventFilters["change"].length).toEqual( 0 );
+        expect(this.instance.eventFilters()["change"].length).toEqual( 0 );
       });
 
     });

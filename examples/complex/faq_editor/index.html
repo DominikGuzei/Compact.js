@@ -10,13 +10,23 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <link type="text/css" rel="stylesheet" media="screen" href="application.css" />
+  
 </head>
 
 <body>
   <h1>FAQ Editor</h1>
   
     
-  <div id="application"></div>
+  <div id="application">
+    <div id="faq-topics">
+      <div class="wrap box">
+        <h2 class="coffee2watch">FAQ</h2>
+        <input id="addTopicButton" type="button" value="add" />
+      </div>
+    </div>
+    <div id="faq-posts" class="box"></div>
+  </div>
   
   <script type="text/javascript" data-main="application" src="../../../lib/require.js"></script>
 </body>

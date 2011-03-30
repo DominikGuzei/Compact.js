@@ -1,6 +1,6 @@
 
 define(function() {
-  /*!
+/*!
  * jQuery JavaScript Library v1.5.1
  * http://jquery.com/
  *
@@ -91,7 +91,7 @@ var jQuery = function( selector, context ) {
   trim = String.prototype.trim,
   indexOf = Array.prototype.indexOf,
 
-  // [[Module]] -> type pairs
+  // [[Class]] -> type pairs
   class2type = {};
 
 jQuery.fn = jQuery.prototype = {
@@ -1773,11 +1773,11 @@ jQuery.fn.extend({
     });
   },
 
-  addModule: function( value ) {
+  addClass: function( value ) {
     if ( jQuery.isFunction(value) ) {
       return this.each(function(i) {
         var self = jQuery(this);
-        self.addModule( value.call(this, i, self.attr("class")) );
+        self.addClass( value.call(this, i, self.attr("class")) );
       });
     }
 
@@ -1793,14 +1793,14 @@ jQuery.fn.extend({
 
           } else {
             var className = " " + elem.className + " ",
-              setModule = elem.className;
+              setClass = elem.className;
 
             for ( var c = 0, cl = classNames.length; c < cl; c++ ) {
               if ( className.indexOf( " " + classNames[c] + " " ) < 0 ) {
-                setModule += " " + classNames[c];
+                setClass += " " + classNames[c];
               }
             }
-            elem.className = jQuery.trim( setModule );
+            elem.className = jQuery.trim( setClass );
           }
         }
       }
@@ -1809,11 +1809,11 @@ jQuery.fn.extend({
     return this;
   },
 
-  removeModule: function( value ) {
+  removeClass: function( value ) {
     if ( jQuery.isFunction(value) ) {
       return this.each(function(i) {
         var self = jQuery(this);
-        self.removeModule( value.call(this, i, self.attr("class")) );
+        self.removeClass( value.call(this, i, self.attr("class")) );
       });
     }
 
@@ -1841,14 +1841,14 @@ jQuery.fn.extend({
     return this;
   },
 
-  toggleModule: function( value, stateVal ) {
+  toggleClass: function( value, stateVal ) {
     var type = typeof value,
       isBool = typeof stateVal === "boolean";
 
     if ( jQuery.isFunction( value ) ) {
       return this.each(function(i) {
         var self = jQuery(this);
-        self.toggleModule( value.call(this, i, self.attr("class"), stateVal), stateVal );
+        self.toggleClass( value.call(this, i, self.attr("class"), stateVal), stateVal );
       });
     }
 
@@ -1863,8 +1863,8 @@ jQuery.fn.extend({
 
         while ( (className = classNames[ i++ ]) ) {
           // check each className given, space seperated list
-          state = isBool ? state : !self.hasModule( className );
-          self[ state ? "addModule" : "removeModule" ]( className );
+          state = isBool ? state : !self.hasClass( className );
+          self[ state ? "addClass" : "removeClass" ]( className );
         }
 
       } else if ( type === "undefined" || type === "boolean" ) {
@@ -1879,7 +1879,7 @@ jQuery.fn.extend({
     });
   },
 
-  hasModule: function( selector ) {
+  hasClass: function( selector ) {
     var className = " " + selector + " ";
     for ( var i = 0, l = this.length; i < l; i++ ) {
       if ( (" " + this[i].className + " ").replace(rclass, " ").indexOf( className ) > -1 ) {
@@ -4417,8 +4417,8 @@ if ( document.querySelectorAll ) {
             return makeArray( context.getElementsByTagName( query ), extra );
           
           // Speed-up: Sizzle(".CLASS")
-          } else if ( match[2] && Expr.find.CLASS && context.getElementsByModuleName ) {
-            return makeArray( context.getElementsByModuleName( match[2] ), extra );
+          } else if ( match[2] && Expr.find.CLASS && context.getElementsByClassName ) {
+            return makeArray( context.getElementsByClassName( match[2] ), extra );
           }
         }
         
@@ -4534,22 +4534,22 @@ if ( document.querySelectorAll ) {
   div.innerHTML = "<div class='test e'></div><div class='test'></div>";
 
   // Opera can't find a second classname (in 9.6)
-  // Also, make sure that getElementsByModuleName actually exists
-  if ( !div.getElementsByModuleName || div.getElementsByModuleName("e").length === 0 ) {
+  // Also, make sure that getElementsByClassName actually exists
+  if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
     return;
   }
 
   // Safari caches class attributes, doesn't catch changes (in 3.2)
   div.lastChild.className = "e";
 
-  if ( div.getElementsByModuleName("e").length === 1 ) {
+  if ( div.getElementsByClassName("e").length === 1 ) {
     return;
   }
   
   Expr.order.splice(1, 0, "CLASS");
   Expr.find.CLASS = function( match, context, isXML ) {
-    if ( typeof context.getElementsByModuleName !== "undefined" && !isXML ) {
-      return context.getElementsByModuleName(match[1]);
+    if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
+      return context.getElementsByClassName(match[1]);
     }
   };
 

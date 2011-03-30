@@ -62,6 +62,7 @@ function(Module, ListView, TemplateView, $, Model, Collection) {
         .end();
         
         this.listView.setViewItemType(OtherView);
+        this.listView.render();
         expect($(parent).find(".other").length).toBe(3);
       });
       

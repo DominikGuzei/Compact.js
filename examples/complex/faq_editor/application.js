@@ -46,9 +46,9 @@ function($, Collection, Topic, Post, TopicListViewController, PostsListViewContr
   var postsListView = new PostsListViewController(topicCollection.first().get("posts"));
   
   topicListView.addEventListener("topicSelected", function(topic) {
-    postsListView.setCollection(topic.model.get("posts"));
+    postsListView.collection.refresh(topic.model.get("posts").all());
   });
   
-  topicListView.appendTo($("#application"));
-  postsListView.appendTo($("#application"));
+  topicListView.appendTo($("#faq-topics .wrap"));
+  postsListView.appendTo($("#faq-posts"));
 });

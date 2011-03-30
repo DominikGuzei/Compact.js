@@ -41,7 +41,7 @@ function(Collection, Model) {
         var callback = jasmine.createSpy();
         this.collection.addEventListener("add", callback);
         this.collection.add(this.model);
-        expect(callback).toHaveBeenCalledWith(this.model);
+        expect(callback).toHaveBeenCalledWith(this.model, 0, this.collection);
       });
 
     });
@@ -66,9 +66,44 @@ function(Collection, Model) {
         var callback = jasmine.createSpy();
         this.collection.addEventListener("remove", callback);
         this.collection.remove( this.model );
-        expect(callback).toHaveBeenCalledWith( this.model );
+        expect(callback).toHaveBeenCalledWith( this.model, 0, this.collection );
       });
 
+    });
+    
+    describe("refresh", function() {
+      
+      beforeEach(function() {
+        this.model1 = new Model();
+        this.model2 = new Model();
+        
+        this.oldModels = [ this.model1, this.model2 ];
+        this.collection = new Collection( this.oldModels );
+        
+        this.newModels = [ this.model1, new Model() ];
+      });
+      
+      it("removes old models and adds new ones", function() {
+        this.collection.refresh(this.newModels);
+        expect(this.collection.models).toBe(this.newModels);
+      });
+      
+      it("dispatches a refresh event if something changed", function() {
+        var refreshSpy = jasmine.createSpy();
+        this.collection.addEventListener("refresh", refreshSpy);
+        this.collection.refresh(this.newModels);
+        
+        expect(refreshSpy).toHaveBeenCalled();
+      });
+      
+      it("dispatches no refresh event if the old models are equal to the new ones", function() {
+        var refreshSpy = jasmine.createSpy();
+        this.collection.addEventListener("refresh", refreshSpy);
+        this.collection.refresh(this.oldModels);
+        
+        expect(refreshSpy).not.toHaveBeenCalled();
+      });
+      
     });
 
     describe("pop", function() {

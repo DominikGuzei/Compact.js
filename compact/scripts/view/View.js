@@ -39,7 +39,7 @@ function(Module, each, bind, $) {
       if (!(events || (events = this.events))) { return; }
       
       this.element.unbind();
-      var eventSplitter = /^(\w+)\s*(.*)$/;
+      var eventSplitter = /^(\w+)\s*(.*)/;
       
       each(events, function(methodName, key) {
         var match = key.match(eventSplitter);
@@ -54,7 +54,11 @@ function(Module, each, bind, $) {
       }, this);
     },
     
-    render: function() {}
+    isRendered: function() {
+      return this.element.closest('html').length ? true : false;
+    },
+    
+    render: function() { return this; }
   })
   
   .end();

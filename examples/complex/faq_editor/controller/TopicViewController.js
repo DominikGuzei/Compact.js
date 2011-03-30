@@ -23,12 +23,20 @@ function(Module, TemplateView, Topic, TopicTemplate, $, Observable) {
       }
     });
     
+    this.active = false;
   })
   
   .methods({
     
-    onClick: function() {
+    onClick: function(event) {
       this.dispatchEvent("click", this);
+    },
+    
+    setActive: function(flag) {
+      if(this.active !== flag) {
+        this.element.find("h3.title").toggleClass("active");
+        this.active = flag;
+      } 
     }
     
   })

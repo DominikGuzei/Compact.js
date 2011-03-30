@@ -14,11 +14,11 @@ require(
   'compact/model/Collection',
   'model/Topic',
   'model/Post',
-  'controller/TopicListViewController',
-  'controller/PostsListViewController'
+  'controller/TopicList',
+  'controller/PostList'
 ], 
 
-function($, Collection, Topic, Post, TopicListViewController, PostsListViewController) {
+function($, Collection, Topic, Post, TopicList, PostList) {
   
   var topicCollection = new Collection([
     new Topic({ 
@@ -42,13 +42,13 @@ function($, Collection, Topic, Post, TopicListViewController, PostsListViewContr
     new Topic()
   ]);
   
-  var topicListView = new TopicListViewController(topicCollection);
-  var postsListView = new PostsListViewController(topicCollection.first().get("posts"));
+  var topicList = new TopicList (topicCollection);
+  var postList = new PostList (topicCollection.first().get("posts"));
   
-  topicListView.addEventListener("topicSelected", function(topic) {
-    postsListView.collection.refresh(topic.model.get("posts").all());
+  topicList.addEventListener("topicSelected", function(topic) {
+    postList.collection.refresh(topic.model.get("posts").all());
   });
   
-  topicListView.appendTo($("#faq-topics .wrap"));
-  postsListView.appendTo($("#faq-posts"));
+  topicList.appendTo($("#faq-topics .wrap"));
+  postList.appendTo($("#faq-posts"));
 });

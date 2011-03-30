@@ -2,14 +2,14 @@
 define([
   'compact/Module',
   'compact/view/ListView',
-  'controller/TopicViewController',
+  'controller/TopicView',
   'compact/model/Collection',
   'compact/lib/jquery',
   'compact/event/Observable',
   'model/Topic'
 ],
 
-function(Module, ListView, TopicViewController, Collection, $, Observable, Topic) {
+function(Module, ListView, TopicView, Collection, $, Observable, Topic) {
   
   return Module("TopicListViewController") .extend(ListView) .mixin(Observable)
   
@@ -18,7 +18,7 @@ function(Module, ListView, TopicViewController, Collection, $, Observable, Topic
     this.superMethod({
       element: $('<ul id="topics">'),
       collection: collection || new Collection(),
-      viewItemType: TopicViewController
+      viewItemType: TopicView
     });
     
     this.each(function(topicView) {

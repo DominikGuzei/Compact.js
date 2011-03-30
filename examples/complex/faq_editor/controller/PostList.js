@@ -2,13 +2,13 @@
 define([
   'compact/Module',
   'compact/view/ListView',
-  'controller/PostViewController',
+  'controller/PostView',
   'compact/model/Collection',
   'compact/lib/jquery',
   'compact/event/Observable'
 ],
 
-function(Module, ListView, PostViewController, Collection, $, Observable) {
+function(Module, ListView, PostView, Collection, $, Observable) {
   
   return Module("PostsListViewController") .extend(ListView) .mixin(Observable)
   
@@ -17,7 +17,7 @@ function(Module, ListView, PostViewController, Collection, $, Observable) {
     this.superMethod({
       element: $('<ul id="posts">'),
       collection: collection || new Collection(),
-      viewItemType: PostViewController
+      viewItemType: PostView
     });
 
     this._setupPostListeners();

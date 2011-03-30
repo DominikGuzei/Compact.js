@@ -2,24 +2,24 @@
 define([
   'compact/Module',
   'compact/view/TemplateView',
-  'model/Topic',
-  'text!view/Topic.tmpl',
+  'model/Post',
+  'text!view/Post.tmpl',
   'compact/lib/jquery',
   'compact/event/Observable'
 ],
 
-function(Module, TemplateView, Topic, TopicTemplate, $, Observable) {
+function(Module, TemplateView, Post, PostTemplate, $, Observable) {
   
-  return Module("TopicViewController") .extend(TemplateView) .mixin( Observable )
+  return Module("PostView") .extend(TemplateView) .mixin( Observable )
   
   .initialize(function(model) {
     
     this.superMethod({
-      element: $('<li class="topic">'),
-      model: model || new Topic(),
-      template: TopicTemplate,
+      element: $('<li class="closed">'),
+      model: model || new Post(),
+      template: PostTemplate,
       events: {
-        'click .title' : 'onClick'
+        'click h3' : 'onClick'
       }
     });
     
@@ -34,7 +34,7 @@ function(Module, TemplateView, Topic, TopicTemplate, $, Observable) {
     
     setActive: function(flag) {
       if(this.active !== flag) {
-        this.element.find("h3.title").toggleClass("active");
+        this.element.toggleClass("open closed");
         this.active = flag;
       } 
     }

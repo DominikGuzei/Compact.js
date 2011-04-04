@@ -2,9 +2,9 @@
 define([
  'compact/Module',
  'compact/view/KnockoutTemplateView',
- 'model/ContactModel',
- 'text!view/templates/ContactView.tmpl',
- 'text!view/templates/ContactEdit.tmpl' 
+ 'model/Contact',
+ 'compact/view/Template!view/ContactView',
+ 'compact/view/Template!view/ContactEdit' 
 ],
 
 function(Module, KnockoutTemplateView, ContactModel, contactViewTemplate, contactEditTemplate) {

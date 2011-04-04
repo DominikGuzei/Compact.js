@@ -2,19 +2,19 @@
 define([
  'compact/Module',
  'compact/view/TemplateView',
- 'model/ContactModel',
- 'text!view/templates/ContactView.tmpl',
- 'text!view/templates/ContactEdit.tmpl' 
+ 'model/Contact',
+ 'compact/view/Template!view/ContactView',
+ 'compact/view/Template!view/ContactEdit' 
 ],
 
-function(Module, TemplateView, ContactModel, contactViewTemplate, contactEditTemplate) {
+function(Module, TemplateView, Contact, contactViewTemplate, contactEditTemplate) {
   
   return Module("ContactView") .extend(TemplateView)
   
   .initialize(function(model){
     
     this.superMethod({
-      model: model || new ContactModel(),
+      model: model || new Contact(),
       template: contactViewTemplate,
       events: {
         "click .editButton"          : "editButtonClicked",

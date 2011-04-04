@@ -14,8 +14,8 @@ require(
   'compact/model/Collection',
   'model/Topic',
   'model/Post',
-  'controller/TopicList',
-  'controller/PostList'
+  'view/TopicList',
+  'view/PostList'
 ], 
 
 function($, Collection, Topic, Post, TopicList, PostList) {

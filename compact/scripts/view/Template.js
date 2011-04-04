@@ -83,20 +83,27 @@
                 req(['compact/lib/jquery-tmpl'], function() {
                   Template.get(url, function (content) {
                     
-                    if (config.isBuild && config.inlineText) {
-                        buildMap[name] = content;
+                    if (config.isBuild && config.inlineTemplates) {
+                      buildMap[name] = content;
+                      onLoad(content);
+                    } else {
+                      onLoad($.template(name, content));
                     }
-                    onLoad(jQuery.template(name, content));
+                    
                   });
                 });
+                
             },
 
             write: function (pluginName, moduleName, write) {
+              
                 if (moduleName in buildMap) {
                     var content = Template.jsEscape(buildMap[moduleName]);
-                    write("define(['compact/lib/jquery-tmpl'], '" + pluginName + "!" + moduleName  +
-                          "', function () { return jQuery.template('" + moduleName + "', '" + content + "');});\n");
+                    write("define('" + pluginName + "!" + moduleName  + 
+                      "', ['compact/lib/jquery-tmpl'], function () { return $.template('" 
+                      + moduleName + "', '" + content + "');});\n");
                 }
+                
             }
         };
 

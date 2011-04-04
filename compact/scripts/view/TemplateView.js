@@ -18,7 +18,7 @@ function(Module, View, Model, $) {
     this.template = config.template || "empty";
     
     this._setupModelListeners();
-    this.setTemplate(this.template);
+    this.render();
   })
   
   .methods({
@@ -29,8 +29,8 @@ function(Module, View, Model, $) {
       return this;
     },
     
-    setTemplate: function(markup, rerender, name) {
-      this.template = $.template(name || "", markup);
+    setTemplate: function(template, rerender) {
+      this.template = template;
       if(rerender || rerender === undefined) { this.render(); }
     },
     

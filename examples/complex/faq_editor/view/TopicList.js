@@ -2,14 +2,14 @@
 define([
   'compact/Module',
   'compact/view/ListView',
-  'controller/TopicView',
   'compact/model/Collection',
   'compact/lib/jquery',
   'compact/event/Observable',
-  'model/Topic'
+  'model/Topic',
+  'view/TopicView',
 ],
 
-function(Module, ListView, TopicView, Collection, $, Observable, Topic) {
+function(Module, ListView, Collection, $, Observable, Topic, TopicView) {
   
   return Module("TopicListViewController") .extend(ListView) .mixin(Observable)
   
@@ -30,19 +30,14 @@ function(Module, ListView, TopicView, Collection, $, Observable, Topic) {
   
   .methods({
     
-    appendTo: function() {
-      this.superMethod.apply(this, arguments);
-      this.selectTopic(this.viewItems[0]);
-    },
-    
-    selectTopic: function(clickedTopic) {
-      if(this.selectedTopic === clickedTopic) return;
+    selectTopic: function(topic, silent) {
+      if(this.selectedTopic === topic) { return; }
       
       if(this.selectedTopic) { this.selectedTopic.setActive(false); }
-      clickedTopic.setActive(true);
+      topic.setActive(true);
       
-      this.selectedTopic = clickedTopic;
-      this.dispatchEvent("topicSelected", this.selectedTopic);
+      this.selectedTopic = topic;
+      !silent && this.dispatchEvent("topicSelected", this.selectedTopic);
     },
     
     addTopic: function(event) {
@@ -50,8 +45,8 @@ function(Module, ListView, TopicView, Collection, $, Observable, Topic) {
     },
     
     _addItem: function(item, index, collection) {
-      var viewItem = this.superMethod.apply(this, arguments);
-      this._setupTopicListeners(viewItem);
+      var addedItem = this.superMethod.apply(this, arguments);
+      this._setupTopicListeners(addedItem);
     },
     
     _setupTopicListeners: function(topicView) {

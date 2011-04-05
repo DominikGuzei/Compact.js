@@ -40,19 +40,21 @@ function(Module, Observable, Validatable) {
     set: function(key, value, silent) {
       
       silent = silent || false;
+      var changed = false;
       
       if(typeof(key) == 'object') {
         var changedValues = key;
         var validateResults = this.validateEvent(this.beforeChange(), changedValues);
-
+        
         if(validateResults.isValid) {
-          var changed = false;
-          for(property in key) {
+          for(var property in key) {
             if(key.hasOwnProperty(property)) {
-              if(this.set(property, key[property], true)) changed = true;
+              if(this.set(property, key[property], true)) { changed = true; }
             }
           }
-          if(changed) this.dispatchEvent(this.afterChange(), changedValues);
+          if(changed) { 
+            this.dispatchEvent(this.afterChange(), changedValues); 
+          }
 
         }
         else {
@@ -63,8 +65,10 @@ function(Module, Observable, Validatable) {
       }
 
       if(typeof(key) == 'string') {
-        var changed = this.change(key, value);
-        if(changed && !silent) this.dispatchEvent(this.afterChange(), this._accessibleCollection());
+        changed = this.change(key, value);
+        if(changed && !silent) { 
+          this.dispatchEvent(this.afterChange(), this._accessibleCollection());
+        }
         return changed;
       }
     },

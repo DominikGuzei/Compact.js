@@ -1,7 +1,7 @@
 
 define([
   'compact/Module',
-  'compact/model/Model',
+  'compact/model/Model'
 ],
 
 function(Module, Model) {

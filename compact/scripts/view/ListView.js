@@ -35,13 +35,13 @@ function(Module, View, Collection, Enumerable) {
       if(this.collection) {
         this.collection.addEventListener("refresh", this._createItemsFromCollection, this);
         this.collection.addEventListener("add", this._addItem, this);
+        this.collection.addEventListener("remove", this._removeItem, this);
       }
     },
     
     _removeCollectionListeners: function() {
       if(this.collection) {
-        this.collection.removeEventListener("refresh", this._createItemsFromCollection);
-        this.collection.removeEventListener("add", this._addItem);
+        this.collection.removeEventListenersWithContext(this);
       }
     },
     
@@ -55,7 +55,7 @@ function(Module, View, Collection, Enumerable) {
       this.isRendered() && this.render();
     },
     
-    _addItem: function(model, index, collection) {
+    _addItem: function(model, index) {
       var viewItem = new this.viewItemType(model);
       
       if(index > 0) {
@@ -73,6 +73,12 @@ function(Module, View, Collection, Enumerable) {
         viewItem.appendTo(this.element);
       }
       return viewItem;
+    },
+    
+    _removeItem: function(model, index) {
+      var elementToRemove = this.element.children().eq(index);
+      elementToRemove.remove();
+      this.viewItems.splice(index, 1);
     },
     
     render: function() {

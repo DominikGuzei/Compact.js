@@ -43,11 +43,13 @@ function($, Collection, Topic, Post, TopicList, PostList) {
   ]);
   
   var topicList = new TopicList (topicCollection);
-  var postList = new PostList (topicCollection.first().get("posts"));
+  var postList = new PostList ();
   
   topicList.addEventListener("topicSelected", function(topic) {
     postList.collection.refresh(topic.model.get("posts").all());
   });
+  
+  topicList.selectTopic(topicList.viewItems[0]);
   
   topicList.appendTo($("#faq-topics .wrap"));
   postList.appendTo($("#faq-posts"));

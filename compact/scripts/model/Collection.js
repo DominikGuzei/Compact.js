@@ -1,15 +1,17 @@
 define([
   'compact/Module',
-  'compact/collection/Enumerable',
+  'compact/collection/Collectable',
+  'compact/array/Enumerable',
   'compact/event/Observable'
 ], 
 
-function(Module, Enumerable, Observable) {
+function(Module, Collectable, Enumerable, Observable) {
 
-  return Module("Collection") .mixin( Enumerable, Observable )
+  return Module("Collection") .mixin( Collectable, Enumerable, Observable )
 
   .initialize(function(models) {
     this.models = models || [];
+    this._addAllModelListeners();
   })
 
   .methods({
@@ -23,7 +25,9 @@ function(Module, Enumerable, Observable) {
 
     add: function(model) {
       this.models.push(model);
+      this._addModelListeners(model);
       this.dispatchEvent("add", model, this.models.length-1, this);
+      return model;
     },
 
     remove: function(model) {
@@ -36,14 +40,26 @@ function(Module, Enumerable, Observable) {
       }, this);
 
       if(removedModel) {
+        this._removeModelListeners(removedModel);
         this.dispatchEvent("remove", removedModel, removedIndex, this);
       }
       return removedModel;
     },
     
+    removeAt: function(index) {
+      var model = this.models[index];
+      if(model) {
+        this.models.splice(index, 1);
+        this._removeModelListeners(model);
+        this.dispatchEvent("remove", model, index, this);
+      }
+    },
+    
     refresh: function(newModels) {
       if(this.models === newModels) { return; }
+      this._removeAllModelListeners();
       this.models = newModels;
+      this._addAllModelListeners();
       this.dispatchEvent("refresh");
     },
     
@@ -51,10 +67,31 @@ function(Module, Enumerable, Observable) {
       var removedModel = this.models.pop();
       
       if(removedModel) {
+        this._removeModelListeners(removedModel);
         this.dispatchEvent("pop", removedModel);
         this.dispatchEvent("remove", removedModel);
       }
       return removedModel;
+    },
+    
+    _addModelListeners: function(model) {
+      model.addEventListener("destroy", this.remove, this);
+    },
+    
+    _addAllModelListeners: function() {
+      this.each(function(model) {
+        this._addModelListeners(model);
+      }, this);
+    },
+    
+    _removeModelListeners: function(model) {
+      model.removeEventListenersWithContext(this);
+    },
+    
+    _removeAllModelListeners: function() {
+      this.each(function(model) {
+        this._removeModelListeners(model);
+      }, this);
     },
     
     all: function() {
@@ -64,7 +101,20 @@ function(Module, Enumerable, Observable) {
     first: function() {
       return this.models[0];
     },
+    
+    isEmpty: function() {
+      return this.models.length === 0;
+    },
+    
+    clear: function() {
+      this.models = [];
+      this.dispatchEvent("clear", this);
+    },
 
+    _collectableCollection: function() {
+      return this.models;
+    },
+    
     _enumerableCollection: function() {
       return this.models;
     }

@@ -2,14 +2,14 @@ define([
   'compact/Module',
   'compact/model/Store',
   'compact/model/Model',
-  'compact/collection/Enumerable',
+  'compact/collection/Collectable',
   'compact/object/values',
   'compact/collection/each'
 ], 
   
-function(Module, Store, Model, Enumerable, values, each) {
+function(Module, Store, Model, Collectable, values, each) {
 
-  return Module("LocalStorage") .mixin( Enumerable )
+  return Module("LocalStorage") .mixin( Collectable )
 
   .initialize (function(name, data){
     this.data = data || {};
@@ -107,7 +107,7 @@ function(Module, Store, Model, Enumerable, values, each) {
       return "#" + this.highestLocalModelId++;
     },
 
-    _enumerableCollection: function() {
+    _collectableCollection: function() {
       return this.data
     }
 

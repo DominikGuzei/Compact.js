@@ -74,21 +74,28 @@ function(Module) {
     
     describe(".statics()", function() {
       
-      var Static = Module("Static")
+      var statics = this;
+      
+      Module("Static")
+      
       .statics({
         instance: null,
         getInstance: function() {
-          if(!this.instance)
-            this.instance = new this();
-          return this.instance;
+          if(!statics.Static.instance)
+            statics.Static.instance = new statics.Static();
+          return statics.Static.instance;
         }
       })
-      .end();
+      .end(statics);
 
       it("Adds static properties and methods to the module constructor", function() {
-        expect(Static.instance).toEqual(null);
-        var instance = Static.getInstance();
-        expect(Static.instance).toBe(instance);
+        expect(statics.Static.instance).toEqual(null);
+        var instance = statics.Static.getInstance();
+        expect(statics.Static.instance).toBe(instance);
+        
+        for(var i = 0; i < 3; i++) {
+          expect(statics.Static.getInstance()).toBe(instance);
+        }
       });
 
     });

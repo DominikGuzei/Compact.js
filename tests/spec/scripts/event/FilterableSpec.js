@@ -50,7 +50,7 @@ function(Module, Observable, Filterable) {
         expect(this.filterInfo).toEqual({
           collection: "eventFilters",
           eventName: "change",
-          index: 0
+          callback: this.filter
         });
       });
 
@@ -60,7 +60,7 @@ function(Module, Observable, Filterable) {
 
       it("removes the registered callback from the eventFilters collection", function() {
         this.instance.removeEventFilter(this.filterInfo);
-        expect(this.instance.eventFilters()["change"].length).toEqual( 0 );
+        expect(this.instance.eventFilters()["change"]).not.toBeDefined();
       });
 
     });

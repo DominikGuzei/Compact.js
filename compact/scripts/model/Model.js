@@ -27,6 +27,7 @@ function(Module, JSON, Accessible, Store, clone) {
     },
 
     destroy: function() {
+      this.dispatchEvent("destroy", this);
       Store.getInstance().synchronize("destroy", this);
     },
 

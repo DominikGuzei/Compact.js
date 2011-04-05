@@ -26,7 +26,7 @@ function(Module, ListView, TemplateView, $, Model, Collection) {
             new Model({ data: { name: "model2" } }),
             new Model({ data: { name: "model3" } })
           ]),
-        viewItemType: TestView
+        itemType: TestView
       });
     });
 
@@ -45,7 +45,7 @@ function(Module, ListView, TemplateView, $, Model, Collection) {
       it("sets the itemModule property to the assigned value", function() {
         var ItemModule = Module("ItemModule").end();
         this.listView.setViewItemType(ItemModule);
-        expect(this.listView.viewItemType).toBe(ItemModule);
+        expect(this.listView.itemType).toBe(ItemModule);
       });
       
       it("Rerenders the whole list with the given item module", function() {

@@ -5,6 +5,8 @@ define([
 
 function(Module, Observable) {
 
+  var statics = this;
+  
   return Module("Store") .mixin(Observable)
 
   .methods({
@@ -39,14 +41,14 @@ function(Module, Observable) {
   .statics({
     instance: undefined,
     getInstance: function() {
-      if(!this.instance) {
-        this.instance = new this();
+      if(!statics.Store.instance) {
+        statics.Store.instance = new statics.Store();
       }
-      return this.instance;
+      return statics.Store.instance;
     }
 
   })
 
-  .end();
+  .end(statics);
 
 });

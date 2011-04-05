@@ -17,6 +17,7 @@ function(clone, bind) {
    */
 
   return function(source, destination, overwrite, byReference, context) {
+    
     for (var propertyName in source) {
 
       if (source.hasOwnProperty(propertyName)) {

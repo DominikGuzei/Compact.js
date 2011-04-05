@@ -46,7 +46,7 @@ function(Module, Observable) {
         expect(this.listenerInfo).toEqual({
           collection: "eventListeners",
           eventName: "change",
-          index: 0
+          callback: this.listener
         });
       });
       
@@ -73,12 +73,12 @@ function(Module, Observable) {
 
       it("removes the registered callback from the observable event", function() {
         this.instance.removeEventListener(this.listenerInfo);
-        expect(this.instance.eventListeners()["change"].length).toEqual( 0 );
+        expect(this.instance.eventListeners()["change"]).not.toBeDefined();
       });
       
       it("can also be removed without the event name and function", function() {
         this.instance.removeEventListener(this.listenerInfo.eventName, this.listener);
-        expect(this.instance.eventListeners()["change"].length).toEqual( 0 );
+        expect(this.instance.eventListeners()["change"]).not.toBeDefined();
       });
 
     });
@@ -94,11 +94,12 @@ function(Module, Observable) {
             instance.removeEventListenersWithContext(this);
           }
           instance.addEventListener("test", this.test, this);
+          instance.addEventListener("test", this.test, this);
         }
         
         var test = new Test();
         test.remove();
-        expect(this.instance.eventListeners()["test"].length).toBe(0);
+        expect(this.instance.eventListeners()["test"]).not.toBeDefined();
       });
       
     });

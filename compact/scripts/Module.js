@@ -101,7 +101,7 @@ function(each, copy, chain, bind) {
         
         this.superModule && extendSuperModule(moduleSpecification, moduleConstructor);
         this.mixins && addMixinMethods(moduleSpecification);
-        this.staticsDefinition && copy(this.staticsDefinition, moduleConstructor, true, true, moduleConstructor);
+        this.staticsDefinition && addStatics(this.staticsDefinition, moduleConstructor);
         
         addPrototypeMethods(moduleConstructor.prototype, this.methodsDefinition, this.superModule);
         
@@ -165,11 +165,12 @@ function(each, copy, chain, bind) {
    */
   
   function buildModuleConstructor(moduleSpecification, modulePackage) {
-    
-    var moduleConstructor = modulePackage.namespace[modulePackage.name] = function() {
-      this.Module = modulePackage.namespace[modulePackage.name];
+    var moduleConstructor = function() {
+      this.Module = moduleConstructor;
       this.initializer.apply(this, arguments);
     };
+    modulePackage.namespace[modulePackage.name] = moduleConstructor;
+    moduleConstructor.name = modulePackage.name;
     
     return moduleConstructor;
   }
@@ -234,6 +235,10 @@ function(each, copy, chain, bind) {
         : methods[methodName];
       }
     }
+  }
+  
+  function addStatics(staticsDefinition, constructor) {
+    copy(staticsDefinition, constructor, true, true, constructor);
   }
 
   return Module;

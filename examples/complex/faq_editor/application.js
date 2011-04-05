@@ -14,8 +14,8 @@ require(
   'compact/model/Collection',
   'model/Topic',
   'model/Post',
-  'view/TopicList',
-  'view/PostList'
+  'controller/TopicList',
+  'controller/PostList'
 ], 
 
 function($, Collection, Topic, Post, TopicList, PostList) {
@@ -42,15 +42,10 @@ function($, Collection, Topic, Post, TopicList, PostList) {
     new Topic()
   ]);
   
-  var topicList = new TopicList (topicCollection);
-  var postList = new PostList ();
+  window.PostList = new PostList();
+  window.TopicList = new TopicList (topicCollection);
+  //var postList = new PostList ();
   
-  topicList.addEventListener("topicSelected", function(topic) {
-    postList.collection.refresh(topic.model.get("posts").all());
-  });
-  
-  topicList.selectTopic(topicList.viewItems[0]);
-  
-  topicList.appendTo($("#faq-topics .wrap"));
-  postList.appendTo($("#faq-posts"));
+  window.TopicList.appendTo($("#application"));
+  window.PostList.appendTo($("#application"));
 });

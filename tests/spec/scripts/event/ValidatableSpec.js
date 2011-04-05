@@ -50,7 +50,7 @@ function(Module, Observable, Validatable) {
 		    expect(this.validatorInfo).toEqual({
 		      collection: "eventValidators",
 		      eventName: "change:name",
-		      index: 0
+		      callback: this.validator
 		    });
 		  });
 		  
@@ -60,7 +60,7 @@ function(Module, Observable, Validatable) {
 		  
 		  it("removes the registered callback from the eventFilters collection", function() {
 		    this.instance.removeEventValidator(this.validatorInfo);
-		    expect(this.instance.eventValidators()["change:name"].length).toEqual( 0 );
+		    expect(this.instance.eventValidators()["change:name"]).not.toBeDefined();
 		  });
 		  
 		});

@@ -79,7 +79,10 @@ function(Module, each) {
 			
 			if(listeners) {
 				for(var i=0; i<listeners.length; i++) {
-					listeners[i].callback.apply(listeners[i].context, args.slice(1));
+				  if(!listeners[i].callback) {
+				    throw "Observable: Callback is not a function for event '" + eventName + "' with arguments " + args.slice(1).join(" ");
+				  }
+				  listeners[i].callback.apply(listeners[i].context, args.slice(1));
 				}
 			}
 		},
@@ -101,7 +104,7 @@ function(Module, each) {
 			if(!collection[eventName]) {
 				collection[eventName] = [];
 			}
-			
+
 			collection[eventName].push({
 			  callback: callback,
 			  context: context || this
@@ -110,13 +113,20 @@ function(Module, each) {
 			var callbackInfo = {
         collection: collectionName,
         eventName: eventName,
-        index: collection[eventName].length -1
+        callback: callback
       };
 			
 			if(context) {
-        var contexts = collection.__contexts__ || {};
-        contexts[context] = contexts[context] || [];
-        contexts[context].push(callbackInfo);
+        var contexts = collection.__contexts__ || [];
+        var foundContext = this._findEventContext(contexts, context).contextInfo;
+        
+        foundContext = foundContext || { 
+          context: context,
+          callbacks: []
+        };
+        
+        contexts.push(foundContext);
+        foundContext.callbacks.push(callbackInfo);
         collection.__contexts__ = contexts;
       }
       
@@ -132,23 +142,42 @@ function(Module, each) {
 		 * @param {Integer} index The index of the callback in the event array
 		 */
 		_removeCallbackFromCollection: function() {
-		  var collection = this[arguments[0]]();
-		  var index = null;
-		  var eventName = "";
+		  var args = arguments;
+		  var collection = this[ args[0] ]();
+		  var callbackInfo = args.length < 3 ? args[1] : null; 
+		  var eventName = callbackInfo ? callbackInfo.eventName : args[1];
+		  var callback = callbackInfo ? callbackInfo.callback : args[2];
 		  
-		  if(arguments.length == 3) {
-		    eventName = arguments[1];
-		    var fn = arguments[2];
-		    
-		    each(collection[eventName], function(value, i) {
-		      if(fn == value) index = i;
-		    });
-		  } else {
-		    index = arguments[1].index;
-		    eventName = arguments[1].eventName;
+		  var index = -1;
+		  each(collection[eventName], function(value, i) {
+        if(callback === value) { 
+          index = i; 
+        }
+      });
+		  
+		  if(collection[eventName]) {
+		    collection[eventName].splice(index, 1);
+		    if(!collection[eventName].length) {
+		      delete collection[eventName];
+		    }
 		  }
+		},
+		
+		_findEventContext: function(contexts, searchedContext) {
+		  var searchedContextInfo = null;
+		  var index = -1;
 		  
-		  if(collection[eventName]) collection[eventName].splice(index, 1);
+		  each(contexts, function(contextInfo, i) {
+		    if(contextInfo.context === searchedContext) {
+		      searchedContextInfo = contextInfo;
+		      index = i;
+		    }
+		  });
+		  
+		  return {
+		    contextInfo: searchedContextInfo,
+		    index: index
+		  }
 		},
 		
 		/**
@@ -161,10 +190,13 @@ function(Module, each) {
 		_removeCallbacksFromCollectionWithContext: function(collectionName, context) {
 		  var collection = this[collectionName]();
 		  var contexts = collection.__contexts__;
-		  if(contexts && contexts[context]) {
-		    each(contexts[context], function(callbackInfo) {
+		  var foundContext = this._findEventContext(contexts, context);
+		  
+		  if(foundContext.contextInfo) {
+		    each(foundContext.contextInfo.callbacks, function(callbackInfo, index) {
 		      this._removeCallbackFromCollection(collectionName, callbackInfo);
 		    }, this);
+		    contexts.splice(foundContext.index, 1);
 		  }
 		}
 	})

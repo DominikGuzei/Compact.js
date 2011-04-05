@@ -6,7 +6,7 @@
   display: table;
   table-layout: fixed;
   border-collapse: collapse;
-  margin: 0 auto;
+  margin: 30px auto;
 }
 #application > div {
   display: table-cell;
@@ -20,89 +20,130 @@
 ul, li {
   margin: 0;
   padding: 0;
+  list-style: none;
+  text-indent: 0;
+}
+
+.addButton {
+  border: 1px solid #10A60F;
+  padding: 2px;  color: #10A60F;
+}
+
+.addButton:hover {
+  background: #DAF7DA;
+  cursor: pointer;
 }
 
 #faq-topics {
-  width: 30%;
+  width: 40%;
 }
+
+#faq-topics .addButton {
+  margin: 0 0 1em 15px;
+}
+
 #faq-topics .wrap {
   margin-right: 15px;
   height: 100%;
 }
 #faq-topics h2 {
-  margin: 16px;
+  margin: 16px 0 1em 15px;
 }
 
-#faq-topics li h3 {
-  display: block;
-  border-top: 1px solid #ccc;
-  padding: 0.5em 0 0.5em 16px;
-  color: #a5a5a5;
-  margin: 0;
-  font-size: 14px;
+
+#faq-topics li {
+  padding-left: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
-#faq-topics li h3.active {
+
+#faq-topics li.active {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #ededed));
   background-image: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%);
   background-image: linear-gradient(top, #ffffff 0%, #ededed 100%);
+  cursor: default;
+}
+
+#faq-topics li.active h3 {
   color: black;
 }
-#faq-topics li h3:hover {
+
+#faq-topics li:hover {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #f4f4f4));
   background-image: -moz-linear-gradient(top, #ffffff 0%, #f4f4f4 100%);
   background-image: linear-gradient(top, #ffffff 0%, #f4f4f4 100%);
 }
-#faq-topics li:first-child h3 {
+
+#faq-topics li h3 {
+  display: block;
+  padding: 0.5em 0 0.5em 0;
+  color: #a5a5a5;
+  margin: 0;
+  font-size: 14px;
+}
+
+#faq-topics input[type='text'] {
+  border: none;
+  background: none;
+}
+
+#faq-topics ul:first-child {
   border: none;
 }
 
+.menu .save {
+  border: 1px solid #333;
+  color: black;
+  cursor: pointer;
+}
+
+.menu .save:hover {
+  background: #DAF7DA;
+}
+
 #faq-posts {
-  width: 70%;
+  width: 60%;
   padding: 16px;
 }
 
-#faq-posts ul#posts {
+#faq-posts ul {
   margin-left: 0;
 }
-#faq-posts ul#posts li {
+#faq-posts ul li {
   padding-left: 40px;
   background: url('images/faq-dropbutton-closed.png') no-repeat 11px 0px;
   list-style-type: none;
-}
-#faq-posts ul#posts li {
   min-height: 20px;
   margin-bottom: 1em;
 }
 
-#faq-posts ul#posts li .menu {
-
+#faq-posts .menu {
   float: right;
 }
 
-#faq-posts ul#posts li.closed h3 {
+#faq-posts li h3 {
   cursor: pointer;
-}
-#faq-posts ul#posts li.closed h3:hover {
-  color: #7c969c;
-}
-#faq-posts ul#posts li.closed p {
-  display: none;
-}
-#faq-posts ul#posts li.open {
-  background-image: url(images/faq-dropbutton-open.png);
-}
-#faq-posts ul#posts li.open h3 {
-  font-weight: bold;
-  margin-bottom: 1em;
-}
-#faq-posts h3 {
   padding-top: 2px;
   font-size: 14px;
 }
-#faq-posts p {
+#faq-posts li h3:hover {
+  color: #7c969c;
+}
+#faq-posts li p {
+  display: none;
+}
+#faq-posts li.active p {
+  display: block;
   font-size: 12px;
   line-height: 1.3em;
+  margin-bottom: 1em;
+}
+#faq-posts li.active {
+  background-image: url(images/faq-dropbutton-open.png);
+}
+#faq-posts li.active h3 {
+  font-weight: bold;
   margin-bottom: 1em;
 }
 
@@ -119,4 +160,28 @@ ul, li {
   border-radius: 5px;
   overflow: hidden;
   background: #FFF;
+}
+
+.menu {
+  font-size: 0.7em;
+}
+
+a.delete:link, a.delete:visited {
+  color: red;
+  text-decoration: none;
+}
+
+a.delete:hover {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+a.edit:link, a.edit:visited {
+  color: #2E2F2F;
+  text-decoration: none;
+}
+
+a.edit:hover {
+  font-weight: bold;
+  text-decoration: underline;
 }

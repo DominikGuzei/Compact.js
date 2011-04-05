@@ -30,7 +30,9 @@
         }
         ]
       },
-      ['tests/object/chainSpec',
+      [
+      
+      'tests/object/chainSpec',
       'tests/object/cloneSpec',
       'tests/object/copySpec',
       'tests/object/valuesSpec',
@@ -46,24 +48,22 @@
       'tests/collection/containsSpec',
       'tests/collection/invokeSpec',
 
+      'tests/array/indexOfSpec',
+
       'tests/ModuleSpec',
-      
+     
       'tests/event/ObservableSpec',
       'tests/event/FilterableSpec',
       'tests/event/ValidatableSpec',
       
-      'tests/collection/EnumerableSpec',
+      'tests/collection/CollectableSpec',
       'tests/collection/AccessibleSpec',
       
       'tests/model/ModelSpec',
       'tests/model/CollectionSpec',
       'tests/model/StoreSpec',
       'tests/model/persistence/LocalStorageSpec',
-      
-      'tests/view/ViewSpec',
-      'tests/view/TemplateViewSpec',
-      'tests/view/KnockoutTemplateViewSpec',
-      'tests/view/ListViewSpec'
+      'tests/model/BindingsManagerSpec',
       
       ], function(ModuleSpec) {
         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());

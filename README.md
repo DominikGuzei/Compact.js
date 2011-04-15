@@ -1,22 +1,17 @@
-Introduction
-==========
--------------
-**Compact.js** combines best practices and experience with object oriented javascript to provide a compact base to build **class hierarchies** and **modular components**. It helps you keep your code **DRY** and readable by **following conventions** and doing some magic in the background.
 
-Built on the shoulders of giants
+**Compact.js** combines best practices and experience with object oriented javascript to provide a compact base to build **class hierarchies** and **modular components**.
+
+Built with Performance in Mind
 -------------------------
-It takes the best approaches and code found in other open source javascript projects and combines them into a modular framework based on **[Require.js](http://requirejs.org/)** that handles all **dependency management** and offers plugins for **i18n** and other sweet stuff.
+The whole library is built on **[Require.js](http://requirejs.org/)** and uses the concept of non-global modules which [shows to be up to 98% faster](http://jsperf.com/global-namespace-chain-vs-string-based-local-modules) than traditional modular JavaScript that is used in most other frameworks.
 
 The Core
 =========
 -----------
-The whole framework is built around a lightweight (1k) core that enables you to write classes and mixins in an clean and lean way. It borrows the idea of function chaining to construct your own awesome modules, see yourself:
+The whole framework is built around a lightweight (1k) core ***[compact/Module](https://github.com/DominikGuzei/Compact.js/blob/master/compact/scripts/Module.js)*** that enables you to write classes and mixins in an clean and lean way. It borrows the idea of function chaining to construct your own awesome modules, see yourself:
 
 Module:
 ----------------
-**Syntax: Module( namespace:String ).end( optionalContext:Object )**
-
-Module is a function that returns an "chainable class builder" that collects the information of your class and returns it when .end() is called.
 
 **Create a basic (useless) class and append it to the global window:**
 
@@ -28,110 +23,74 @@ Module is a function that returns an "chainable class builder" that collects the
     var TestModule = Module("TestModule").end();
     var instance = new TestModule(); // instanciable like this
 
--------
-###Properties: **.properties( propertiesDefinition:Object )**
-Before calling .end() on the "chainable class builder" you can also specify the properties you plan to use in your class with default values
+**Syntax: Module( namespace:String ).end( optionalContext:Object )**
 
-**Build a class that has two properties and their default values defined**
-  
-    Module("PropertyModule")
-    
-    .properties({
-      name: "Compact",
-      collection: []
-    });
-    
-    .end(window);
-    
-    // This will apply the name property of the argument to the
-    // name property of the instance and take the default value
-    // for the collection (empty array);
-    
-    var instance = new PropertyModule({ name: "Changed" }); 
-    
-    // You can also omit the argument object and leave all the defaults:
-    
-    var instance = new PropertyModule();
-    
-    // Note that you can not assign new properties to the instance 
-    // via the argument object. This would be useless:
-    
-    var instance = new PropertyModule({ newProp: "test" });
+Module is a function that returns an "chainable class builder" that collects the information of your class and returns it when .end() is called.
 
 --------
 ###Constructor: **.initialize( constructor:Function )**
-By default you don't need to define a constructor and often you can omit it because the properties are applied for you in the background.
-But there are also cases where you need to do special initialization or want to be able to access all properties that where handed to your
-class constructor by the user.
+By default you don't need to define a constructor but you can use it to initialize properties.
 
 **Building a class with a custom initializer**
 
-    Module("InitializerModule") 
-    
-    .properties ({
-      name: "default"
-    }) 
+    var InitializeModule = Module("InitializerModule") 
      
-    .initialize (function( userArguments ){
-      this.name; // "default" -> is applied automaticlly by the framework
-      this.specialProp; // undefined
-      userArguments.specialProp // "value"
+    .initialize (function( name ){
+      this.name = name || "Default";
     })
     
-    .end(window);
+    .end();
     
-    // Pass a special initialization property that is not defined as default
-    var instance = new InitializerModule({ specialProp: "value" });
+    // Pass a custom name property to constructor
+    var instance = new InitializerModule( "custom" );
 
 --------    
 ###Methods: **.methods( methodsDefinition:Object )**
-Like properties it is possible to define methods for your classes.
+Define (prototype) methods for your classes.
 
 **Building a class that defines a method**
 
-    Module("ModuleWithMethod")
+    var ModuleWithMethod = Module("ModuleWithMethod")
     
-    .properties({
-      name: "Compact"
+    .initialize (function( name ){
+      this.name = name || "Default";
     })
     
     .methods({
       getName: function() { return this.name }
     })
     
-    .end(window);
+    .end();
 
-    // retrieve the name via the method
-    var instance = new ModuleWithMethod();
+    var instance = new ModuleWithMethod( "Compact" );
     instance.getName(); // "Compact"
 
-
+----------
 ###Statics: **.statics( staticPropertiesAndMethods:Object )**
-These methods and properties are assigned statically to your class, comparable to class methods in other languages. All functions that are
-declared in the .statics definition have "this" pointing to the class constructor, so that all static properties or methods can be
-accessed via this.property / this.method().
+These methods and properties are assigned statically to your class, comparable to class methods in other languages.
 
 **Building a singleton with a statics**
 
-    Module("Singleton")
+    var Singleton = Module("Singleton")
     
-    .properties({
-      name: "Compact"
+    .initialize (function( name ){
+      this.name = name || "Default";
     })
     
     .statics({
       instance: null,
       getInstance: function() {
-        if(!this.instance) this.instance = new this(); // this points to the class constructor
-        return this.instance;
+        if(!Singleton.instance) {
+          Singleton.instance = new Singleton();
+        }
+        return Singleton.instance;
       }
     })
     
-    .end(window);
+    .end();
 
-    // retrieve the one and only instance
     var instance = Singleton.getInstance();
-    instance.name; // "Compact"
+    instance.name; // "Default"
     
 -----------------    
 Inheritance
@@ -140,12 +99,12 @@ The class builder also enables you to build class hierarchies extremely comforta
 
     Module("SuperModule")
     
-    .properties({
-      name: "SuperModule"
+    .initialize (function( name ){
+      this.name = name || "SuperModule";
     })
     
     .methods({
-      sayHello: function() { console.log("from " + this.name); }
+      sayHello: function() { return "from " + this.name; }
     })
     
     .end(window);
@@ -153,36 +112,35 @@ The class builder also enables you to build class hierarchies extremely comforta
 
     Module("SubModule") .extend( SuperModule )
     
-    .properties({
-      greeting: "hello"
+    .initialize (function( greeting ){
+      this.superMethod(); // call the super constructor
+      this.greeting = greeting || "hello ";
     })
     
     .methods({
       sayHello: function() {
-        console.log(this.greeting);
-        this.superMethod(); // always points to the same method on the super class
+        // this.superMethod() always points to the same method on the super class
+        return this.greeting + this.superMethod();
       }
     })
     
     .end(window);
     
-    // say hello from both classes:
     var instance = new SubModule();
     instance.sayHello(); // "hello from SuperModule"
 
 ###Rules:
-- Properties from sub class overwrite those from its super class
 - methods from sub class overwrite those from super class but have a special reference to them (this.superMethod)
 - inheritance just means aggregating the prototype of the subclasses with the methods from the super classes
 
 ----------    
 Mixins
 -----------------
-**Syntax: Mixin( namespace:String ).end( optionalContext:Object )**
+**Syntax: .mixin( FirstModule, SecondModule )**
 
 Add modular behaviour that should be separated from the class hierarchy:
 
-    Mixin("Module")
+    Module("Mixin")
     
     .methods({
       sayHello: function() { return "hello" },
@@ -190,10 +148,9 @@ Add modular behaviour that should be separated from the class hierarchy:
     })
     
     .end(window);
+
   
-  
-  
-    Module("ModuleWithAddedBehaviour") .mixin(Module)
+    Module("ModuleWithAddedBehaviour") .mixin( Mixin )
     
     .methods({
       sayHello: function() { return "hello world" },
@@ -207,7 +164,7 @@ In this example the class would be augmented with the "saySomethingElse" method 
 because it defines it itself.
 
 ###How to use mixins:
-Mixin has exactly the same syntax like Module but does not offer .statics, .initialize or .extend
+Mixins are Modules that are not directly in included into the inheritance chain and thus their constructor cannot be called from the mixed module. 
 You can also augment mixins with other mixins through the .mixin method.
 
 Further Documentation
